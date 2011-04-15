@@ -1,0 +1,40 @@
+-# Toggling worked until you submitted the new record, and then the only copy of #new_k3cms_s3_podcast_episode got replaced 
+-# toggle_js = "$('.k3cms_s3_podcast_episode_list #new_k3cms_s3_podcast_episode').toggle(); K3cms_S3Podcast.fix_clears();"
+-# So I changed it to insert a clone instead:
+-# toggle_js = "$('.k3cms_s3_podcast_episode_list #new_k3cms_s3_podcast_episode:eq(0)').clone().insertBefore($('.k3cms_s3_podcast_episode_list>.k3cms_s3_podcast_episode:visible:eq(0)')).show(); K3cms_S3Podcast.fix_clears();"
+-# But then the inline editing didn't work on the cloned copy. (Somehow the inline editors and bound events didn't get cloned? At least for the 'code' attribute...)
+- toggle_js = "$('.k3cms_s3_podcast_episode_list #new_k3cms_s3_podcast_episode').toggle(); K3cms_S3Podcast.fix_clears(); "
+- new_episode_js = capture do
+  :plain
+    #{toggle_js}
+    $('.k3cms_s3_podcast_episode_list>.k3cms_s3_podcast_episode:visible:eq(0)').
+      expose({
+        color:'#000', 
+        opacity: 0.6, 
+        onClose: function() {
+          var e = this.getExposed()
+          //console.debug('expose: onClose:');
+          if (!e.data('closing') && $('#new_k3cms_s3_podcast_episode').data('close_box_when_mask_closes') !== false) {
+            e.data('closing', 'expose is closed');
+            e.trigger('close');
+          }
+        },
+      });
+
+.k3cms_s3_podcast_episode_list
+  %div
+    = paginate @episodes
+
+  - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
+    %div
+      = link_to_function image_tag('k3cms/s3_podcast/add.png', :alt => 'New') + ' New episode', new_episode_js
+    = render_cell 'k3cms/s3_podcast/episodes', :show_small, :episode => (episode=K3cms::S3Podcast::Episode.new)
+    -# "$(this).closest('.k3cms_s3_podcast_episode').remove(); K3cms_S3Podcast.fix_clears();"
+
+  - @episodes.in_groups_of(Rails.application.config.k3cms_s3_podcast_pagination[:per_row], false).each do |episodes|
+    -#.row
+    - episodes.each do |episode|
+      = render_cell 'k3cms/s3_podcast/episodes', :show_small, :episode => episode
+
+:javascript
+  K3cms_S3Podcast.fix_clears()

@@ -1,0 +1,6 @@
+- if k3cms_user.k3cms_permitted?(:create_episode)
+  - if @episode.new_record?
+    .status.unpublished Not yet saved
+  - elsif !@episode.published?
+    .status.unpublished Not yet published
+

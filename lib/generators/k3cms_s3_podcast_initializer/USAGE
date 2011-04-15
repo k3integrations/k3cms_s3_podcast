@@ -1,0 +1,5 @@
+Description:
+    Explain the generator
+
+Example:
+    rails generate k3cms_s3_podcast_initializer bucket_name

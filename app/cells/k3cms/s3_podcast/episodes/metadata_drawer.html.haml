@@ -1,0 +1,20 @@
+%h2 Post Information
+%div{:class => dom_class(@episode), :id => dom_id(@episode)}
+  .title
+    %label Title:
+    = inline_editable('span', @episode, :title, 'data-idle-save-time' => '1000') do
+      = raw @episode.title
+
+  .published_at
+    %label published_at:
+    - if edit_mode? and can?(:edit, K3cms::S3Podcast::Episode)
+      = inline_editable('span', @episode, :published_at) do
+        = raw @episode.published_at
+    - else
+      = raw @episode.published_at
+
+  .description
+    %label Description:
+    = inline_editable('div', @episode, :description) do
+      = raw @episode.description
+

@@ -1,0 +1,6 @@
+%h1 Episodes
+
+= link_to image_tag('k3cms/s3_podcast/feed.png'), k3cms_s3_podcast_episodes_url(:format => :rss)
+= link_to 'Subscribe to Podcast', k3cms_s3_podcast_episodes_url(:format => :rss)
+
+= render_cell 'k3cms/s3_podcast/episodes', :list

@@ -1,0 +1,98 @@
+%div{:class => k3cms_s3_podcast_episode_classes(@episode), :id => dom_id(@episode)}
+
+  .thumbnail
+    - if can?(:edit, @episode) && edit_mode?
+      = k3cms_s3_podcast_episode_thumbnail_image_url(@episode)
+    - else
+      = link_to k3cms_s3_podcast_episode_thumbnail_image_url(@episode), @episode
+
+  %h3.title
+    - if can?(:edit, @episode) && edit_mode?
+      = inline_editable('span', @episode, :title) do
+        = raw @episode.title
+    - else
+      = link_to raw(@episode.title), k3cms_s3_podcast_episode_path(@episode)
+
+  = render_cell('k3cms/s3_podcast/episodes', :published_status, :episode => @episode)
+
+  - if can?(:edit, K3cms::S3Podcast::Episode) && edit_mode?
+    .code
+      %label Code:
+      = inline_editable('span', @episode, :code) do
+        = @episode.code
+
+  .published_at
+    %label Date:
+    - if can?(:edit, @episode) && edit_mode?
+      = inline_editable('span', @episode, :published_at) do
+        = raw @episode.published_at
+    - else
+      = @episode.published_at && @episode.published_at.to_s(:long)
+
+  .description
+    - if can?(:edit, @episode) && edit_mode?
+      = inline_editable('div', @episode, :description) do
+        = raw @episode.description
+    - else
+      = raw @episode.description
+
+  .topics
+    %label Topics
+    - @episode.tag_list.each_with_index do |tag_name, n|
+      = (n>0 ? ', ' : '') + link_to(tag_name, tag_path(tag_name))
+
+  - if can?(:edit, @episode) && edit_mode?
+    .editor_links
+      - if @episode.new_record?
+        - js = capture do
+          :plain
+            K3cms_InlineEditor.saveMultipleElements({
+              url: #{polymorphic_url(@episode, :only_path => true).to_json},
+              'save-type': 'POST',
+              object_name: #{dom_class(@episode).to_json},
+              elements: $('#new_k3cms_s3_podcast_episode .editable'),
+              save_success: function(data, msg, xhr, options) {
+                if (data.error) {
+                  return;
+                }
+                $('#new_k3cms_s3_podcast_episode').data('close_box_when_mask_closes', false);
+                $.mask.close();
+
+                // Now that we've created the record, we need to do an Ajax request and actually replace the New Object box with an Update Object box
+                // so that the url and save-type gets updated and inline-editing will work.
+                // We could probably update the existing DOM elements, but this is easier...
+                $.get(k3cms_s3_podcast_episode.url_for(options.object.id), {size: 'small'}, function(data) {
+                  $('#new_k3cms_s3_podcast_episode').eq(0).replaceWith(data);
+
+                  // Add the #new_k3cms_s3_podcast_episode box back into the DOM (initially hidden) so they can add another New Episode
+                  $.get(#{new_k3cms_s3_podcast_episode_path.to_json}, {size: 'small'}, function(data) {
+                    $('.k3cms_s3_podcast_episode_list>.k3cms_s3_podcast_episode:visible:eq(0)').before(data);
+
+                    // TODO: instead of having it add editors to *all* the '.editable' elements (some of which have already been initialized for editing),
+                    // we should selectively add the inline editor to *only* the elements we just added to the DOM. (Or change initInlineEditor to use livequery or something
+                    // so it automatically applies it to .editable elements as soon as they're added to the DOM.
+                    K3cms_InlineEditor.initInlineEditor();
+                  });
+                });
+              },
+            });
+        = button_to_function 'Create', js
+        = link_to_function image_tag('k3cms/s3_podcast/cancel.png', :alt => 'Cancel') + ' Cancel', "$(this).closest('.k3cms_s3_podcast_episode').trigger('close')"
+
+      - else
+        - if can?(:edit, @episode)
+          = link_to image_tag('k3cms/s3_podcast/pencil_go.png', :alt => 'Edit') + ' Edit', polymorphic_url(@episode, :only_path => true)
+        - if can?(:destroy, @episode)
+          = link_to image_tag('k3cms/s3_podcast/delete.png', :alt => 'Delete')  + ' Delete', polymorphic_url(@episode, :only_path => true), :confirm => 'Are you sure?', :method => :delete, :remote => true
+
+:javascript
+  $(function() {
+    $('##{dom_id(@episode)}}').bind('close', function() {
+      if (!$(this).data('closing')) {
+        $.mask.close();
+      } else if ($(this).data('closing') === 'expose is closed') {
+        $('.k3cms_s3_podcast_episode_list #new_k3cms_s3_podcast_episode').toggle(); K3cms_S3Podcast.fix_clears();
+        $(this).data('closing', false)
+      }
+    });
+  });
