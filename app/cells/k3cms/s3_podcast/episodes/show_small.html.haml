@@ -36,10 +36,13 @@
     - else
       = raw @episode.description
 
-  .topics
-    %label Topics:
-    = k3cms_s3_podcast_episode_linked_tag_list(@episode)
-    
+  .tags
+    %label Tags:
+    - if can?(:edit, @episode) && edit_mode?
+      = best_in_place @episode, :tag_list, :type => :input
+    - else
+      = k3cms_s3_podcast_episode_linked_tag_list(@episode)
+
 
   - if can?(:edit, @episode) && edit_mode?
     .editor_links

@@ -23,11 +23,19 @@
 /*------------------------------------------------------------------------------------------------*/
 /* .k3cms_s3_podcast_episode_list */
 
+.k3cms_s3_podcast_episode_list form {
+  display: inline;
+}
+.k3cms_s3_podcast_episode_list form input {
+  margin: 0;
+}
+
 .k3cms_s3_podcast_episode_list .k3cms_s3_podcast_episode {
   float: left;
   padding: 10px 18px 0;
   /* This is just an invisible placeholder border to keep dimensions uniform. The width here should match that of .k3cms_s3_podcast_episode.new_record */
   border: 5px solid transparent;
+  width: 170px;
 }
 
 .k3cms_s3_podcast_episode_list #new_k3cms_s3_podcast_episode {
@@ -77,7 +85,8 @@
   background: url(/images/k3cms/s3_podcast/episode_small-thumbnail_bg.png) center no-repeat;
 }
 
-.k3cms_s3_podcast_episode_list .k3cms_s3_podcast_episode .title {
+.k3cms_s3_podcast_episode_list .k3cms_s3_podcast_episode div.tags input {
+  width: 100px;
 }
 
 .k3cms_s3_podcast_episode + .k3cms_s3_podcast_episode {

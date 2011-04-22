@@ -47,6 +47,9 @@
     .download_link
       = link_to(image_tag('k3cms/s3_podcast/video.png') + ' Download Video', @episode.download_url)
 
-    .topics
-      %label Topics:
-      = k3cms_s3_podcast_episode_linked_tag_list(@episode)
+    .tags
+      %label Tags:
+      - if can?(:edit, @episode) && edit_mode?
+        = best_in_place @episode, :tag_list, :type => :input
+      - else
+        = k3cms_s3_podcast_episode_linked_tag_list(@episode)
