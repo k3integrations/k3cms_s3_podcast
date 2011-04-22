@@ -40,6 +40,10 @@ k3cms_s3_podcast_episode = {
     }
 
     K3cms_Ribbon.set_saved_status(new Date(object.updated_at));
+  },
+
+  // Given a root element (jQuery object), it will extract the current state of the object from the DOM and return it as a JS object.
+  get_object_from_page: function(root_element) {
   }
 };
 

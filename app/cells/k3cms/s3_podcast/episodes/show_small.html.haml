@@ -37,9 +37,9 @@
       = raw @episode.description
 
   .topics
-    %label Topics
-    - @episode.tag_list.each_with_index do |tag_name, n|
-      = (n>0 ? ', ' : '') + link_to(tag_name, tag_path(tag_name))
+    %label Topics:
+    = k3cms_s3_podcast_episode_linked_tag_list(@episode)
+    
 
   - if can?(:edit, @episode) && edit_mode?
     .editor_links
@@ -59,7 +59,7 @@
                 $.mask.close();
 
                 // Now that we've created the record, we need to do an Ajax request and actually replace the New Object box with an Update Object box
-                // so that the url and save-type gets updated and inline-editing will work.
+                // so that we have an object_id and the correct url and save-type for updating, so that inline-editing will work.
                 // We could probably update the existing DOM elements, but this is easier...
                 $.get(k3cms_s3_podcast_episode.url_for(options.object.id), {size: 'small'}, function(data) {
                   $('#new_k3cms_s3_podcast_episode').eq(0).replaceWith(data);

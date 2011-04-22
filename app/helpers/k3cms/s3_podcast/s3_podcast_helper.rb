@@ -18,6 +18,10 @@ module K3cms::S3Podcast::S3PodcastHelper
     ].compact
   end
 
+  def k3cms_s3_podcast_episode_linked_tag_list(episode)
+    episode.tag_list.map { |tag_name| link_to(tag_name, k3cms_s3_podcast_episodes_path(:tag_list => tag_name)) }.join(', ').html_safe
+  end
+
   def video_player(sources, options = {})
     # FIXME: H.264 MP4 works in Firefox but not Chrome 10+
     # So temporarily, add a test .ogv source for the sake of Chrome:

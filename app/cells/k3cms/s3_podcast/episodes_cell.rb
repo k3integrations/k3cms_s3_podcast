@@ -18,7 +18,10 @@ module K3cms
       end
 
       def list
-        @episodes = Episode.accessible_by(current_ability).order('id desc')
+        set_up
+        unless @episodes
+          @episodes = Episode.accessible_by(current_ability).order('id desc')
+        end
         @episodes = @episodes.page(params[:page])
         # This is to enforce the episode.published? condition specified in a block. accessible_by doesn't automatically check the block conditions when fetching records.
         @episodes.select! {|episode| can?(:read, episode)}
@@ -48,6 +51,7 @@ module K3cms
     private
       def set_up
         @episode = options[:episode]
+        @episodes = options[:episodes]
       end
 
     end

@@ -10,9 +10,9 @@ module K3cms
           @episodes = @episodes.order('id desc')
         end
 
-        # TODO:
-        #@episodes = k3cms_logged_in? ? Episode : Episode.published
-        #@episodes = @episodes.tagged_with(params[:topic])
+        if params[:tag_list]
+          @episodes = @episodes.tagged_with(params[:tag_list])
+        end
 
         respond_to do |format|
           format.html # index.html.erb

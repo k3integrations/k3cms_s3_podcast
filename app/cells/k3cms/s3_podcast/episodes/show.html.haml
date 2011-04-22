@@ -17,12 +17,6 @@
       - else
         = raw @episode.title
 
-    - if true #!edit_mode?
-      -# FIXME: H.264 MP4 works in Firefox but not Chrome.
-      = video_player [@episode.view_url], { |
-          :poster => @episode.thumbnail_image_url     |
-        }.merge(Rails.application.config.k3cms_s3_podcast_video_tag_options) |
-
     - if can?(:edit, K3cms::S3Podcast::Episode) && edit_mode?
       .code
         %label Code:
@@ -44,10 +38,15 @@
       - else
         = raw @episode.description
 
+    - if true #!edit_mode?
+      -# FIXME: H.264 MP4 works in Firefox but not Chrome.
+      = video_player [@episode.view_url], { |
+          :poster => @episode.thumbnail_image_url     |
+        }.merge(Rails.application.config.k3cms_s3_podcast_video_tag_options) |
+
     .download_link
       = link_to(image_tag('k3cms/s3_podcast/video.png') + ' Download Video', @episode.download_url)
 
     .topics
-      %label Topics
-      - @episode.tag_list.each_with_index do |tag_name, n|
-        = (n>0 ? ', ' : '') + link_to(tag_name, tag_path(tag_name))
+      %label Topics:
+      = k3cms_s3_podcast_episode_linked_tag_list(@episode)
