@@ -1,4 +1,4 @@
-- toggle_js = "$('.k3cms_s3_podcast_episode_list #new_k3cms_s3_podcast_episode').toggle(); K3cms_S3Podcast.fix_clears(); "
+- toggle_js = "$('.k3cms_s3_podcast_episode_list .k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode').toggle(); K3cms_S3Podcast.fix_clears(); "
 - new_episode_js = capture do
   :plain
     #{toggle_js}
@@ -8,7 +8,7 @@
         opacity: 0.6, 
         onClose: function() {
           var e = this.getExposed()
-          if (!e.data('closing') && $('#new_k3cms_s3_podcast_episode').data('close_box_when_mask_closes') !== false) {
+          if (!e.data('closing') && $('.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode').data('close_box_when_mask_closes') !== false) {
             e.data('closing', 'expose is closed');
             e.trigger('close');
           }

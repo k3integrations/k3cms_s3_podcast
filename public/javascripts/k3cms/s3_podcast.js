@@ -55,7 +55,11 @@ k3cms_s3_podcast_episode = {
   $.fn.clear_every_nth_element = function(n) {
     this.css('clear', 'none');
     this.filter(':visible').
-      filter(function(index) { return index % n == 0; }).
+      filter(function(index) {
+        //console.debug("Considering clearing index=", index, ': ', this);
+        //console.debug("clear it? ", (index % n == 0));
+        return index % n == 0;
+      }).
       css('clear', 'left')
 
   };

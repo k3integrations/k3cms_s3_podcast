@@ -1,5 +1,14 @@
-%div{:class => k3cms_s3_podcast_episode_classes(@episode), :id => dom_id(@episode)}
+- if can?(:edit, @episode) && edit_mode?
+  .contextual_ribbon{:id => dom_id(@episode)}
+    .code
+      %label Code:
+      - if true
+        = inline_editable('span', @episode, :code) do
+          = @episode.code
+      - if false
+        = best_in_place @episode, :code, :type => :input
 
+%div{:class => k3cms_s3_podcast_episode_classes(@episode) + ['small_box'], :id => dom_id(@episode)}
   .thumbnail
     - if can?(:edit, @episode) && edit_mode?
       = k3cms_s3_podcast_episode_thumbnail_image_url(@episode)
@@ -14,12 +23,6 @@
       = link_to raw(@episode.title), k3cms_s3_podcast_episode_path(@episode)
 
   = render_cell('k3cms/s3_podcast/episodes', :published_status, :episode => @episode)
-
-  - if can?(:edit, K3cms::S3Podcast::Episode) && edit_mode?
-    .code
-      %label Code:
-      = inline_editable('span', @episode, :code) do
-        = @episode.code
 
   .published_at
     %label Date:
@@ -88,14 +91,40 @@
         - if can?(:destroy, @episode)
           = link_to image_tag('k3cms/s3_podcast/delete.png', :alt => 'Delete')  + ' Delete', polymorphic_url(@episode, :only_path => true), :confirm => 'Are you sure?', :method => :delete, :remote => true
 
+
 :javascript
   $(function() {
-    $('##{dom_id(@episode)}}').bind('close', function() {
+    var this_episode_box = $('.edit_mode_on .k3cms_s3_podcast_episode##{dom_id(@episode)}}');
+    var this_contextual_ribbon_selector = '.contextual_ribbon##{dom_id(@episode)}}';
+
+    this_episode_box.bind('close', function() {
       if (!$(this).data('closing')) {
         $.mask.close();
       } else if ($(this).data('closing') === 'expose is closed') {
         $('.k3cms_s3_podcast_episode_list #new_k3cms_s3_podcast_episode').toggle(); K3cms_S3Podcast.fix_clears();
         $(this).data('closing', false)
       }
+
+      $(this_contextual_ribbon_selector).hide();
+    });
+
+    this_episode_box.tooltip({
+      //events: {tooltip: "mouseenter"},
+      delay: 100,
+      position: 'top left',
+      tip: this_contextual_ribbon_selector,
+      offset: [0, 0], // We don't want any gap or tooltip may disappear while moving mouse up through the gap.
+      onBeforeShow: function() {
+        var conf = this.getConf();
+        this.getTip().css('width', this.getTrigger().innerWidth() + 'px');
+        conf.offset[1] = this.getTrigger().outerWidth();
+      },
+      onShow: function() {
+        this.getTrigger().addClass('active');
+      },
+      onHide: function() {
+        this.getTrigger().removeClass('active');
+      },
     });
   });
+
