@@ -38,11 +38,17 @@
   width: 170px;
 }
 
-.k3cms_s3_podcast_episode_list #new_k3cms_s3_podcast_episode {
-  display: none;
+/* Copied fom inline_editor/public/stylesheets/k3cms/inline_editor.css */
+body.edit_mode_on
+.k3cms_s3_podcast_episode_list .k3cms_s3_podcast_episode:hover {
+  outline-color: #009000; /* green */
+     -moz-box-shadow: 0 0 12px #009000;
+  -webkit-box-shadow: 0 0 12px #009000;
+          box-shadow: 0 0 12px #009000;
 }
 
 .k3cms_s3_podcast_episode_list .k3cms_s3_podcast_episode.new_record {
+  display: none;
   float: left;
   border: 5px solid green;
 }
