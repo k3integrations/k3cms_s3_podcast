@@ -33,7 +33,7 @@ module K3cms
         render
       end
 
-      def show
+      def show_large
         set_up
         render
       end

@@ -1,5 +1,8 @@
+-# Compare: ./app/cells/k3cms/s3_podcast/episodes/show_large.html.haml ./app/cells/k3cms/s3_podcast/episodes/show_small.html.haml
+
+-# This "should" be inside of the .show_small container too. But when it is, it causes the position of the tooltip to be calculated incorrectly since its parent element is positioned relative (due to the expose mask).
 - if can?(:edit, @episode) && edit_mode?
-  .contextual_ribbon{:id => dom_id(@episode)}
+  .context_ribbon{:id => dom_id(@episode)}
     .code
       %label Code:
       - if true
@@ -8,7 +11,7 @@
       - if false
         = best_in_place @episode, :code, :type => :input
 
-%div{:class => k3cms_s3_podcast_episode_classes(@episode) + ['small_box'], :id => dom_id(@episode)}
+%div{:class => k3cms_s3_podcast_episode_classes(@episode) + ['show_small'], :id => dom_id(@episode)}
   .thumbnail
     - if can?(:edit, @episode) && edit_mode?
       = k3cms_s3_podcast_episode_thumbnail_image_url(@episode)
@@ -72,7 +75,7 @@
 
                   // Add the #new_k3cms_s3_podcast_episode box back into the DOM (initially hidden) so they can add another New Episode
                   $.get(#{new_k3cms_s3_podcast_episode_path.to_json}, {size: 'small'}, function(data) {
-                    $('.k3cms_s3_podcast_episode_list>.k3cms_s3_podcast_episode:visible:eq(0)').before(data);
+                    $('.k3cms_s3_podcast.episode_list>.k3cms_s3_podcast_episode:visible:eq(0)').before(data);
 
                     // TODO: instead of having it add editors to *all* the '.editable' elements (some of which have already been initialized for editing),
                     // we should selectively add the inline editor to *only* the elements we just added to the DOM. (Or change initInlineEditor to use livequery or something
@@ -94,25 +97,26 @@
 
 :javascript
   $(function() {
-    var this_episode_box = $('.edit_mode_on .k3cms_s3_podcast_episode##{dom_id(@episode)}}');
-    var this_contextual_ribbon_selector = '.contextual_ribbon##{dom_id(@episode)}}';
+    var this_episode_box = $('.edit_mode_on .k3cms_s3_podcast_episode.show_small##{dom_id(@episode)}}');
+    var this_context_ribbon_selector = '.context_ribbon##{dom_id(@episode)}}';
 
     this_episode_box.bind('close', function() {
       if (!$(this).data('closing')) {
         $.mask.close();
       } else if ($(this).data('closing') === 'expose is closed') {
-        $('.k3cms_s3_podcast_episode_list #new_k3cms_s3_podcast_episode').toggle(); K3cms_S3Podcast.fix_clears();
+        $('.k3cms_s3_podcast_episode_list>#new_k3cms_s3_podcast_episode').toggle(); K3cms_S3Podcast.fix_clears();
         $(this).data('closing', false)
       }
 
-      $(this_contextual_ribbon_selector).hide();
+      $(this_context_ribbon_selector).hide();
     });
 
     this_episode_box.tooltip({
       //events: {tooltip: "mouseenter"},
       delay: 100,
       position: 'top left',
-      tip: this_contextual_ribbon_selector,
+      relative: true,
+      tip: this_context_ribbon_selector,
       offset: [0, 0], // We don't want any gap or tooltip may disappear while moving mouse up through the gap.
       onBeforeShow: function() {
         var conf = this.getConf();
