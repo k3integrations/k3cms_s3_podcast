@@ -43,11 +43,6 @@ module K3cms
         render
       end
 
-      def metadata_drawer
-        set_up
-        render
-      end
-
     private
       def set_up
         @episode = options[:episode]

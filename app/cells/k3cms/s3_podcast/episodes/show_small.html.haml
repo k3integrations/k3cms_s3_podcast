@@ -73,6 +73,8 @@
                 $.get(k3cms_s3_podcast_episode.url_for(options.object.id), {size: 'small'}, function(data) {
                   $('#new_k3cms_s3_podcast_episode').eq(0).replaceWith(data);
 
+                  K3cms_S3Podcast.fix_clears();
+
                   // Add the #new_k3cms_s3_podcast_episode box back into the DOM (initially hidden) so they can add another New Episode
                   $.get(#{new_k3cms_s3_podcast_episode_path.to_json}, {size: 'small'}, function(data) {
                     $('.k3cms_s3_podcast.episode_list>.k3cms_s3_podcast_episode:visible:eq(0)').before(data);
@@ -104,7 +106,7 @@
       if (!$(this).data('closing')) {
         $.mask.close();
       } else if ($(this).data('closing') === 'expose is closed') {
-        $('.k3cms_s3_podcast_episode_list>#new_k3cms_s3_podcast_episode').toggle(); K3cms_S3Podcast.fix_clears();
+        $('.k3cms_s3_podcast.episode_list>#new_k3cms_s3_podcast_episode').toggle(); K3cms_S3Podcast.fix_clears();
         $(this).data('closing', false)
       }
 

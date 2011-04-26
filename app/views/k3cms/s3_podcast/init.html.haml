@@ -3,39 +3,3 @@
   // Config
 
   K3cms_S3Podcast.config.pagination = #{Rails.application.config.k3cms_s3_podcast_pagination.to_json};
-
-  //================================================================================================
-  // Ribbon
-
-  $(function() {
-    $('#k3cms_ribbon').k3cms_ribbon({tabs: [
-      new K3cms_Ribbon.Tab('k3cms_s3_podcast', {label: 'Podcast Episode', sections: [
-        new K3cms_Ribbon.Section('k3cms_s3_podcast', {items: [
-          new K3cms_Ribbon.Button({
-            element: $('<li/>', { 'class': "icon button episode_metadata" }).
-              append($('<a/>', {title: "Episode Information", href: "javascript:;", html: '&nbsp;'})),
-            onClick:  function() { $(this).k3cms_ribbon('isEnabled') && $(this).trigger('invoke'); },
-            onInvoke: function() { $('.k3cms_s3_podcast_episode_metadata.drawer').slideToggle(); $('.k3cms_s3_podcast_episode_metadata.drawer .editable:visible:eq(0)').focus() }
-          }),
-          new K3cms_Ribbon.Button({
-            element: $('<li/>', { 'class': "icon button list_episodes" }).
-              append($('<a/>', {title: "List Podcast Episodes", href: "#{k3cms_s3_podcast_episodes_url}", html: '&nbsp;'})),
-            onMousedown: function(event) {
-              var a = $(this).find('a').eq(0);
-              if ($(this).k3cms_ribbon('isEnabled')) {
-                a.attr('href', a.data('href'));
-              } else {
-                a.data('href', a.attr('href'));
-                a.attr('href', 'javascript:;');
-              }
-            },
-          }),
-        ]})
-      ]})
-    ]})
-    $('#k3cms_ribbon').k3cms_ribbon({
-      always_enabled: [
-        '.k3cms_s3_podcast .list_episodes.button',
-      ]
-    });
-  })
