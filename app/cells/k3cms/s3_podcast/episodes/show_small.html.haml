@@ -51,7 +51,7 @@
               url: #{polymorphic_url(@episode, :only_path => true).to_json},
               'save-type': 'POST',
               object_name: #{dom_class(@episode).to_json},
-              elements: $('#new_k3cms_s3_podcast_episode .editable'),
+              elements: $('.new_k3cms_s3_podcast_episode .editable'),
               save_success: function(data, msg, xhr, options) {
                 if (data.error) {
                   return;
@@ -92,7 +92,7 @@
 :javascript
   $(function() {
     var this_episode_box = $('.edit_mode_on .k3cms_s3_podcast_episode.show_small##{dom_id(@episode)}}');
-    var this_context_ribbon_selector = '.context_ribbon##{dom_id(@episode)}}';
+    var this_context_ribbon_selector = '.context_ribbon.#{dom_id(@episode)}}';
 
     this_episode_box.bind('close', function() {
       if (!$(this).data('closing')) {

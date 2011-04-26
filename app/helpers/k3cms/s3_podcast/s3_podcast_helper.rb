@@ -13,6 +13,7 @@ module K3cms::S3Podcast::S3PodcastHelper
   def k3cms_s3_podcast_episode_classes(episode)
     [
       dom_class(episode),
+      dom_id(episode),
       ('new_record' if episode.new_record?),
       (episode.published? ? 'published' : 'unpublished'),
     ].compact

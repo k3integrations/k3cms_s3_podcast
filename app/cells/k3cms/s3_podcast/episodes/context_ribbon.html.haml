@@ -1,5 +1,5 @@
 - if can?(:edit, @episode) && edit_mode?
-  .context_ribbon{:id => dom_id(@episode)}
+  .context_ribbon{:class => dom_id(@episode)}
     .code
       %label Code:
       - if true
