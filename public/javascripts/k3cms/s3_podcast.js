@@ -6,7 +6,7 @@ K3cms_S3Podcast = {
   },
 
   fix_clears: function() {
-    $('.k3cms_s3_podcast.episode_list>.k3cms_s3_podcast_episode.show_small').clear_every_nth_element(K3cms_S3Podcast.config.pagination.per_row);
+    $('.k3cms_s3_podcast.episode_list .the_list>.k3cms_s3_podcast_episode.show_small').clear_every_nth_element(K3cms_S3Podcast.config.pagination.per_row);
   },
 }
 

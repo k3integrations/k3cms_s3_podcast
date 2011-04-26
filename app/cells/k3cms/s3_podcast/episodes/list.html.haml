@@ -1,8 +1,9 @@
-- toggle_js = "$('.k3cms_s3_podcast.episode_list>.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode').toggle(); K3cms_S3Podcast.fix_clears(); "
+- toggle_js = "$('.k3cms_s3_podcast.episode_list .the_list>.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode').toggle(); K3cms_S3Podcast.fix_clears(); "
 - new_episode_js = capture do
   :plain
     #{toggle_js}
-    $('.k3cms_s3_podcast.episode_list>.k3cms_s3_podcast_episode:visible:eq(0)').
+    $('.k3cms_s3_podcast.episode_list .the_list>.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode').data('tooltip').show()
+    $('.k3cms_s3_podcast.episode_list .the_list>.k3cms_s3_podcast_episode:visible:eq(0)').
       expose({
         color:'#000', 
         opacity: 0.6, 
@@ -16,17 +17,19 @@
       });
 
 .k3cms_s3_podcast.episode_list
-  %div
-    = paginate @episodes
-
-  - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
+  .header
     %div
-      = link_to_function image_tag('k3cms/s3_podcast/add.png', :alt => 'New') + ' New episode', new_episode_js
-    = render_cell 'k3cms/s3_podcast/episodes', :show_small, :episode => (episode=K3cms::S3Podcast::Episode.new)
+      = paginate @episodes
 
-  - @episodes.in_groups_of(Rails.application.config.k3cms_s3_podcast_pagination[:per_row], false).each do |episodes|
-    - episodes.each do |episode|
-      = render_cell 'k3cms/s3_podcast/episodes', :show_small, :episode => episode
+    - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
+      %div
+        = link_to_function image_tag('k3cms/s3_podcast/add.png', :alt => 'New') + ' New episode', new_episode_js
+
+  .the_list
+    = render_cell 'k3cms/s3_podcast/episodes', :show_small, :episode => (episode=K3cms::S3Podcast::Episode.new)
+    - @episodes.in_groups_of(Rails.application.config.k3cms_s3_podcast_pagination[:per_row], false).each do |episodes|
+      - episodes.each do |episode|
+        = render_cell 'k3cms/s3_podcast/episodes', :show_small, :episode => episode
 
 :javascript
   K3cms_S3Podcast.fix_clears()

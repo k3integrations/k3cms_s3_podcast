@@ -1,4 +1,0 @@
-// Currently not used. Was more flexible to return the HTML and let the calling JS decide how to add it to DOM.
-$(".k3cms_s3_podcast.episode_list").append(
-  "<%= escape_javascript(render_cell('k3cms/s3_podcast/episodes', (params[:size] == 'small' ? :show_small : :show), :episode => @episode)) %>"
-);

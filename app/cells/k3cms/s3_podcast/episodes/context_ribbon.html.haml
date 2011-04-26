@@ -6,5 +6,5 @@
         = inline_editable('span', @episode, :code) do
           = @episode.code
       - if false
-        = best_in_place @episode, :code, :type => :input
+        = text_field_tag @episode, :code
 

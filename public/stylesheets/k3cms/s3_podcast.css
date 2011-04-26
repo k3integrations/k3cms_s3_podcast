@@ -1,5 +1,11 @@
 /*------------------------------------------------------------------------------------------------*/
-/* common to list and show */
+/* .k3cms_s3_podcast.episode_list */
+.k3cms_s3_podcast.episode_list .header {
+  margin-bottom: 20px;
+}
+
+/*------------------------------------------------------------------------------------------------*/
+/* common to show_large and show_small */
 
 .k3cms_s3_podcast_episode.show_large,
 .k3cms_s3_podcast_episode.show_small {
@@ -15,7 +21,19 @@
   z-index: 9999; /* must be on top of "expose" mask */
 }
 
-/* Copied fom inline_editor/public/stylesheets/k3cms/inline_editor.css */
+/* Records on the page that *can* be edited but are not yet being edited */
+/* Give a subtle visual hint as to which areas on the screen can be edited */
+.edit_mode_on .k3cms_s3_podcast_episode.show_small,
+.edit_mode_on .k3cms_s3_podcast_episode.show_small,
+.edit_mode_on .k3cms_s3_podcast_episode.show_large,
+.edit_mode_on .k3cms_s3_podcast_episode.show_large {
+     -moz-box-shadow: 0 0 12px #ddd;
+  -webkit-box-shadow: 0 0 12px #ddd;
+          box-shadow: 0 0 12px #ddd;
+}
+
+/* Records that you hover over or are actively editing */ 
+/* Copied fom inline_editor/public/stylesheets/k3cms/inline_editor.css -- keep in sync */
 .edit_mode_on .k3cms_s3_podcast_episode.show_small:hover,
 .edit_mode_on .k3cms_s3_podcast_episode.show_small.active,
 .edit_mode_on .k3cms_s3_podcast_episode.show_large:hover,
