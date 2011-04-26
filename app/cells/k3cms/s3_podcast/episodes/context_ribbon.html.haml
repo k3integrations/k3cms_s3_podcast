@@ -1,0 +1,10 @@
+- if can?(:edit, @episode) && edit_mode?
+  .context_ribbon{:id => dom_id(@episode)}
+    .code
+      %label Code:
+      - if true
+        = inline_editable('span', @episode, :code) do
+          = @episode.code
+      - if false
+        = best_in_place @episode, :code, :type => :input
+

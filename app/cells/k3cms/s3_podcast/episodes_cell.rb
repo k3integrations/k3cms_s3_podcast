@@ -28,17 +28,22 @@ module K3cms
         render
       end
 
-      def published_status
-        set_up
-        render
-      end
-
       def show_large
         set_up
         render
       end
 
       def show_small
+        set_up
+        render
+      end
+
+      def published_status
+        set_up
+        render
+      end
+
+      def context_ribbon
         set_up
         render
       end
