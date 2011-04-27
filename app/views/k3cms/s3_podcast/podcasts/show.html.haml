@@ -1,0 +1,8 @@
+- content_for :title do
+  = strip_tags @podcast.title
+
+-# Hard-code the widget on this page
+= render_cell 'k3cms/s3_podcast/podcasts', :show, :podcast => @podcast
+
+:javascript
+  k3cms_s3_podcast_podcast.updatePage('#{dom_class(@podcast)}', '#{dom_id(@podcast)}', #{@podcast.to_json}.podcast, null);

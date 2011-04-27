@@ -4,6 +4,8 @@ module K3cms
       set_table_name 'k3cms_s3_podcast_episodes'
 
       belongs_to :author, :class_name => 'User'
+      belongs_to :podcast
+
       acts_as_taggable
 
       scope :published,    lambda { where(['published_at <= ?', Time.now.to_date]) }
@@ -16,7 +18,7 @@ module K3cms
       normalize_attributes :title, :description, :with => [:strip, :blank]
 
       validates :title, :presence => true
-      validates :code, :presence => true, :uniqueness => true
+      validates :code, :presence => true, :uniqueness => {:scope => :podcast_id}
       validates :published_at, :timeliness => {:type => :date}
 
       def set_defaults

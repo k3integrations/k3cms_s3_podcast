@@ -4,7 +4,7 @@ module K3cms
       helper K3cms::Ribbon::RibbonHelper # for edit_mode?
       #include K3cms::Ribbon::RibbonHelper # for edit_mode?
       helper K3cms::InlineEditor::InlineEditorHelper
-      helper K3cms::S3Podcast::S3PodcastHelper
+      helper K3cms::S3Podcast::EpisodeHelper
 
       # Sorry this is duplicated between here and app/controllers/k3cms/s3_podcast/base_controller.rb
       # I tried refactoring the common code out to a BaseControllerModule module that got mixed in both places, but for whatever reason that I couldn't figure out, it would use the current_ability defined in cancan/lib/cancan/controller_additions.rb:277:
@@ -25,6 +25,11 @@ module K3cms
         @episodes = @episodes.page(params[:page])
         # This is to enforce the episode.published? condition specified in a block. accessible_by doesn't automatically check the block conditions when fetching records.
         @episodes.select! {|episode| can?(:read, episode)}
+
+        # duplicated with #new action
+        @new_episode = K3cms::S3Podcast::Episode.new.set_defaults
+        @new_episode.podcast = @podcast
+
         render
       end
 
@@ -35,6 +40,7 @@ module K3cms
 
       def show_small
         set_up
+        ::Rails.logger.debug "... @podcast=#{@podcast.inspect}"
         render
       end
 
@@ -50,6 +56,8 @@ module K3cms
 
     private
       def set_up
+        options
+        @podcast = options[:podcast]
         @episode = options[:episode]
         @episodes = options[:episodes]
       end

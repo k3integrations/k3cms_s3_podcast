@@ -1,0 +1,5 @@
+- content_for :title do
+  Podcasts
+%h1 Podcasts
+
+= render_cell 'k3cms/s3_podcast/podcasts', :list, :podcasts => @podcasts

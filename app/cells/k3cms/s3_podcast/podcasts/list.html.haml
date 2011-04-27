@@ -1,0 +1,36 @@
+- new_podcast_js = capture do
+  :plain
+    $('.k3cms_s3_podcast.podcast_list .the_list>.k3cms_s3_podcast_podcast#new_k3cms_s3_podcast_podcast').trigger('toggle');
+    $('.k3cms_s3_podcast.podcast_list .the_list>.k3cms_s3_podcast_podcast#new_k3cms_s3_podcast_podcast').data('tooltip').show()
+    $('.k3cms_s3_podcast.podcast_list .the_list>.k3cms_s3_podcast_podcast:visible:eq(0)').
+      expose({
+        color:'#000', 
+        opacity: 0.6, 
+        onClose: function() {
+          var e = this.getExposed()
+          if (!e.data('closing') && $('.k3cms_s3_podcast_podcast#new_k3cms_s3_podcast_podcast').data('close_box_when_mask_closes') !== false) {
+            e.data('closing', 'expose is closed');
+            e.trigger('close');
+          }
+        },
+      });
+
+.k3cms_s3_podcast.podcast_list
+  .header
+    %div
+      = paginate @podcasts
+
+    - if can?(:create, K3cms::S3Podcast::Podcast) && edit_mode?
+      %div
+        = link_to_function image_tag('k3cms/s3_podcast/add.png', :alt => 'New') + ' New podcast', new_podcast_js
+
+  .the_list
+    - if can?(:create, K3cms::S3Podcast::Podcast) && edit_mode?
+      = render_cell 'k3cms/s3_podcast/podcasts', :show, :podcast => (podcast=K3cms::S3Podcast::Podcast.new.set_defaults)
+
+    - @podcasts.in_groups_of(Rails.application.config.k3cms_s3_podcast_pagination[:per_row], false).each do |podcasts|
+      - podcasts.each do |podcast|
+        = render_cell 'k3cms/s3_podcast/podcasts', :show, :podcast => podcast
+
+:javascript
+  K3cms_S3Podcast.fix_clears()

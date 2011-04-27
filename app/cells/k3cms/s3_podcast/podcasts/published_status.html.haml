@@ -1,0 +1,6 @@
+- if k3cms_user.k3cms_permitted?(:create_podcast)
+  - if @podcast.new_record?
+    .status.unpublished Not yet saved
+  - elsif !@podcast.published?
+    .status.unpublished Not yet published
+

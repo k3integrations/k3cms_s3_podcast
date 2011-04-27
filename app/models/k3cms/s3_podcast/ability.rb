@@ -4,6 +4,38 @@ module K3cms
       include CanCan::Ability
 
       def initialize(user)
+        #----------------------------------------------------------------------------------------------------
+        # Podcasts
+
+        if user.k3cms_permitted?(:view_podcast)
+          can :read, K3cms::S3Podcast::Podcast
+        end
+
+        if user.k3cms_permitted?(:edit_podcast)
+          can :read, K3cms::S3Podcast::Podcast
+          can :update, K3cms::S3Podcast::Podcast
+        end
+
+        if user.k3cms_permitted?(:edit_own_podcast)
+          can :read, K3cms::S3Podcast::Podcast
+          can :update, K3cms::S3Podcast::Podcast, :author_id => user.id
+        end
+
+        if user.k3cms_permitted?(:create_podcast)
+          can :create, K3cms::S3Podcast::Podcast
+        end
+
+        if user.k3cms_permitted?(:delete_podcast)
+          can :destroy, K3cms::S3Podcast::Podcast
+        end
+
+        if user.k3cms_permitted?(:delete_own_podcast)
+          can :destroy, K3cms::S3Podcast::Podcast, :author_id => user.id
+        end
+
+        #----------------------------------------------------------------------------------------------------
+        # Episodes
+
         if user.k3cms_permitted?(:view_episode)
           can :read, K3cms::S3Podcast::Episode, [] do |episode|
             episode.published?
