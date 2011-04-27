@@ -19,16 +19,11 @@ module K3cms
       validates :code, :presence => true, :uniqueness => true
       validates :published_at, :timeliness => {:type => :date}
 
-      # TODO: remove after inline creation fixed
-      after_initialize :set_defaults
       def set_defaults
-        default_description = '<p>Description goes here</p>'
-
-        if new_record?
-          self.title   = 'New Episode'                          if self.attributes['title'].nil?
-          self.description = default_description                if self.attributes['description'].nil?
-          self.published_at = Date.tomorrow                     if self.attributes['published_at'].nil?
-        end
+        self.title   = 'New Episode'                          if self.attributes['title'].nil?
+        self.description = '<p>Description goes here</p>'     if self.attributes['description'].nil?
+        self.published_at = Date.tomorrow                     if self.attributes['published_at'].nil?
+        self
       end
 
       def to_s
