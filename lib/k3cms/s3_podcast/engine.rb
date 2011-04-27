@@ -15,6 +15,8 @@ module K3cms
         require 'haml'
         require 'acts-as-taggable-on'
         require 'aws/s3'
+        require 'validates_timeliness'
+        require 'cancan'
       end
 
       config.before_configuration do |app|
@@ -28,6 +30,13 @@ module K3cms
         # TODO: Figure out how to namespace config settings so we can do config.k3cms_s3_podcast.video_tag_options
       end
 
+      # This is to avoid errors like undefined method `can?' for #<K3cms::S3Podcast::EpisodesCell>
+      initializer 'k3.authorization.cancan' do
+        ActiveSupport.on_load(:action_controller) do
+          include CanCan::ControllerAdditions
+          Cell::Base.send :include, CanCan::ControllerAdditions
+        end
+      end
 
       config.action_view.javascript_expansions[:k3] ||= []
       config.action_view.javascript_expansions[:k3].concat [

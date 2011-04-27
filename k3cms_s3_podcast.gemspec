@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'rails',        '~> 3.0.0'
   s.add_dependency 'activerecord', '~> 3.0.0'
   s.add_dependency 'actionpack',   '~> 3.0.0'
+  s.add_dependency 'cancan'
   s.add_dependency 'k3cms_core'
   s.add_dependency 'k3cms_ribbon' # for edit_mode?
   s.add_dependency 'cells'
