@@ -24,14 +24,14 @@ Gem::Specification.new do |s|
   s.add_dependency 'kaminari' # pagination
 
   s.add_dependency 'attribute_normalizer'
- #s.add_dependency 'friendly_id'
- #s.add_dependency 'stringex'
   s.add_dependency 'validates_timeliness'
 
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'rspec-rails'
-  s.add_development_dependency 'sqlite3-ruby'
-  s.add_development_dependency 'ruby-debug19'
+  # TODO: These are listed in the gem's Gemfile -- do we need to duplicate the list here as well?
+ #s.add_development_dependency 'rspec'
+ #s.add_development_dependency 'rspec-rails'
+ #s.add_development_dependency 'machinist'
+ #s.add_development_dependency 'sqlite3-ruby'
+ #s.add_development_dependency 'ruby-debug19'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

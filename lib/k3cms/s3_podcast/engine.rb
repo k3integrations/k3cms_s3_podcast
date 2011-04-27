@@ -45,6 +45,7 @@ module K3cms
         'jquery.tools.tooltip.js',
         'k3cms/s3_podcast.js',
       ]
+      config.action_view.stylesheet_expansions[:k3] ||= []
       config.action_view.stylesheet_expansions[:k3].concat [
         'k3cms/s3_podcast.css',
       ]
