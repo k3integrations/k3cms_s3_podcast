@@ -20,7 +20,7 @@ xml.feed('xmlns:atom' => 'http://www.w3.org/2005/Atom', 'xmlns:itunes' => 'http:
         xml.itunes(:summary, episode.description)
         xml.description(episode.description)
         #xml.itunes(:author,episode.presenter) unless episode.presenter.blank?
-        xml.pubDate(episode.published_at.to_datetime.to_s(:rfc822))
+        xml.pubDate(episode.display_date.to_datetime.to_s(:rfc822))
         xml.enclosure(:url => episode.download_url, :type => 'video/mp4')
         xml.guid({:isPermaLink => "false"}, k3cms_s3_podcast_episode_url(episode))
         xml.itunes(:keywords, episode.tag_list) unless episode.tag_list.blank?

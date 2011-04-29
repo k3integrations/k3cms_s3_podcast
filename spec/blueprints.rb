@@ -23,6 +23,6 @@ module K3cms::S3Podcast
   Episode.blueprint do
     code         { Sham.code }
     title        { Sham.title }
-    published_at { Date.tomorrow }
+    display_date { Date.tomorrow }
   end
 end

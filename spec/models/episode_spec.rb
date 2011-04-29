@@ -10,13 +10,13 @@ module K3cms::S3Podcast
 
 
     describe "published?" do
-      it 'when published_at is yesterday, it will report itself as being unpublished' do
-        @episode = Episode.make(:published_at => Date.new(2011,12,31))
+      it 'when display_date is yesterday, it will report itself as being unpublished' do
+        @episode = Episode.make(:display_date => Date.new(2011,12,31))
         @episode.should_not be_published
       end
 
-      it 'when published_at is today, it will report itself as being published' do
-        @episode = Episode.make(:code => 'something', :published_at => Date.new(2011,1,1))
+      it 'when display_date is today, it will report itself as being published' do
+        @episode = Episode.make(:code => 'something', :display_date => Date.new(2011,1,1))
         @episode.should be_published
       end
 
@@ -37,20 +37,20 @@ module K3cms::S3Podcast
         end
       end
 
-      describe 'published_at' do
+      describe 'display_date' do
         it "accepts valid dates" do
           Episode.destroy_all
-          episode = Episode.make_unsaved(:code => 'something', :published_at => '2011-02-10')
+          episode = Episode.make_unsaved(:code => 'something', :display_date => '2011-02-10')
           episode.should be_valid
         end
 
         it "doesn't accept valid date" do
           Episode.destroy_all
           episode = Episode.new(code: 'code')
-          episode.published_at = '2011-02-99'
+          episode.display_date = '2011-02-99'
           episode.valid?
           episode.should_not be_valid
-          episode.errors['published_at'].first.should match(/not a valid date/)
+          episode.errors['display_date'].first.should match(/not a valid date/)
         end
       end
 

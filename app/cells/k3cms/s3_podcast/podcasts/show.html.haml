@@ -27,7 +27,7 @@
         %h3.title
           = @most_recent_episode.title
         .date
-          = @most_recent_episode.published_at
+          = @most_recent_episode.display_date
 
     - unless @podcast.new_record?
       = link_to 'All episodes', k3cms_s3_podcast_podcast_episodes_path(@podcast)

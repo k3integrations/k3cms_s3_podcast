@@ -23,13 +23,13 @@
 
   = render_cell('k3cms/s3_podcast/episodes', :published_status, :episode => @episode)
 
-  .published_at
+  .display_date
     %label Date:
     - if can?(:edit, @episode) && edit_mode?
-      = inline_editable('span', @episode, :published_at) do
-        = raw @episode.published_at
+      = inline_editable('span', @episode, :display_date) do
+        = raw @episode.display_date
     - else
-      = @episode.published_at && @episode.published_at.to_s(:long)
+      = @episode.display_date && @episode.display_date.to_s(:long)
 
   .description
     - if can?(:edit, @episode) && edit_mode?

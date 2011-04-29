@@ -12,13 +12,13 @@
     - else
       = raw @episode.title
 
-  .published_at
+  .display_date
     %label Publish date:
     - if can?(:edit, K3cms::S3Podcast::Episode) && edit_mode?
-      = inline_editable('span', @episode, :published_at) do
-        = raw @episode.published_at
+      = inline_editable('span', @episode, :display_date) do
+        = raw @episode.display_date
     - else
-      = @episode.published_at && @episode.published_at.to_s(:long)
+      = @episode.display_date && @episode.display_date.to_s(:long)
 
   .description
     - if can?(:edit, K3cms::S3Podcast::Episode) && edit_mode?
