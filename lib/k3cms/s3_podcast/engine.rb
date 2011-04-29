@@ -41,6 +41,7 @@ module K3cms
       config.action_view.javascript_expansions[:k3] ||= []
       config.action_view.javascript_expansions[:k3].concat [
         'jquery.tools.min.js',
+        'jquery.tools.tooltip.js',
         'k3cms/s3_podcast.js',
       ]
       config.action_view.stylesheet_expansions[:k3].concat [
