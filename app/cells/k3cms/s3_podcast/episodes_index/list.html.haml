@@ -1,0 +1,55 @@
+- toggle_js = "$('.k3cms_s3_podcast.episode_list .the_list>.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode').toggle(); K3cms_S3Podcast.fix_clears(); "
+- new_episode_js = capture do
+  :plain
+    #{toggle_js}
+    $('.k3cms_s3_podcast.episode_list .the_list>.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode').data('tooltip').show()
+    $('.k3cms_s3_podcast.episode_list .the_list>.k3cms_s3_podcast_episode:visible:eq(0)').
+      expose({
+        color:'#000', 
+        opacity: 0.6, 
+        onClose: function() {
+          var e = this.getExposed()
+          if (!e.data('closing') && $('.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode').data('close_box_when_mask_closes') !== false) {
+            e.data('closing', 'expose is closed');
+            e.trigger('close');
+          }
+        },
+      });
+
+.k3cms_s3_podcast.episode_list
+  .header
+    %div
+      = paginate @episodes
+
+    - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
+      %div
+        = link_to_function image_tag('k3cms/s3_podcast/add.png', :alt => 'New') + ' New episode', new_episode_js
+
+  %table
+    %tr.tableHeading
+      %th{:colspan=>"3"}
+        Latest Programs
+      - link_params = Rails.application.config.k3cms_s3_show_view==:lightbox ? {:rel => '#s3_overlay'} : {}
+      - @episodes.each do |episode|
+        %tr{:class => cycle('mm_Row','mm_altRow')}
+          %td.title
+            = link_to episode.title, episode, link_params
+          %td.watch
+            = link_to 'Watch', episode, link_params
+          %td.download
+            = link_to 'Download', episode.download_url
+
+:javascript
+  $(function() {
+    $("a[rel]").overlay({
+      mask: '#000',
+      effect: 'apple',
+      onBeforeLoad: function() {
+        var wrap = this.getOverlay().find(".contentWrap");
+        wrap.load(this.getTrigger().attr("href"));
+      }
+    });
+  });
+
+.s3_podcast_overlay#s3_overlay
+  .contentWrap

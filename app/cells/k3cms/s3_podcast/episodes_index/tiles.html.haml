@@ -27,10 +27,23 @@
 
   .the_list
     - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
-      = render_cell 'k3cms/s3_podcast/episodes', :show_small, :episode => (episode=K3cms::S3Podcast::Episode.new.set_defaults)
+      = render_cell 'k3cms/s3_podcast/episodes_index', :tile, :episode => (episode=K3cms::S3Podcast::Episode.new.set_defaults), :style => 'tiles'
     - @episodes.in_groups_of(Rails.application.config.k3cms_s3_podcast_pagination[:per_row], false).each do |episodes|
       - episodes.each do |episode|
-        = render_cell 'k3cms/s3_podcast/episodes', :show_small, :episode => episode
+        = render_cell 'k3cms/s3_podcast/episodes_index', :tile, :episode => episode, :style => 'tiles'
 
 :javascript
   K3cms_S3Podcast.fix_clears()
+  $(function() {
+    $("a[rel]").overlay({
+      mask: '#000',
+      effect: 'apple',
+      onBeforeLoad: function() {
+        var wrap = this.getOverlay().find(".contentWrap");
+        wrap.load(this.getTrigger().attr("href"));
+      }
+    });
+  });
+
+.s3_podcast_overlay#s3_overlay
+  .contentWrap

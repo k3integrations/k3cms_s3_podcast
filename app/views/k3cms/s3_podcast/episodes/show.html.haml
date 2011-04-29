@@ -2,7 +2,7 @@
   = strip_tags @episode.title
 
 -# Hard-code the widget on this page
-= render_cell 'k3cms/s3_podcast/episodes', :show_large, :episode => @episode
+= render_cell 'k3cms/s3_podcast/episodes', :choose, :episode => @episode
 
 :javascript
   k3cms_s3_podcast_episode.updatePage('#{dom_class(@episode)}', '#{dom_id(@episode)}', #{@episode.to_json}.episode, null);
