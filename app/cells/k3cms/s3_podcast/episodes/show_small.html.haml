@@ -1,9 +1,8 @@
 -# Compare: ./app/cells/k3cms/s3_podcast/episodes/show_large.html.haml ./app/cells/k3cms/s3_podcast/episodes/show_small.html.haml
 
--# This "should" be inside of the .show_small container too. But when it is, it causes the position of the tooltip to be calculated incorrectly since its parent element is positioned relative (due to the expose mask).
-= render_cell('k3cms/s3_podcast/episodes', :context_ribbon, :episode => @episode)
-
 %div{:class => k3cms_s3_podcast_episode_classes(@episode) + ['show_small'], :id => dom_id(@episode)}
+  = render_cell('k3cms/s3_podcast/episodes', :context_ribbon, :episode => @episode)
+
   .thumbnail
     - if can?(:edit, @episode) && edit_mode?
       = k3cms_s3_podcast_episode_thumbnail_image_url(@episode)
@@ -120,11 +119,9 @@
       position: 'top left',
       relative: true,
       tip: this_context_ribbon_selector,
-      offset: [0, 0], // We don't want any gap or tooltip may disappear while moving mouse up through the gap.
+      offset: [-5, -5],
       onBeforeShow: function() {
-        var conf = this.getConf();
         this.getTip().css('width', this.getTrigger().innerWidth() + 'px');
-        conf.offset[1] = this.getTrigger().outerWidth();
       },
       onShow: function() {
         this.getTrigger().addClass('active');

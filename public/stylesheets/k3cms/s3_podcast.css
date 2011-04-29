@@ -9,6 +9,7 @@
 
 .k3cms_s3_podcast_episode.show_large,
 .k3cms_s3_podcast_episode.show_small {
+  background-color: white;
   position: relative;
 }
 
