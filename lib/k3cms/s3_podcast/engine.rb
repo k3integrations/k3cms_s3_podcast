@@ -6,6 +6,7 @@ require 'facets/pathname'
 module K3cms
   module S3Podcast
     class Engine < Rails::Engine
+      puts self
 
       config.before_initialize do
         # Anything in the .gemspec that needs to be *required* should be required here.
@@ -31,7 +32,7 @@ module K3cms
       end
 
       # This is to avoid errors like undefined method `can?' for #<K3cms::S3Podcast::EpisodesCell>
-      initializer 'k3.authorization.cancan' do
+      initializer 'k3.s3_podcast.cancan' do
         ActiveSupport.on_load(:action_controller) do
           include CanCan::ControllerAdditions
           Cell::Base.send :include, CanCan::ControllerAdditions
@@ -41,8 +42,10 @@ module K3cms
       config.action_view.javascript_expansions[:k3] ||= []
       config.action_view.javascript_expansions[:k3].concat [
         'jquery.tools.min.js',
+        'jquery.tools.tooltip.js',
         'k3cms/s3_podcast.js',
       ]
+      config.action_view.stylesheet_expansions[:k3] ||= []
       config.action_view.stylesheet_expansions[:k3].concat [
         'k3cms/s3_podcast.css',
       ]
@@ -52,9 +55,19 @@ module K3cms
                                   config.root + 'app/views']
       end
 
-      initializer 'k3.ribbon.action_view' do
+      initializer 'k3.s3_podcast.action_view' do
         ActiveSupport.on_load(:action_view) do
           #include K3cms::S3Podcast::S3PodcastHelper
+        end
+      end
+      config.after_initialize do
+        Cell::Rails.class_eval do
+          helper K3cms::S3Podcast::EpisodeHelper
+          helper K3cms::S3Podcast::PodcastHelper
+        end
+        ApplicationController.class_eval do
+          helper K3cms::S3Podcast::EpisodeHelper
+          helper K3cms::S3Podcast::PodcastHelper
         end
       end
 

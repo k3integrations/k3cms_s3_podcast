@@ -1,12 +1,18 @@
 module K3cms
   module S3Podcast
     class EpisodesIndexCell < EpisodesCell
+
       def choose
         send(::Rails.application.config.k3cms_s3_index_view || :tiles)
       end
       
       def list
         fetch_episodes
+
+        # duplicated with #new action
+        @new_episode = K3cms::S3Podcast::Episode.new.set_defaults
+        @new_episode.podcast = @podcast
+
         render :view => 'list'
       end
       

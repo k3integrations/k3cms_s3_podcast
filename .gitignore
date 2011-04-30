@@ -1,4 +1,6 @@
 *.gem
 .bundle
+Gemfile
 Gemfile.lock
 pkg/*
+test_app

@@ -1,9 +1,13 @@
 -# Compare: ./app/cells/k3cms/s3_podcast/episodes/show_large.html.haml ./app/cells/k3cms/s3_podcast/episodes/show_small.html.haml
 
--# This "should" be inside of the .show_small container too. But when it is, it causes the position of the tooltip to be calculated incorrectly since its parent element is positioned relative (due to the expose mask).
-= render_cell('k3cms/s3_podcast/episodes', :context_ribbon, :episode => @episode)
+- raise 'podcast is required' unless @podcast
 
 %div{:class => k3cms_s3_podcast_episode_classes(@episode) + ['show_small'], :id => dom_id(@episode)}
+  = render_cell('k3cms/s3_podcast/episodes', :context_ribbon, :episode => @episode)
+
+  = form_for(@episode) do |f|
+    = f.hidden_field :podcast_id
+
   .thumbnail
     - link_params = Rails.application.config.k3cms_s3_show_view==:lightbox ? {:rel => '#s3_overlay'} : {}
     - if can?(:edit, @episode) && edit_mode?
@@ -20,13 +24,13 @@
 
   = render_cell('k3cms/s3_podcast/episodes', :published_status, :episode => @episode)
 
-  .published_at
+  .display_date
     %label Date:
     - if can?(:edit, @episode) && edit_mode?
-      = inline_editable('span', @episode, :published_at) do
-        = raw @episode.published_at
+      = inline_editable('span', @episode, :display_date) do
+        = raw @episode.display_date
     - else
-      = @episode.published_at && @episode.published_at.to_s(:long)
+      = @episode.display_date && @episode.display_date.to_s(:long)
 
   .description
     - if can?(:edit, @episode) && edit_mode?
@@ -55,7 +59,6 @@
         - if can?(:destroy, @episode)
           = link_to image_tag('k3cms/s3_podcast/delete.png', :alt => 'Delete')  + ' Delete', polymorphic_url(@episode, :only_path => true), :confirm => 'Are you sure?', :method => :delete, :remote => true
 
-
 :javascript
   $(function() {
     var this_episode_box = $('.edit_mode_on .k3cms_s3_podcast_episode.show_small##{dom_id(@episode)}');
@@ -66,7 +69,7 @@
         url: #{polymorphic_url(@episode, :only_path => true).to_json},
         'save-type': 'POST',
         object_name: #{dom_class(@episode).to_json},
-        elements: $('.new_k3cms_s3_podcast_episode .editable'),
+        elements: $('.new_k3cms_s3_podcast_episode .editable, .new_k3cms_s3_podcast_episode form'),
         save_success: function(data, msg, xhr, options) {
           if (data.error) {
             return;
@@ -86,13 +89,13 @@
           // Now that we've created the record, we need to do an Ajax request and actually replace the New Object box with an Update Object box
           // so that we have an object_id and the correct url and save-type for updating, so that inline-editing will work.
           // We could probably update the existing DOM elements, but this is easier...
-          $.get(k3cms_s3_podcast_episode.url_for(options.object.id), {style: '#{@style}'}, function(data) {
+          $.get(k3cms_s3_podcast_episode.url_for(options.object), {style: '#{@style}'}, function(data) {
             $('#new_k3cms_s3_podcast_episode').eq(0).replaceWith(data);
 
             K3cms_S3Podcast.fix_clears();
 
             // Add the #new_k3cms_s3_podcast_episode box back into the DOM (initially hidden) so they can add another New Episode
-            $.get(#{new_k3cms_s3_podcast_episode_path.to_json}, {style: '#{@style}'}, function(data) {
+            $.get(#{new_k3cms_s3_podcast_podcast_episode_path(@podcast).to_json}, {style: '#{@style}'}, function(data) {
               $('.k3cms_s3_podcast.episode_list .the_list>.k3cms_s3_podcast_episode:visible:eq(0)').before(data);
 
               // TODO: instead of having it add editors to *all* the '.editable' elements (some of which have already been initialized for editing),
@@ -121,11 +124,9 @@
       position: 'top left',
       relative: true,
       tip: this_context_ribbon_selector,
-      offset: [0, 0], // We don't want any gap or tooltip may disappear while moving mouse up through the gap.
+      offset: [-5, -5],
       onBeforeShow: function() {
-        var conf = this.getConf();
         this.getTip().css('width', this.getTrigger().innerWidth() + 'px');
-        conf.offset[1] = this.getTrigger().outerWidth();
       },
       onShow: function() {
         this.getTrigger().addClass('active');

@@ -1,4 +1,4 @@
-module K3cms::S3Podcast::S3PodcastHelper
+module K3cms::S3Podcast::EpisodeHelper
   def k3cms_s3_podcast_episode_thumbnail_image_url(episode)
     image_url = episode.thumbnail_image_url
     options = {:width => 166, :height => 125}
@@ -14,19 +14,25 @@ module K3cms::S3Podcast::S3PodcastHelper
     [
       dom_class(episode),
       dom_id(episode),
-      ('new_record' if episode.new_record?),
       (episode.published? ? 'published' : 'unpublished'),
+      (episode.new_record? ? 'new_record' : 'visible'),
     ].compact
   end
 
   def k3cms_s3_podcast_episode_linked_tag_list(episode)
-    episode.tag_list.map { |tag_name| link_to(tag_name, k3cms_s3_podcast_episodes_path(:tag_list => tag_name)) }.join(', ').html_safe
+    episode.tag_list.map { |tag_name| 
+      link_to(tag_name, k3cms_s3_podcast_podcast_episodes_path(episode.podcast, :tag_list => tag_name))
+    }.join(', ').html_safe
+  end
+
+  def k3cms_s3_podcast_video_player(episode)
+    video_player [episode.view_url], {
+      :poster => episode.thumbnail_image_url
+    }.merge(Rails.application.config.k3cms_s3_podcast_video_tag_options)
   end
 
   def video_player(sources, options = {})
     # FIXME: H.264 MP4 works in Firefox but not Chrome 10+
-    # So temporarily, add a test .ogv source for the sake of Chrome:
-    sources << 'http://cdn.kaltura.org/apis/html5lib/kplayer-examples/media/bbb400p.ogv'
     options.merge!(:controls => 'true', :style => "display: block;")
     content_tag(:video, options, false) do
       sources.map do |source_url|

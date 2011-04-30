@@ -4,8 +4,8 @@ module K3cms
       helper K3cms::Ribbon::RibbonHelper # for edit_mode?
       #include K3cms::Ribbon::RibbonHelper # for edit_mode?
       helper K3cms::InlineEditor::InlineEditorHelper
-      helper K3cms::S3Podcast::S3PodcastHelper
-      
+      helper K3cms::S3Podcast::EpisodeHelper
+
       # Sorry this is duplicated between here and app/controllers/k3cms/s3_podcast/base_controller.rb
       # I tried refactoring the common code out to a BaseControllerModule module that got mixed in both places, but for whatever reason that I couldn't figure out, it would use the current_ability defined in cancan/lib/cancan/controller_additions.rb:277:
       #   def current_ability
@@ -16,7 +16,7 @@ module K3cms
       def current_ability
         @current_ability ||= K3cms::S3Podcast::Ability.new(k3cms_user)
       end
-      
+
       def published_status
         set_up
         render
@@ -30,6 +30,8 @@ module K3cms
       private
       
       def set_up
+        options
+        @podcast = options[:podcast]
         @episode = options[:episode]
         @episodes = options[:episodes]
       end

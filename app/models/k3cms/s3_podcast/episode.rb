@@ -4,10 +4,14 @@ module K3cms
       set_table_name 'k3cms_s3_podcast_episodes'
 
       belongs_to :author, :class_name => 'User'
+      belongs_to :podcast
+
       acts_as_taggable
 
-      scope :published,    lambda { where(['published_at <= ?', Time.now.to_date]) }
-      scope :most_recent,  lambda { published.order('published_at DESC') }
+      #scope :published,    lambda { where(['display_date <= ? - interval k3cms_s3_podcast.publish_days_in_advance_of_episode_date day', Time.now.to_date]) }
+      scope :published,    lambda { where(['display_date <= ?', Time.now.to_date]) }
+
+      scope :most_recent,  lambda { published.order('display_date DESC') }
       scope :most_popular, lambda { published.order('view_count DESC') }
       scope :random,       order('rand() ASC')
 
@@ -16,13 +20,13 @@ module K3cms
       normalize_attributes :title, :description, :with => [:strip, :blank]
 
       validates :title, :presence => true
-      validates :code, :presence => true, :uniqueness => true
-      validates :published_at, :timeliness => {:type => :date}
+      validates :code, :presence => true, :uniqueness => {:scope => :podcast_id}
+      validates :display_date, :timeliness => {:type => :date}
 
       def set_defaults
         self.title   = 'New Episode'                          if self.attributes['title'].nil?
         self.description = '<p>Description goes here</p>'     if self.attributes['description'].nil?
-        self.published_at = Date.tomorrow                     if self.attributes['published_at'].nil?
+        self.display_date = Date.tomorrow                     if self.attributes['display_date'].nil?
         self
       end
 
@@ -48,7 +52,7 @@ module K3cms
       end
 
       def published?
-        published_at and Time.zone.now >= published_at.beginning_of_day
+        display_date and Time.zone.now >= display_date.beginning_of_day
       end
 
       def as_json(options={})
@@ -68,7 +72,7 @@ module K3cms
         url = Rails.application.config.k3cms_s3_podcast_asset_urls[name].dup
         return '' if code.blank?
         url.gsub!(/\{\s*CODE\s*\}/i, code)
-        url.gsub!(/\{\s*YEAR\s*\}/i, published_at.year.to_s)
+        url.gsub!(/\{\s*YEAR\s*\}/i, display_date.year.to_s)
         url.gsub(/\{\s*TITLE\s*\}/i, scrubbed_title)
       end
 

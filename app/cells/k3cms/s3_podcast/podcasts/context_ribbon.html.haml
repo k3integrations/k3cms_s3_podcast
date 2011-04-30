@@ -1,0 +1,10 @@
+- if can?(:edit, @podcast) && edit_mode?
+  .context_ribbon{:class => dom_id(@podcast)}
+    .code
+      %label Url:
+      - if true
+        = inline_editable('span', @podcast, :url) do
+          = @podcast.url
+      - if false
+        = text_field_tag @podcast, :url
+

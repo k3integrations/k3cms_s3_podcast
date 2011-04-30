@@ -12,13 +12,13 @@
     - else
       = raw @episode.title
 
-  .published_at
+  .display_date
     %label Publish date:
     - if can?(:edit, K3cms::S3Podcast::Episode) && edit_mode?
-      = inline_editable('span', @episode, :published_at) do
-        = raw @episode.published_at
+      = inline_editable('span', @episode, :display_date) do
+        = raw @episode.display_date
     - else
-      = @episode.published_at && @episode.published_at.to_s(:long)
+      = @episode.display_date && @episode.display_date.to_s(:long)
 
   .description
     - if can?(:edit, K3cms::S3Podcast::Episode) && edit_mode?
@@ -27,11 +27,7 @@
     - else
       = raw @episode.description
 
-  - if true #!edit_mode?
-    -# FIXME: H.264 MP4 works in Firefox but not Chrome.
-    = video_player [@episode.view_url], { |
-        :poster => @episode.thumbnail_image_url     |
-      }.merge(Rails.application.config.k3cms_s3_podcast_video_tag_options) |
+  = k3cms_s3_podcast_video_player @episode
 
   .download_link
     = link_to(image_tag('k3cms/s3_podcast/video.png') + ' Download Video', @episode.download_url)

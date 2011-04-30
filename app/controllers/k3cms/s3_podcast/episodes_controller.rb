@@ -1,9 +1,20 @@
 module K3cms
   module S3Podcast
     class EpisodesController < K3cms::S3Podcast::BaseController
-      load_and_authorize_resource :episode, :class => 'K3cms::S3Podcast::Episode'
+      before_filter :adjust_params
+      # otherwise the load_resource :episode results in a 'Failed Authorization' error
+      def adjust_params
+        if params[:k3cms_s3_podcast_podcast_id]
+          params[:podcast_id] = params[:k3cms_s3_podcast_podcast_id]
+        end
+      end
+
+      load_resource :podcast, :class => 'K3cms::S3Podcast::Podcast'
+      load_resource :episode, :class => 'K3cms::S3Podcast::Episode', :through => :podcast, :shallow => true
 
       def index
+        @podcast or raise "podcast must be specified in the url (use the nested route, k3cms_s3_podcast_podcast_episodes_path(podcast))"
+
         if request.fullpath =~ /.rss$/
           @episodes = Episode.most_recent.limit(20)
         else
@@ -26,7 +37,7 @@ module K3cms
         respond_to do |format|
           if request.xhr?
             format.html {
-              render :text => render_cell('k3cms/s3_podcast/episodes_show', params[:style], :episode => @episode)
+              render :text => render_cell('k3cms/s3_podcast/episodes_show', params[:style], :episode => @episode, :podcast => @podcast)
             }
           else
             format.html # show.html.erb
@@ -44,10 +55,14 @@ module K3cms
       end
 
       def new
+        # TODO: duplicated with EpisodesCell
+        @episode = K3cms::S3Podcast::Episode.new.set_defaults
+        @episode.podcast = @podcast
+
         respond_to do |format|
           if request.xhr?
             format.html {
-              render :text => render_cell('k3cms/s3_podcast/episodes_show', params[:style], :episode => @episode)
+              render :text => render_cell('k3cms/s3_podcast/episodes_show', params[:style], :episode => @episode, :podcast => @podcast)
             }
           else
             format.html # new.html.erb
@@ -67,12 +82,8 @@ module K3cms
               redirect_to(k3cms_s3_podcast_episode_url(@episode, :focus => ".editable[data-object-id=#{dom_id(@episode)}][data-attribute=title]:visible"),
                           :notice => 'Episode was successfully created.')
             end
+            format.json { redirect_to(k3cms_s3_podcast_episode_url(@episode)) }
             format.xml  { render :xml => @episode, :status => :created, :location => @episode }
-            format.json {
-              redirect_to(k3cms_s3_podcast_episode_url(@episode))
-              #K3cms::S3Podcast::Episode.model_name.instance_variable_set('@element', dom_class(@episode))
-              #render :json => @episode
-            }
           else
             format.html { render :action => "new" }
             format.xml  { render :xml => @episode.errors, :status => :unprocessable_entity }
@@ -101,7 +112,7 @@ module K3cms
       def destroy
         @episode.destroy
         respond_to do |format|
-          format.html { redirect_to(k3cms_s3_podcast_episodes_url) }
+          format.html { redirect_to(k3cms_s3_podcast_podcast_episodes_url(@episode.podcast)) }
           format.js
           format.xml  { head :ok }
           format.json { render :nothing =>  true }
