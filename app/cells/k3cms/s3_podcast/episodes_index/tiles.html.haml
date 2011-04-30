@@ -35,16 +35,19 @@
 
 :javascript
   K3cms_S3Podcast.fix_clears()
-  $(function() {
-    $("a[rel]").overlay({
-      mask: '#000',
-      effect: 'apple',
-      onBeforeLoad: function() {
-        var wrap = this.getOverlay().find(".contentWrap");
-        wrap.load(this.getTrigger().attr("href"));
-      }
+
+- if ::Rails.application.config.k3cms_s3_show_view == :page
+  :javascript
+    $(function() {
+      $("a[rel]").overlay({
+        mask: '#000',
+        effect: 'apple',
+        onBeforeLoad: function() {
+          var wrap = this.getOverlay().find(".contentWrap");
+          wrap.load(this.getTrigger().attr("href"));
+        }
+      });
     });
-  });
 
 .s3_podcast_overlay#s3_overlay
   .contentWrap
