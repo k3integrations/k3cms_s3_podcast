@@ -30,8 +30,12 @@ module K3cms
       private
       
       def set_up
-        options
         @podcast = options[:podcast]
+
+        # duplicated with #new action in controller
+        @new_episode = K3cms::S3Podcast::Episode.new.set_defaults
+        @new_episode.podcast = @podcast
+
         @episode = options[:episode]
         @episodes = options[:episodes]
       end
