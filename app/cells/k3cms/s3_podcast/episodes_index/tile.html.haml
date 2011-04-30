@@ -2,6 +2,7 @@
 
 - raise 'episode is required' unless @episode
 - raise 'podcast is required' unless @podcast
+- raise 'style is required'   unless @style
 
 %div{:class => k3cms_s3_podcast_episode_classes(@episode) + ['show_small'], :id => dom_id(@episode)}
   = render_cell('k3cms/s3_podcast/episodes', :context_ribbon, :episode => @episode)

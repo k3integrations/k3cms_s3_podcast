@@ -38,6 +38,8 @@ module K3cms
 
         @episode = options[:episode]
         @episodes = options[:episodes]
+
+        @style = options[:style]
       end
     end
   end

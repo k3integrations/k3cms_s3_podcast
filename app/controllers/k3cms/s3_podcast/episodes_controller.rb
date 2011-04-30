@@ -37,7 +37,9 @@ module K3cms
         respond_to do |format|
           if request.xhr?
             format.html {
-              render :text => render_cell('k3cms/s3_podcast/episodes_show', params[:style], :episode => @episode, :podcast => @podcast)
+              style = params[:style]
+              style = 'tile' if style = 'tiles'
+              render :text => render_cell('k3cms/s3_podcast/episodes_index', style, :episode => @episode, :podcast => @podcast, :style => style)
             }
           else
             format.html # show.html.erb
@@ -62,7 +64,9 @@ module K3cms
         respond_to do |format|
           if request.xhr?
             format.html {
-              render :text => render_cell('k3cms/s3_podcast/episodes_show', params[:style], :episode => @episode, :podcast => @podcast)
+              style = params[:style]
+              style = 'tile' if style = 'tiles'
+              render :text => render_cell('k3cms/s3_podcast/episodes_index', style, :episode => @episode, :podcast => @podcast, :style => style)
             }
           else
             format.html # new.html.erb
