@@ -64,7 +64,7 @@
   :javascript
     $(function() {
       var this_episode_box = $('.edit_mode_on .k3cms_s3_podcast_episode.show_small##{dom_id(@episode)}');
-      var this_context_ribbon_selector = '.context_ribbon.#{dom_id(@episode)}';
+      var this_context_ribbon_selector = '.k3cms_s3_podcast_episode.show_small##{dom_id(@episode)} .context_ribbon';
 
       $(this_episode_box.selector + ' .create_button').click(function() {
         K3cms_InlineEditor.saveMultipleElements({
