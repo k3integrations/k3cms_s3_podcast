@@ -5,6 +5,7 @@ K3cms::S3Podcast::Engine.authorization.draw do
 
   context :podcasts do
     ability :view, 'Can view a podcast'  # Creates :view_podcast ability
+    ability :list, 'Can list podcasts'
     ability :edit, 'Can edit a podcast'
     ability :edit_own, 'Can edit only my podcasts'
     ability :create, 'Can create a new podcast'
@@ -12,14 +13,14 @@ K3cms::S3Podcast::Engine.authorization.draw do
     ability :delete_own, 'Can delete only podcasts created by me'
 
     extend_suggested_permission_set :default do
-      guest :has => :view
+      guest :has => [:view, :list]
       user :includes_role => :guest
       manager :has => [:create, :edit_own, :delete_own], :includes_role => :user
       admin :has => :all
     end
 
     extend_suggested_permission_set :user_creation do
-      guest :has => :view
+      guest :has => [:view, :list]
       user :has => [:create, :edit_own, :delete_own], :includes_role => :guest
       manager :has => :all
       admin :has => :all
