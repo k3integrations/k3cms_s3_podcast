@@ -52,8 +52,9 @@
 }
 
 .k3cms_s3_podcast_podcast.show_small .right {
-  padding-left: 10px;
   float: right;
+  width: 390px;
+  padding-left: 10px;
 }
 
 .k3cms_s3_podcast_podcast.show_small {
