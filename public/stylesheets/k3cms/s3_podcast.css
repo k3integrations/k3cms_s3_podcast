@@ -24,13 +24,35 @@
 
 .k3cms_s3_podcast_podcast.show_small {
   position: relative;
+  float: left;
+  clear: left;
+  padding: 10px 18px 0;
+  background-color: white;
+  /* This is just an invisible placeholder border to keep dimensions uniform. The width here should match that of .k3cms_s3_podcast_podcast.new_record */
+  border: 5px solid transparent;
+  width: 600px;
+}
+
+.k3cms_s3_podcast_podcast.show_small.new_record {
+  display: none;
+  border: 5px solid green;
+}
+
+.k3cms_s3_podcast_podcast.show_small .video_player {
+  margin: 0 0 5px -8px;
+  width: 352px;
+  height: 265px;
+  padding: 20px 0px 20px 20px;
+  background: url(/images/k3cms/s3_podcast/video_player_large_bg.png) center no-repeat;
 }
 
 .k3cms_s3_podcast_podcast.show_small .left {
   float: left;
+  width: 200px;
 }
 
 .k3cms_s3_podcast_podcast.show_small .right {
+  padding-left: 10px;
   float: right;
 }
 
@@ -61,29 +83,6 @@
 }
 .k3cms_s3_podcast_podcast form input {
   margin: 0;
-}
-
-.k3cms_s3_podcast_podcast.show_small {
-  float: left;
-  clear: left;
-  padding: 10px 18px 0;
-  background-color: white;
-  /* This is just an invisible placeholder border to keep dimensions uniform. The width here should match that of .k3cms_s3_podcast_podcast.new_record */
-  border: 5px solid transparent;
-  width: 600px;
-}
-
-.k3cms_s3_podcast_podcast.show_small.new_record {
-  display: none;
-  border: 5px solid green;
-}
-
-.k3cms_s3_podcast_podcast.show_small .video_player {
-  margin: 0 0 5px -8px;
-  width: 352px;
-  height: 265px;
-  padding: 20px 0px 20px 20px;
-  background: url(/images/k3cms/s3_podcast/video_player_large_bg.png) center no-repeat;
 }
 
 .k3cms_s3_podcast_podcast.show_small .k3cms_s3_podcast_podcast div.tags input {
