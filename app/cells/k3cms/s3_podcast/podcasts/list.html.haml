@@ -18,7 +18,7 @@
 .k3cms_s3_podcast.podcast_list
   .header
     %div
-      = paginate @podcasts
+      = #paginate @podcasts
 
     - if can?(:create, K3cms::S3Podcast::Podcast) && edit_mode?
       %div

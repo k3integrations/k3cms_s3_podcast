@@ -23,7 +23,7 @@ module K3cms
       config.before_configuration do |app|
         # Ensure that active_record is loaded before attribute_normalizer, since attribute_normalizer only loads its active_record-specific code if active_record is loaded.
         require 'active_record'
-        require 'kaminari'
+        #require 'kaminari'
         require 'attribute_normalizer'
 
         # See ./lib/generators/k3cms_s3_podcast_initializer/templates/initializer.rb.erb

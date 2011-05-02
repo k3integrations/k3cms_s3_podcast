@@ -15,7 +15,7 @@ module K3cms
       scope :most_popular, lambda { published.order('view_count DESC') }
       scope :random,       order('rand() ASC')
 
-      paginates_per Rails.application.config.k3cms_s3_podcast_pagination[:per_page]
+      #paginates_per Rails.application.config.k3cms_s3_podcast_pagination[:per_page]
 
       normalize_attributes :title, :description, :with => [:strip, :blank]
 
