@@ -28,12 +28,10 @@
   z-index: 9999; /* must be on top of "expose" mask */
 }
 
-/* Records on the page that *can* be edited but are not yet being edited */
-/* Give a subtle visual hint as to which areas on the screen can be edited */
-.edit_mode_on .k3cms_s3_podcast_podcast.show_small,
-.edit_mode_on .k3cms_s3_podcast_podcast.show_small,
-.edit_mode_on .k3cms_s3_podcast_podcast.show_large,
-.edit_mode_on .k3cms_s3_podcast_podcast.show_large {
+.k3cms_s3_podcast_podcast.show_small,
+.k3cms_s3_podcast_podcast.show_small,
+.k3cms_s3_podcast_podcast.show_large,
+.k3cms_s3_podcast_podcast.show_large {
      -moz-box-shadow: 0 0 12px #ddd;
   -webkit-box-shadow: 0 0 12px #ddd;
           box-shadow: 0 0 12px #ddd;
