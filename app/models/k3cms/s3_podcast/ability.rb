@@ -7,6 +7,10 @@ module K3cms
         #----------------------------------------------------------------------------------------------------
         # Podcasts
 
+        if user.k3cms_permitted?(:list_podcast)
+          can :index, K3cms::S3Podcast::Podcast
+        end
+
         if user.k3cms_permitted?(:view_podcast)
           can :read, K3cms::S3Podcast::Podcast
         end

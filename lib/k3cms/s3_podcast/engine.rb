@@ -71,15 +71,16 @@ module K3cms
         end
       end
 
-      initializer 'k3.s3_podcast.require_decorators' do |app|
-        Dir.glob(config.root + "app/**/*_decorator*.rb") do |c|
-          Rails.env.production? ? require(c) : load(c)
-        end
-      end
-
       initializer 'k3.s3_podcast.hooks', :before => 'k3.core.hook_listeners' do |app|
         class K3cms::S3Podcast::Hooks < K3cms::ThemeSupport::HookListener
           insert_after :top_of_page, :file => 'k3cms/s3_podcast/init.html.haml'
+        end
+      end
+
+      initializer 'k3.s3_podcast.require_decorators', :after => 'k3.core.require_decorators' do |app|
+        puts 'k3.s3_podcast.require_decorators'
+        Dir.glob(config.root + "app/**/*_decorator*.rb") do |c|
+          Rails.env.production? ? require(c) : load(c)
         end
       end
     end
