@@ -2,7 +2,6 @@ module K3cms
   module S3Podcast
     class BaseController < ApplicationController
 
-      # Needed for CanCan authorization
       include CanCan::ControllerAdditions
       #include K3cms::Ribbon::RibbonHelper # for edit_mode?
       helper K3cms::InlineEditor::InlineEditorHelper

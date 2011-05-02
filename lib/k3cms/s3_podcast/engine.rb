@@ -78,7 +78,7 @@ module K3cms
       end
 
       initializer 'k3.s3_podcast.require_decorators', :after => 'k3.core.require_decorators' do |app|
-        puts 'k3.s3_podcast.require_decorators'
+        #puts 'k3.s3_podcast.require_decorators'
         Dir.glob(config.root + "app/**/*_decorator*.rb") do |c|
           Rails.env.production? ? require(c) : load(c)
         end
