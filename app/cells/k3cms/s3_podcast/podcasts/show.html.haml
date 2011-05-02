@@ -3,14 +3,14 @@
 %div{:class => k3cms_s3_podcast_podcast_classes(@podcast) + ['show_small'], :id => dom_id(@podcast)}
   = render_cell('k3cms/s3_podcast/podcasts', :context_ribbon, :podcast => @podcast)
 
-  .left
-    %h3.title
-      - if can?(:edit, @podcast) && edit_mode?
-        = inline_editable('span', @podcast, :title) do
-          = raw @podcast.title
-      - else
-        = link_to raw(@podcast.title), k3cms_s3_podcast_podcast_path(@podcast)
+  %h3.title
+    - if can?(:edit, @podcast) && edit_mode?
+      = inline_editable('span', @podcast, :title) do
+        = raw @podcast.title
+    - else
+      = link_to raw(@podcast.title), k3cms_s3_podcast_podcast_path(@podcast)
 
+  .left
     .description
       - if can?(:edit, @podcast) && edit_mode?
         = inline_editable('div', @podcast, :description) do

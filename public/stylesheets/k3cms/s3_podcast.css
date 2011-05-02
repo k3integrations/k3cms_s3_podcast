@@ -1,6 +1,14 @@
 /*================================================================================================*/
 /* Common */
 
+.context_ribbon,
+.context_ribbon {
+  background-color: #eee;
+  border: 1px solid #fff;
+  padding: 5px;
+  display: none;
+  z-index: 9999; /* must be on top of "expose" mask */
+}
 
 /*================================================================================================*/
 /* Podcasts */
@@ -12,26 +20,21 @@
 }
 
 /*------------------------------------------------------------------------------------------------*/
-/* common to show_large and show_small */
+/* .k3cms_s3_podcast_podcast.show_small */
 
-.k3cms_s3_podcast_podcast.show_large,
 .k3cms_s3_podcast_podcast.show_small {
   position: relative;
 }
 
-.context_ribbon,
-.context_ribbon {
-  background-color: #eee;
-  border: 1px solid #fff;
-  padding: 5px;
-  display: none;
-  z-index: 9999; /* must be on top of "expose" mask */
+.k3cms_s3_podcast_podcast.show_small .left {
+  float: left;
 }
 
-.k3cms_s3_podcast_podcast.show_small,
-.k3cms_s3_podcast_podcast.show_small,
-.k3cms_s3_podcast_podcast.show_large,
-.k3cms_s3_podcast_podcast.show_large {
+.k3cms_s3_podcast_podcast.show_small .right {
+  float: right;
+}
+
+.k3cms_s3_podcast_podcast.show_small {
      -moz-box-shadow: 0 0 12px #ddd;
   -webkit-box-shadow: 0 0 12px #ddd;
           box-shadow: 0 0 12px #ddd;
@@ -41,8 +44,6 @@
 /* Copied fom inline_editor/public/stylesheets/k3cms/inline_editor.css -- keep in sync */
 .edit_mode_on .k3cms_s3_podcast_podcast.show_small:hover,
 .edit_mode_on .k3cms_s3_podcast_podcast.show_small.active,
-.edit_mode_on .k3cms_s3_podcast_podcast.show_large:hover,
-.edit_mode_on .k3cms_s3_podcast_podcast.show_large.active,
 .context_ribbon,
 .context_ribbon {
   outline-color: #009000; /* green */
@@ -51,7 +52,6 @@
           box-shadow: 0 0 12px #009000;
 }
 
-.k3cms_s3_podcast_podcast.show_large .editor_links,
 .k3cms_s3_podcast_podcast.show_small .editor_links {
   clear: both;
 }
@@ -62,20 +62,6 @@
 .k3cms_s3_podcast_podcast form input {
   margin: 0;
 }
-
-/*------------------------------------------------------------------------------------------------*/
-/* .k3cms_s3_podcast_podcast.show_large */
-
-.k3cms_s3_podcast_podcast.show_large {
-  padding: 5px;
-}
-
-.k3cms_s3_podcast_podcast.show_large .description {
-  margin: 1em 0;
-}
-
-/*------------------------------------------------------------------------------------------------*/
-/* .k3cms_s3_podcast_podcast.show_small */
 
 .k3cms_s3_podcast_podcast.show_small {
   float: left;
@@ -128,20 +114,9 @@
   position: relative;
 }
 
-.context_ribbon,
-.context_ribbon {
-  background-color: #eee;
-  border: 1px solid #fff;
-  padding: 5px;
-  display: none;
-  z-index: 9999; /* must be on top of "expose" mask */
-}
-
 /* Records on the page that *can* be edited but are not yet being edited */
 /* Give a subtle visual hint as to which areas on the screen can be edited */
 .edit_mode_on .k3cms_s3_podcast_episode.show_small,
-.edit_mode_on .k3cms_s3_podcast_episode.show_small,
-.edit_mode_on .k3cms_s3_podcast_episode.show_large,
 .edit_mode_on .k3cms_s3_podcast_episode.show_large {
      -moz-box-shadow: 0 0 12px #ddd;
   -webkit-box-shadow: 0 0 12px #ddd;
