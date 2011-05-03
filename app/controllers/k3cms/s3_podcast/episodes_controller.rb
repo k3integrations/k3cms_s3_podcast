@@ -39,7 +39,7 @@ module K3cms
             format.html {
               style = params[:style]
               style = 'tile' if style == 'tiles'
-              render :text => render_cell('k3cms/s3_podcast/episodes_index', style, :episode => @episode, :podcast => @podcast, :style => style)
+              render :text => render_cell('k3cms/s3_podcast/episodes_index', Rails.application.config.k3cms_s3_index_view, :episode => @episode, :podcast => @podcast, :style => style)
             }
           else
             format.html # show.html.erb
@@ -66,7 +66,7 @@ module K3cms
             format.html {
               style = params[:style]
               style = 'tile' if style == 'tiles'
-              render :text => render_cell('k3cms/s3_podcast/episodes_index', style, :episode => @episode, :podcast => @podcast, :style => style)
+              render :text => render_cell('k3cms/s3_podcast/episodes_index', Rails.application.config.k3cms_s3_show_view, :episode => @episode, :podcast => @podcast, :style => style)
             }
           else
             format.html # new.html.erb

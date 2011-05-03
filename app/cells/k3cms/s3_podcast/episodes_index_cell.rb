@@ -8,7 +8,6 @@ module K3cms
       
       def list
         fetch_episodes
-
         render :view => 'list'
       end
       

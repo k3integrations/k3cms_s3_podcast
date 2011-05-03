@@ -43,13 +43,12 @@
   $(function() {
     $("a[rel]").overlay({
       mask: '#000',
-      effect: 'apple',
       onBeforeLoad: function() {
-        var wrap = this.getOverlay().find(".contentWrap");
+        var wrap = this.getOverlay().find(".s3podcastWrap");
         wrap.load(this.getTrigger().attr("href"));
       }
     });
   });
 
 .s3_podcast_overlay#s3_overlay
-  .contentWrap
+  .s3podcastWrap

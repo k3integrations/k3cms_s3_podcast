@@ -6,13 +6,13 @@ module K3cms
       end
       
       def page
-        setup
-        render
+        set_up
+        render :view => 'page'
       end
       
       def lightbox
-        setup
-        render
+        set_up
+        render :view => 'lightbox'
       end
     end
   end
