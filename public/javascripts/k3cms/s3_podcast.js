@@ -82,7 +82,7 @@ k3cms_s3_podcast_episode = {
     img.attr('src', object.thumbnail_image_url);
 
     var video = container.find('video');
-    video.attr('poster', object.thumbnail_image_url);
+    video.attr('poster', K3cms_S3Podcast.config.video_tag_options.poster || object.thumbnail_image_url);
     video.find('source').each(function(i) {
       // TODO: Update src attribute
       //$(this).attr('src', '?');
