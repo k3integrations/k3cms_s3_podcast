@@ -1,5 +1,3 @@
--# Compare: ./app/cells/k3cms/s3_podcast/episodes/show_large.html.haml ./app/cells/k3cms/s3_podcast/episodes/show_small.html.haml
-
 = render_cell('k3cms/s3_podcast/episodes', :context_ribbon, :episode => @episode)
 
 %div{:class => k3cms_s3_podcast_episode_classes(@episode) + ['show_large'], :id => dom_id(@episode)}

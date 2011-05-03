@@ -29,7 +29,7 @@
     %tr.tableHeading
       %th{:colspan=>"3"}
         Latest Programs
-      - link_params = Rails.application.config.k3cms_s3_show_view==:lightbox ? {:rel => '#s3_overlay'} : {}
+      - link_params = Rails.application.config.k3cms_s3_show_view==:lightbox ? {:rel => '.s3_podcast_overlay'} : {}
       - @episodes.each do |episode|
         %tr{:class => cycle('mm_Row','mm_altRow')}
           %td.title
@@ -44,11 +44,11 @@
     $("a[rel]").overlay({
       mask: '#000',
       onBeforeLoad: function() {
-        var wrap = this.getOverlay().find(".s3podcastWrap");
+        var wrap = this.getOverlay().find(".content");
         wrap.load(this.getTrigger().attr("href"));
       }
     });
   });
 
-.s3_podcast_overlay#s3_overlay
-  .s3podcastWrap
+.s3_podcast_overlay
+  .content

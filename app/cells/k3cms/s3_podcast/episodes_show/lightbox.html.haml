@@ -1,5 +1,3 @@
--# Compare: ./app/cells/k3cms/s3_podcast/episodes/show_large.html.haml ./app/cells/k3cms/s3_podcast/episodes/show_small.html.haml
-
 = render_cell('k3cms/s3_podcast/episodes', :context_ribbon, :episode => @episode)
 
 %div{:class => k3cms_s3_podcast_episode_classes(@episode) + ['show_large'], :id => dom_id(@episode)}
@@ -27,11 +25,7 @@
     - else
       = raw @episode.description
 
-  - if true #!edit_mode?
-    -# FIXME: H.264 MP4 works in Firefox but not Chrome.
-    = video_player [@episode.view_url], { |
-        :poster => @episode.thumbnail_image_url     |
-      }.merge(Rails.application.config.k3cms_s3_podcast_video_tag_options) |
+  = k3cms_s3_podcast_video_player @episode
 
   .download_link
     = link_to(image_tag('k3cms/s3_podcast/video.png') + ' Download Video', @episode.download_url)
@@ -42,30 +36,3 @@
       = best_in_place @episode, :tag_list, :type => :input
     - else
       = k3cms_s3_podcast_episode_linked_tag_list(@episode)
-
-:javascript
-  $(function() {
-    var this_episode_box = $('.edit_mode_on .k3cms_s3_podcast_episode.show_large##{dom_id(@episode)}}');
-    var this_context_ribbon_selector = '.context_ribbon.#{dom_id(@episode)}}';
-
-    this_episode_box.tooltip({
-      //events: {tooltip: "mouseenter"},
-      delay: 100,
-      position: 'top left',
-      relative: true,
-      tip: this_context_ribbon_selector,
-      offset: [0, 0], // We don't want any gap or tooltip may disappear while moving mouse up through the gap.
-      onBeforeShow: function() {
-        var conf = this.getConf();
-        this.getTip().css('width', this.getTrigger().innerWidth()-10 + 'px');
-        conf.offset[1] = this.getTrigger().outerWidth();
-      },
-      onShow: function() {
-        this.getTrigger().addClass('active');
-      },
-      onHide: function() {
-        this.getTrigger().removeClass('active');
-      },
-    });
-  });
-
