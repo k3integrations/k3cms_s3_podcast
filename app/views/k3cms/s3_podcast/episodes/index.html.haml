@@ -5,4 +5,4 @@
 
 = link_to image_tag('k3cms/s3_podcast/feed.png') + ' Subscribe to Podcast', k3cms_s3_podcast_podcast_episodes_url(@podcast, :format => :rss)
 
-= render_cell 'k3cms/s3_podcast/episodes_index', :choose, :episodes => @episodes, :podcast => @podcast
+= render_cell 'k3cms/s3_podcast/episodes_index', :index, :episodes => @episodes, :podcast => @podcast

@@ -1,6 +1,5 @@
-= render_cell('k3cms/s3_podcast/episodes', :context_ribbon, :episode => @episode)
-
 %div{:class => k3cms_s3_podcast_episode_classes(@episode) + ['show_large'], :id => dom_id(@episode)}
+  = render_cell 'k3cms/s3_podcast/episodes', :context_ribbon,   :episode => @episode
   = render_cell 'k3cms/s3_podcast/episodes', :published_status, :episode => @episode
 
   %h2.title
@@ -37,29 +36,4 @@
     - else
       = k3cms_s3_podcast_episode_linked_tag_list(@episode)
 
-:javascript
-  $(function() {
-    var this_episode_box = $('.edit_mode_on .k3cms_s3_podcast_episode.show_large##{dom_id(@episode)}}');
-    var this_context_ribbon_selector = '.context_ribbon.#{dom_id(@episode)}}';
-
-    this_episode_box.tooltip({
-      //events: {tooltip: "mouseenter"},
-      delay: 100,
-      position: 'top left',
-      relative: true,
-      tip: this_context_ribbon_selector,
-      offset: [0, 0], // We don't want any gap or tooltip may disappear while moving mouse up through the gap.
-      onBeforeShow: function() {
-        var conf = this.getConf();
-        this.getTip().css('width', this.getTrigger().innerWidth()-10 + 'px');
-        conf.offset[1] = this.getTrigger().outerWidth();
-      },
-      onShow: function() {
-        this.getTrigger().addClass('active');
-      },
-      onHide: function() {
-        this.getTrigger().removeClass('active');
-      },
-    });
-  });
-
+  = render_cell 'k3cms/s3_podcast/episodes_index', :record_editing_js, :episode => @episode, :podcast => @podcast

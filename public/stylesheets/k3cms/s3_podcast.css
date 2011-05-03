@@ -1,6 +1,15 @@
 /*================================================================================================*/
 /* Common */
 
+/* This is a workaround for the fact that 'position: relative' is ignored for table cells. Put one of these inside your td. */
+.relative_fix {
+  position: relative;
+  height: 100%;
+}
+
+/*================================================================================================*/
+/* .context_ribbon */
+
 .context_ribbon,
 .context_ribbon {
   background-color: #eee;
@@ -8,6 +17,22 @@
   padding: 5px;
   display: none;
   z-index: 9999; /* must be on top of "expose" mask */
+}
+
+.context_ribbon * {
+  float: left;
+}
+
+.context_ribbon>div + div {
+  margin-left: 10px;
+}
+
+.context_ribbon label {
+  font-weight: bold;
+}
+
+.context_ribbon input {
+  margin: 0;
 }
 
 /*================================================================================================*/
@@ -110,17 +135,64 @@
 }
 
 /*------------------------------------------------------------------------------------------------*/
-/* common to show_large and show_small */
+/* common to index and show */
 
 .k3cms_s3_podcast_episode.show_large,
-.k3cms_s3_podcast_episode.show_small {
+.k3cms_s3_podcast_episode.tile {
   background-color: white;
   position: relative;
 }
 
+/* This doesn't work (in Chromium and Firefox anyway). 'position: relative' is ignored for table cells. */
+/* Use .relative_fix instead */
+tr.k3cms_s3_podcast_episode td {
+  position: relative;
+}
+
+.k3cms_s3_podcast_episode.new_record {
+  display: none;
+  border: 5px solid green;
+}
+
+/* we can't make this display: none, because it contains a .context_ribbon, but this comes close enough */
+tr.k3cms_s3_podcast_episode td.nearly_invisible {
+  width: 0px;
+  padding: 0px !important;
+}
+
+/* This is just an invisible placeholder border to keep dimensions uniform. The width here should match that of the green border below */
+tr.k3cms_s3_podcast_episode td {
+  border-top:    3px solid transparent;
+  border-bottom: 3px solid transparent;
+}
+tr.k3cms_s3_podcast_episode td:first-child {
+  border-left:   3px solid transparent;
+}
+tr.k3cms_s3_podcast_episode td:last-child {
+  border-right:  3px solid transparent;
+}
+/* Green borders for .active/.new_record */
+tr.k3cms_s3_podcast_episode.active     td,
+tr.k3cms_s3_podcast_episode.new_record td {
+  border-top:    3px solid green;
+  border-bottom: 3px solid green;
+}
+tr.k3cms_s3_podcast_episode.active     td:first-child,
+tr.k3cms_s3_podcast_episode.new_record td:first-child {
+  border-left:   3px solid green;
+}
+tr.k3cms_s3_podcast_episode.active     td:last-child,
+tr.k3cms_s3_podcast_episode.new_record td:last-child {
+  border-right:  3px solid green;
+}
+
+.k3cms_s3_podcast_episode.tile.unpublished {
+  background: #BDAD69;
+}
+
 /* Records on the page that *can* be edited but are not yet being edited */
 /* Give a subtle visual hint as to which areas on the screen can be edited */
-.edit_mode_on .k3cms_s3_podcast_episode.show_small,
+.edit_mode_on .k3cms_s3_podcast_episode.tile,
 .edit_mode_on .k3cms_s3_podcast_episode.show_large {
      -moz-box-shadow: 0 0 12px #ddd;
   -webkit-box-shadow: 0 0 12px #ddd;
@@ -129,8 +201,8 @@
 
 /* Records that you hover over or are actively editing */ 
 /* Copied fom inline_editor/public/stylesheets/k3cms/inline_editor.css -- keep in sync */
-.edit_mode_on .k3cms_s3_podcast_episode.show_small:hover,
-.edit_mode_on .k3cms_s3_podcast_episode.show_small.active,
+.edit_mode_on .k3cms_s3_podcast_episode.tile:hover,
+.edit_mode_on .k3cms_s3_podcast_episode.tile.active,
 .edit_mode_on .k3cms_s3_podcast_episode.show_large:hover,
 .edit_mode_on .k3cms_s3_podcast_episode.show_large.active,
 .context_ribbon,
@@ -142,14 +214,14 @@
 }
 
 .k3cms_s3_podcast_episode.show_large .status.unpublished,
-.k3cms_s3_podcast_episode.show_small .status.unpublished {
+.k3cms_s3_podcast_episode.tile .status.unpublished {
   border: 1px solid #A33028;
   background: #E6554B;
   color: white;
 }
-.k3cms_s3_podcast_episode.show_small .status.unpublished {
+.k3cms_s3_podcast_episode.tile .status.unpublished {
 }
-.k3cms_s3_podcast_episode.show_small .status.unpublished {
+.k3cms_s3_podcast_episode.tile .status.unpublished {
   font-size: 110%;
 }
 
@@ -172,9 +244,9 @@
 }
 
 /*------------------------------------------------------------------------------------------------*/
-/* .k3cms_s3_podcast_episode.show_small */
+/* .k3cms_s3_podcast_episode.tile */
 
-.k3cms_s3_podcast_episode.show_small {
+.k3cms_s3_podcast_episode.tile {
   float: left;
   padding: 10px 18px 0;
   /* This is just an invisible placeholder border to keep dimensions uniform. The width here should match that of .k3cms_s3_podcast_episode.new_record */
@@ -182,16 +254,7 @@
   width: 170px;
 }
 
-.k3cms_s3_podcast_episode.show_small.new_record {
-  display: none;
-  border: 5px solid green;
-}
-
-.k3cms_s3_podcast_episode.show_small.unpublished {
-  background: #BDAD69;
-}
-
-.k3cms_s3_podcast_episode.show_small div.thumbnail {
+.k3cms_s3_podcast_episode.tile div.thumbnail {
   margin: 0 0 5px -8px;
   width: 166px;
   height: 124px;
@@ -199,7 +262,7 @@
   background: url(/images/k3cms/s3_podcast/episode_small-thumbnail_bg.png) center no-repeat;
 }
 
-.k3cms_s3_podcast_episode.show_small .k3cms_s3_podcast_episode div.tags input {
+.k3cms_s3_podcast_episode.tile .k3cms_s3_podcast_episode div.tags input {
   width: 100px;
 }
 

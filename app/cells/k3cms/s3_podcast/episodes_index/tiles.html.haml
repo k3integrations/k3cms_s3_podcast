@@ -1,20 +1,4 @@
-- toggle_js = "$('.k3cms_s3_podcast.episode_list .the_list>.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode').toggle(); K3cms_S3Podcast.fix_clears(); "
-- new_episode_js = capture do
-  :plain
-    #{toggle_js}
-    $('.k3cms_s3_podcast.episode_list .the_list>.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode').data('tooltip').show()
-    $('.k3cms_s3_podcast.episode_list .the_list>.k3cms_s3_podcast_episode:visible:eq(0)').
-      expose({
-        color:'#000', 
-        opacity: 0.6, 
-        onClose: function() {
-          var e = this.getExposed()
-          if (!e.data('closing') && $('.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode').data('close_box_when_mask_closes') !== false) {
-            e.data('closing', 'expose is closed');
-            e.trigger('close');
-          }
-        },
-      });
+-# Compare: app/cells/k3cms/s3_podcast/episodes_index/list.html.haml app/cells/k3cms/s3_podcast/episodes_index/tiles.html.haml
 
 .k3cms_s3_podcast.episode_list
   .header
@@ -23,7 +7,8 @@
 
     - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
       %div
-        = link_to_function image_tag('k3cms/s3_podcast/add.png', :alt => 'New') + ' New episode', new_episode_js
+        = link_to_function image_tag('k3cms/s3_podcast/add.png', :alt => 'New') + ' New episode',
+          "$('.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode:eq(0)').trigger('toggle')"
 
   .the_list
     - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?

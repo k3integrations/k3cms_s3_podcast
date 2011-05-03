@@ -2,25 +2,44 @@ module K3cms
   module S3Podcast
     class EpisodesIndexCell < EpisodesCell
 
-      def choose
-        send(::Rails.application.config.k3cms_s3_index_view || :tiles)
+      #---------------------------------------------------------------------------------------------
+      def index
+        send(::Rails.application.config.k3cms_s3_index_view)
       end
       
       def list
         fetch_episodes
         render :view => 'list'
       end
-      
+
       def tiles
         fetch_episodes
         render :view => 'tiles' # Must specify because of choose() above...
       end
-      
-      def tile
-        fetch_episodes
-        render :view => 'tile'
+
+      #---------------------------------------------------------------------------------------------
+      def show
+        set_up
+        raise 'episode is required' unless @episode
+        raise 'podcast is required' unless @podcast
+        render :view => (::Rails.application.config.k3cms_s3_index_view == :tiles ? :tile : :table_row)
+      end
+
+      def table_row
+        set_up
+        raise 'episode is required' unless @episode
+        raise 'podcast is required' unless @podcast
+        render :view => 'table_row'
       end
       
+      def tile
+        set_up
+        raise 'episode is required' unless @episode
+        raise 'podcast is required' unless @podcast
+        render :view => 'tile'
+      end
+
+      #---------------------------------------------------------------------------------------------
       private
       
       def fetch_episodes

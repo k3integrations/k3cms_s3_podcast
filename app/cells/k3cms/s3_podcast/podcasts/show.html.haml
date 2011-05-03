@@ -33,20 +33,6 @@
       = link_to 'View more episodes', k3cms_s3_podcast_podcast_episodes_path(@podcast)
 
 
-
-  - if can?(:edit, @podcast) && edit_mode?
-    .editor_links
-      - if @podcast.new_record?
-        = button_to_function 'Create', '', :class => 'create_button'
-        = link_to_function image_tag('k3cms/s3_podcast/cancel.png', :alt => 'Cancel') + ' Cancel', "$(this).closest('.k3cms_s3_podcast_podcast').trigger('close')"
-
-      - else
-        - if can?(:edit, @podcast)
-          = link_to image_tag('k3cms/s3_podcast/pencil_go.png', :alt => 'Edit') + ' Edit', polymorphic_url(@podcast, :only_path => true)
-        - if can?(:destroy, @podcast)
-          = link_to image_tag('k3cms/s3_podcast/delete.png', :alt => 'Delete')  + ' Delete', polymorphic_url(@podcast, :only_path => true), :confirm => 'Are you sure?', :method => :delete, :remote => true
-
-
   :javascript
     $(function() {
       var this_podcast_box = $('.edit_mode_on .k3cms_s3_podcast_podcast.show_small##{dom_id(@podcast)}');

@@ -33,14 +33,18 @@ module K3cms
         end
       end
 
+      def xhr_show_for_show_and_new
+        if params[:size] == 'small'
+          render :text => render_cell('k3cms/s3_podcast/episodes_index', :show, :episode => @episode, :podcast => @podcast)
+        else
+          render :text => render_cell('k3cms/s3_podcast/episodes_show',  :show, :episode => @episode, :podcast => @podcast)
+        end
+      end
+
       def show
         respond_to do |format|
-          if request.xhr?
-            format.html {
-              style = params[:style]
-              style = 'tile' if style == 'tiles'
-              render :text => render_cell('k3cms/s3_podcast/episodes_show', Rails.application.config.k3cms_s3_show_view, :episode => @episode, :podcast => @podcast, :style => style)
-            }
+          if xhr?
+            format.html { xhr_show_for_show_and_new }
           else
             format.html # show.html.erb
           end
@@ -62,12 +66,8 @@ module K3cms
         @episode.podcast = @podcast
 
         respond_to do |format|
-          if request.xhr?
-            format.html {
-              style = params[:style]
-              style = 'tile' if style == 'tiles'
-              render :text => render_cell('k3cms/s3_podcast/episodes_index', Rails.application.config.k3cms_s3_show_view, :episode => @episode, :podcast => @podcast, :style => style)
-            }
+          if xhr?
+            format.html { xhr_show_for_show_and_new }
           else
             format.html # new.html.erb
           end
@@ -86,7 +86,13 @@ module K3cms
               redirect_to(k3cms_s3_podcast_episode_url(@episode, :focus => ".editable[data-object-id=#{dom_id(@episode)}][data-attribute=title]:visible"),
                           :notice => 'Episode was successfully created.')
             end
-            format.json { redirect_to(k3cms_s3_podcast_episode_url(@episode)) }
+            # The :format => 'json' is needed here to work around a Firefox bug:
+            # When Firefox receives a redirect when posting an Ajax request, it doesn't keep the same Accept headers as were in the original Ajax POST but changes them to (the default?):
+            #   text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+            # Chrome correctly keeps the same Accept headers as were in the original Ajax POST:
+            #   application/json, text/javascript, */*; q=0.01
+            # By passing :format => 'json' as a param, Rails lets us override the Accept headers.
+            format.json { redirect_to(k3cms_s3_podcast_episode_url(@episode, :xhr => xhr?, :format => 'json')) }
             format.xml  { render :xml => @episode, :status => :created, :location => @episode }
           else
             format.html { render :action => "new" }
@@ -121,6 +127,14 @@ module K3cms
           format.xml  { head :ok }
           format.json { render :nothing =>  true }
         end
+      end
+
+    private
+      # Work around this Firefox bug:
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=553888
+      # http://stackoverflow.com/questions/2485019/firefox-redirect-response-on-xhr-request
+      def xhr?
+        request.xhr? || params[:xhr]
       end
 
     end

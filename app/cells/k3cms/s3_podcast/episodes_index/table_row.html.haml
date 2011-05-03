@@ -1,0 +1,23 @@
+- link_params = Rails.application.config.k3cms_s3_show_view==:lightbox ? {:class => 'lightbox', :rel => '.s3_podcast_overlay'} : {}
+%tr{:class => k3cms_s3_podcast_episode_classes(@episode), :id => dom_id(@episode)}
+  %td.nearly_invisible
+    .relative_fix
+      = render_cell('k3cms/s3_podcast/episodes', :context_ribbon, :episode => @episode)
+
+  %td.title
+    - if can?(:edit, @episode) && edit_mode?
+      = inline_editable('span', @episode, :title) do
+        = raw @episode.title
+    - else
+      = link_to raw(@episode.title), @episode, link_params
+
+  %td.watch
+    - unless @episode.new_record?
+      = link_to 'Watch', @episode, link_params
+
+  = render_cell('k3cms/s3_podcast/episodes_index', :record_editing_js, :episode => @episode, :podcast => @podcast)
+
+  -# Note: The td must be the last element, so that the :last-child CSS selector selects it
+  %td.download
+    - unless @episode.new_record?
+      = link_to 'Download', @episode.download_url

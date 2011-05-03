@@ -1,5 +1,8 @@
 - if can?(:edit, @episode) && edit_mode?
   .context_ribbon{:class => dom_id(@episode)}
+    = fields_for(@episode) do |f|
+      = f.hidden_field :podcast_id
+
     .code
       %label Code:
       - if true
@@ -8,3 +11,27 @@
       - if false
         = text_field_tag @episode, :code
 
+    .display_date
+      %label Date:
+      - if can?(:edit, @episode) && edit_mode?
+        = inline_editable('span', @episode, :display_date) do
+          = raw @episode.display_date
+      - else
+        = @episode.display_date && @episode.display_date.to_s(:long)
+
+    .description
+
+    .action
+      - unless @episode.new_record?
+        -# if can?(:edit, @episode)
+          = link_to image_tag('k3cms/s3_podcast/pencil_go.png', :alt => 'Edit') + ' Edit', polymorphic_url(@episode, :only_path => true)
+        - if can?(:destroy, @episode)
+          = link_to image_tag('k3cms/s3_podcast/delete.png', :alt => 'Delete')  + ' Delete', polymorphic_url(@episode, :only_path => true), :confirm => 'Are you sure?', :method => :delete, :remote => true
+
+    .action
+      - if can?(:edit, @episode) && edit_mode? && @episode.new_record?
+        = button_to_function 'Create', '', :class => 'create_button'
+
+    .action
+      - if can?(:edit, @episode) && edit_mode? && @episode.new_record?
+        = link_to_function image_tag('k3cms/s3_podcast/cancel.png', :alt => 'Cancel') + ' Cancel', "$(this).closest('.k3cms_s3_podcast_episode').trigger('close')"

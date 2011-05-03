@@ -26,18 +26,27 @@ module K3cms
         set_up
         render
       end
+
+      def record_editing_js
+        set_up
+        raise 'episode is required' unless @episode
+        raise 'podcast is required' unless @podcast
+        render
+      end
       
-      private
+    private
       
+      # Extracts from options hash and sets instance variables
+      # Initializes @new_episode
       def set_up
-        @podcast = options[:podcast]
+        @episode = options[:episode]
+        @episodes = options[:episodes]
+
+        @podcast = options[:podcast] || @episode.podcast
 
         # duplicated with #new action in controller
         @new_episode = K3cms::S3Podcast::Episode.new.set_defaults
         @new_episode.podcast = @podcast
-
-        @episode = options[:episode]
-        @episodes = options[:episodes]
 
         @style = options[:style]
       end
