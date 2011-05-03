@@ -34,16 +34,46 @@ module K3cms::S3Podcast::EpisodeHelper
   def video_player(sources, options = {})
     # FIXME: H.264 MP4 works in Firefox but not Chrome 10+
     options.merge!(:controls => 'true', :style => "display: block;")
-    content_tag(:video, options, false) do
-      sources.map do |source_url|
-        case source_url
-        when /mp4$/, /m4v$/
-          type = "video/h264"
-        when /ogv/
-          type = "video/ogg"
-        end
-        content_tag(:source, '', :src => source_url, :type => type)
-      end.join("\n").html_safe
+    
+    src_list=''; download_list=''; mp4_url=''
+    sources.each do |source_url|
+      case source_url
+      when /mp4$/, /m4v$/
+        src_list += %Q(<source src="#{source_url}" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"' />\n)
+        download_list += %Q(<a href="#{source_url}" />MP4</a>\n)
+        mp4_url = source_url
+      when /webm$/
+        src_list += %Q(<source src="#{source_url}" type='video/webm; codecs="vp8, vorbis"' />\n)
+        download_list += %Q(<a href="#{source_url}" />WEBM</a>\n)
+      when /ogv$/
+        src_list += %Q(<source src="#{source_url}" type='video/ogg; codecs="theora, vorbis"' />\n)
+        download_list += %Q(<a href="#{source_url}" />OGV</a>\n)
+      end
     end
+    raise "Must define at least one mp4 file: #{sources}" unless defined?(mp4_url)
+    
+    %Q(
+      <div class="video-js-box">
+        <!-- Using the Video for Everybody Embed Code http://camendesign.com/code/video_for_everybody -->
+        <video class="video-js" width="#{options[:width]}" height=":#{options[:height]}" controls preload poster="#{options[:poster]}">
+          #{src_list}
+          <!-- Flash Fallback. Use any flash video player here. Make sure to keep the vjs-flash-fallback class. -->
+          <object class="vjs-flash-fallback" width="#{options[:width]}" height="#{options[:height]}" type="application/x-shockwave-flash"
+            data="http://releases.flowplayer.org/swf/flowplayer-3.2.1.swf">
+            <param name="movie" value="http://releases.flowplayer.org/swf/flowplayer-3.2.1.swf" />
+            <param name="allowfullscreen" value="true" />
+            <param name="flashvars" value='config={"playlist":["#{options[:poster]}", {"url": "#{mp4_url}","autoPlay":false,"autoBuffering":true}]}' />
+            <!-- Image Fallback. Typically the same as the poster image. -->
+            <img src="#{options[:poster]}" width="#{options[:width]}" height="#{options[:height]}" alt="Poster Image"
+              title="No video playback capabilities." />
+          </object>
+        </video>
+        <!-- Download links provided for devices that can't play video in the browser. -->
+        <p class="vjs-no-video"><strong>Download Video:</strong>
+          #{download_list}
+          <!-- Support VideoJS by keeping this link. -->
+          <a href="http://videojs.com">HTML5 Video Player</a> by VideoJS
+        </p>
+      </div>).html_safe
   end
 end
