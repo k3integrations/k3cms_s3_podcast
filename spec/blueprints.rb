@@ -21,6 +21,7 @@ module K3cms::S3Podcast
   Sham.code  {|i| "#{i}" }
 
   Episode.blueprint do
+    podcast      { Podcast.first || Podcast.make }
     code         { Sham.code }
     title        { Sham.title }
     display_date { Date.tomorrow }

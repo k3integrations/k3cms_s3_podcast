@@ -20,6 +20,7 @@ module K3cms
       normalize_attributes :title, :description, :with => [:strip, :blank]
 
       validates :title, :presence => true
+      validates :podcast, :presence => true
       validates :code, :presence => true, :uniqueness => {:scope => :podcast_id}
       validates :display_date, :timeliness => {:type => :date}
 
