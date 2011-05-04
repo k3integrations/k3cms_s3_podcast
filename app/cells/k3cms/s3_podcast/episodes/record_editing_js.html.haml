@@ -85,9 +85,7 @@
       mask: '#000',
       onBeforeLoad: function() {
         var wrap = this.getOverlay().find(".content");
-        wrap.load(this.getTrigger().attr("href"), function() {
-          $('.s3_podcast_overlay video').VideoJS();
-        });
+        wrap.load(this.getTrigger().attr("href"));
       }
     });
 
