@@ -55,7 +55,7 @@ module K3cms::S3Podcast::EpisodeHelper
     %Q(
       <div class="video-js-box">
         <!-- Using the Video for Everybody Embed Code http://camendesign.com/code/video_for_everybody -->
-        <video class="video-js" width="#{options[:width]}" height=":#{options[:height]}" controls preload poster="#{options[:poster]}">
+        <video class="video-js" width="#{options[:width]}" height="#{options[:height]}" controls preload poster="#{options[:poster]}">
           #{src_list}
           <!-- Flash Fallback. Use any flash video player here. Make sure to keep the vjs-flash-fallback class. -->
           <object class="vjs-flash-fallback" width="#{options[:width]}" height="#{options[:height]}" type="application/x-shockwave-flash"

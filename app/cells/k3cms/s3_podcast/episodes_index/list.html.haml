@@ -14,7 +14,7 @@
     %thead
       %tr
         %th{:colspan=>"4"}
-          Latest Programs
+          = t('Latest Programs')
 
     %tbody.the_list
       - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
