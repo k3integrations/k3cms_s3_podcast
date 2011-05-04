@@ -8,7 +8,7 @@
       = inline_editable('span', @podcast, :title) do
         = raw @podcast.title
     - else
-      = link_to raw(@podcast.title), k3cms_s3_podcast_podcast_path(@podcast)
+      = link_to raw(@podcast.title), k3cms_s3_podcast_podcast_episodes_path(@podcast)
 
   .left
     .description
@@ -24,7 +24,7 @@
         .video_player
           = k3cms_s3_podcast_video_player @most_recent_episode
 
-        %h3.title
+        .title
           = @most_recent_episode.title
         .date
           = @most_recent_episode.display_date
