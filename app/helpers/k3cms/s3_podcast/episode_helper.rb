@@ -36,6 +36,7 @@ module K3cms::S3Podcast::EpisodeHelper
     options.merge!(:controls => 'true', :style => "display: block;")
     
     src_list=''; download_list=''; mp4_url=''
+    #sources << 'http://video-js.zencoder.com/oceans-clip.ogv'
     sources.each do |source_url|
       case source_url
       when /mp4$/, /m4v$/
@@ -55,7 +56,7 @@ module K3cms::S3Podcast::EpisodeHelper
     %Q(
       <div class="video-js-box">
         <!-- Using the Video for Everybody Embed Code http://camendesign.com/code/video_for_everybody -->
-        <video class="video-js" width="#{options[:width]}" height=":#{options[:height]}" controls preload poster="#{options[:poster]}">
+        <video class="video-js" width="#{options[:width]}" height="#{options[:height]}" controls preload poster="#{options[:poster]}">
           #{src_list}
           <!-- Flash Fallback. Use any flash video player here. Make sure to keep the vjs-flash-fallback class. -->
           <object class="vjs-flash-fallback" width="#{options[:width]}" height="#{options[:height]}" type="application/x-shockwave-flash"
@@ -72,6 +73,11 @@ module K3cms::S3Podcast::EpisodeHelper
         <p class="vjs-no-video"><strong>Download Video:</strong>
           #{download_list}
         </p> -->
+        <script type="text/javascript">
+          $(function() {
+            $('video.video-js').VideoJS();
+          })
+        </script>
       </div>).html_safe
   end
 end
