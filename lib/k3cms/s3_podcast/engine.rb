@@ -50,6 +50,7 @@ module K3cms
       config.action_view.stylesheet_expansions[:k3].concat [
         'k3cms/s3_podcast.css',
         'k3cms/s3_podcast_overlay.css',
+        'k3cms/video-js.css',
       ]
 
       initializer 'k3.s3_podcast.cells_paths' do |app|
