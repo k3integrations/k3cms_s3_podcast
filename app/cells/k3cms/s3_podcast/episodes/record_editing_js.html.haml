@@ -85,10 +85,15 @@
       mask: '#000',
       onBeforeLoad: function() {
         var wrap = this.getOverlay().find(".content");
-        wrap.load(this.getTrigger().attr("href"), function() {
-          $('.s3_podcast_overlay video').VideoJS();
-        });
-      }
+        wrap.load(this.getTrigger().attr("href"));
+      },
+      onBeforeClose: function() {
+        var elements = this.getOverlay().find('video.video-js')
+        if (elements.length) {
+          var video_player = elements[0].player;
+          video_player.pause();
+        }
+      },
     });
 
     K3cms_S3Podcast.update_row_striping();
