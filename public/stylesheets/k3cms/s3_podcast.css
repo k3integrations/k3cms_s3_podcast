@@ -39,11 +39,11 @@
 }
 
 .k3cms_s3_podcast_podcast.show_small .video_player {
-  margin: 0 0 5px -8px;
+  margin: 0 0 5px -20px;
   width: 352px;
   height: 265px;
-  padding: 20px 0px 20px 20px;
-  background: url(/images/k3cms/s3_podcast/video_player_large_bg.png) center no-repeat;
+  padding: 18px 0px 10px 20px;
+  background: url(/images/k3cms/s3_podcast/video_player_large_bg.png) top left no-repeat;
 }
 
 .k3cms_s3_podcast_podcast.show_small .left {
@@ -103,6 +103,10 @@
 /* .k3cms_s3_podcast.episode_list */
 .k3cms_s3_podcast.episode_list .header {
   margin-bottom: 20px;
+}
+
+.k3cms_s3_podcast.episode_list table {
+  width: 100%;
 }
 
 /*------------------------------------------------------------------------------------------------*/
