@@ -35,19 +35,6 @@ k3cms_s3_podcast_podcast = {
 
     var container = $('.k3cms_s3_podcast_podcast#' + object_id);
 
-    var link = container.find('.download_link a');
-    link.attr('href', object.download_url);
-
-    var img = container.find('.thumbnail img');
-    img.attr('src', object.thumbnail_image_url);
-
-    var video = container.find('video');
-    video.attr('poster', object.thumbnail_image_url);
-    video.find('source').each(function(i) {
-      // TODO: Update src attribute
-      //$(this).attr('src', '?');
-    });
-
     K3cms_Ribbon.set_saved_status(new Date(object.updated_at));
   },
 
