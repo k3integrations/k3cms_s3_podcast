@@ -40,14 +40,14 @@ module K3cms::S3Podcast::EpisodeHelper
       case source_url
       when /mp4$/, /m4v$/
         src_list += %Q(<source src="#{source_url}" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"' />\n)
-        download_list += %Q(<a href="#{source_url}" />MP4</a>\n)
+        download_list += %Q(<a href="#{source_url}">MP4</a>\n)
         mp4_url = source_url
       when /webm$/
         src_list += %Q(<source src="#{source_url}" type='video/webm; codecs="vp8, vorbis"' />\n)
-        download_list += %Q(<a href="#{source_url}" />WEBM</a>\n)
+        download_list += %Q(<a href="#{source_url}">WEBM</a>\n)
       when /ogv$/
         src_list += %Q(<source src="#{source_url}" type='video/ogg; codecs="theora, vorbis"' />\n)
-        download_list += %Q(<a href="#{source_url}" />OGV</a>\n)
+        download_list += %Q(<a href="#{source_url}">OGV</a>\n)
       end
     end
     raise "Must define at least one mp4 file: #{sources}" unless defined?(mp4_url)
@@ -68,12 +68,10 @@ module K3cms::S3Podcast::EpisodeHelper
               title="No video playback capabilities." />
           </object>
         </video>
-        <!-- Download links provided for devices that can't play video in the browser. -->
+        <!-- Download links provided for devices that can't play video in the browser. 
         <p class="vjs-no-video"><strong>Download Video:</strong>
           #{download_list}
-          <!-- Support VideoJS by keeping this link. -->
-          <a href="http://videojs.com">HTML5 Video Player</a> by VideoJS
-        </p>
+        </p> -->
       </div>).html_safe
   end
 end
