@@ -71,6 +71,43 @@ module K3cms::S3Podcast
 
     end
 
+    describe 'sources' do
+      before do
+        @podcast = Podcast.make(sources: [
+          "http://example.com/{code}.ogv",
+          "http://example.com/{code}.m4v",
+        ])
+        @episode = Episode.new(code: 'my_code', podcast: @podcast)
+      end
+
+      it 'should replace {code} with the actual code' do
+        @episode.sources[0].should == "http://example.com/my_code.ogv"
+      end
+
+      it 'video_sources should return the video sources' do
+        @episode.video_sources.should == ["http://example.com/my_code.ogv", "http://example.com/my_code.m4v"]
+      end
+    end
+
+    describe 'sources' do
+      let(:episode) { @episode = Episode.new(code: 'my_code', display_date: Date.new(2011, 5, 1), podcast: @podcast) }
+
+      it 'should replace {year} with the actual year' do
+        @podcast = Podcast.make(sources: ["http://example.com/{year}.ogv"])
+        episode.sources[0].should == "http://example.com/2011.ogv"
+      end
+
+      it 'should replace {month} with the actual month, padded with 0s' do
+        @podcast = Podcast.make(sources: ["http://example.com/{month}.ogv"])
+        episode.sources[0].should == "http://example.com/05.ogv"
+      end
+
+      it 'should replace {month} with the actual day, padded with 0s' do
+        @podcast = Podcast.make(sources: ["http://example.com/{day}.ogv"])
+        episode.sources[0].should == "http://example.com/01.ogv"
+      end
+    end
+
     describe 'to_s' do
       it 'should return the title' do
         episode = Episode.new(:title => 'Home')

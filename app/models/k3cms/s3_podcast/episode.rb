@@ -24,6 +24,42 @@ module K3cms
       validates :code, :presence => true, :uniqueness => {:scope => :podcast_id}
       validates :display_date, :timeliness => {:type => :date}
 
+      #---------------------------------------------------------------------------------------------
+      # Sources
+
+      delegate :image?, :video?, :audio?, :to => :podcast
+
+      def sources
+        podcast.sources.map { |url| get_url(url) }
+      end
+
+      def sources_hash
+        sources.inject({}) do |hash, source_url|
+          extension = Pathname.new(source_url).extname
+          hash[extension] = source_url
+          hash
+        end
+      end
+
+      def image_url
+        #sources_hash.detect {|k,v| Podcast.image_extensions.include? k }
+        get_url(podcast.image_url)
+      end
+      def video_sources_hash
+        sources_hash.select {|k,v| Podcast.video_extensions.include? k }
+      end
+      def audio_sources_hash
+        sources_hash.select {|k,v| Podcast.audio_extensions.include? k }
+      end
+      def video_sources
+        video_sources_hash.values
+      end
+      def audio_sources
+        audio_sources_hash.values
+      end
+
+      #---------------------------------------------------------------------------------------------
+
       def set_defaults
         self.title   = 'New Episode'                          if self.attributes['title'].nil?
         self.description = '<p>Description goes here</p>'     if self.attributes['description'].nil?
@@ -31,50 +67,46 @@ module K3cms
         self
       end
 
-      def to_s
-        title
-      end
-
-      def scrubbed_title
-        title.gsub(/\s+/,'_').gsub(/[^a-zA-Z0-9_-]/,'')
-      end
-      
-      def thumbnail_image_url
-        replace_vars :thumbnail_image_url
-      end
-
-      # Question: When would this be different than download_url?
-      def view_url
-        replace_vars :view_url
-      end
-      
-      def download_url
-        replace_vars :download_url
-      end
-
       def published?
         display_date and Time.zone.now >= display_date.beginning_of_day
       end
+
+      #---------------------------------------------------------------------------------------------
+      # Conversions
 
       def as_json(options={})
         super(
           :methods => [
             :published?,
-            :thumbnail_image_url,
-            :view_url,
-            :download_url,
+            :image_url,
+            :video_sources,
+            :audio_sources,
           ]
         )
       end
+
+      def to_s
+        title
+      end
+
+      #---------------------------------------------------------------------------------------------
+
       
     private
       
-      def replace_vars(name)
-        url = Rails.application.config.k3cms_s3_podcast_asset_urls[name].dup
-        return '' if code.blank?
-        url.gsub!(/\{\s*CODE\s*\}/i, code)
-        url.gsub!(/\{\s*YEAR\s*\}/i, display_date.year.to_s)
-        url.gsub(/\{\s*TITLE\s*\}/i, scrubbed_title)
+      def get_url(url)
+        return '' if url.blank?
+        url.dup.tap do |url|
+          url.gsub!(/\{code\}/i,  code)
+          url.gsub!(/\{year}/i,   display_date.try(:year).to_s)
+          url.gsub!(/\{month}/i,  display_date.try(:strftime, '%m').to_s)
+          url.gsub!(/\{day}/i,    display_date.try(:strftime, '%d').to_s)
+          url.gsub!(/\{title\}/i, url_friendly_title.to_s)
+        end
+      end
+
+      def url_friendly_title
+        title.present? && title.gsub(/\s+/,'_').gsub(/[^a-zA-Z0-9_-]/,'')
       end
 
     end

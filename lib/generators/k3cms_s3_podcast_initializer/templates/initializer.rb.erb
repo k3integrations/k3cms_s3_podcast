@@ -1,15 +1,10 @@
 Rails.application.class_eval do
-  config.k3cms_s3_podcast_asset_urls = {
-    view_url:            "http://<%= bucket_name %>.s3.amazonaws.com/episodes/{YEAR}/{CODE}.mp4",
-    download_url:        "http://<%= bucket_name %>.s3.amazonaws.com/episodes/{YEAR}/{CODE}.mp4",
-    thumbnail_image_url: "http://<%= bucket_name %>.s3.amazonaws.com/episodes/{YEAR}/{CODE}-thumb.jpg",
-  }
   config.k3cms_s3_podcast_video_tag_options = {
     :width => 720, :height => 400
   }
   config.k3cms_s3_podcast_pagination = {
     :per_row => 3, :per_page => 12
   }
-  config.k3cms_s3_index_view = :tiles
-  config.k3cms_s3_show_view  = :page
+  config.k3cms_s3_index_view = :tiles # :list or :tiles
+  config.k3cms_s3_show_view  = :page  # :lightbox or :page
 end

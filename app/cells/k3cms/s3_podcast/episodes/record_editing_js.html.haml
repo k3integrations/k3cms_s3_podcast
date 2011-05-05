@@ -88,10 +88,17 @@
         wrap.load(this.getTrigger().attr("href"));
       },
       onBeforeClose: function() {
-        var elements = this.getOverlay().find('video.video-js')
+        var elements = this.getOverlay().find('video.video-js');
         if (elements.length) {
+          console.debug('stopping video...');
           var video_player = elements[0].player;
           video_player.pause();
+        }
+
+        var elements = this.getOverlay().find('.jp-jplayer');
+        if (elements.length) {
+          console.debug('stopping audio...');
+          elements.jPlayer("stop");
         }
       },
     });

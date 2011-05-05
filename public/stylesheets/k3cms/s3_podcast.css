@@ -27,12 +27,19 @@
   margin-left: 10px;
 }
 
+.context_ribbon input {
+  margin: 0;
+}
+.context_ribbon input + input {
+  margin-left: 10px;
+}
+
 .context_ribbon label {
   font-weight: bold;
 }
 
-.context_ribbon input {
-  margin: 0;
+.context_ribbon .field {
+  whitespace: nowrap;
 }
 
 /*================================================================================================*/

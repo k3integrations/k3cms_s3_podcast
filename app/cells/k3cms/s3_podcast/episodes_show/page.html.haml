@@ -10,7 +10,7 @@
       = raw @episode.title
 
   .display_date
-    %label Publish date:
+    %label #{t('Publish date')}:
     - if can?(:edit, K3cms::S3Podcast::Episode) && edit_mode?
       = inline_editable('span', @episode, :display_date) do
         = raw @episode.display_date
@@ -24,13 +24,14 @@
     - else
       = raw @episode.description
 
-  = k3cms_s3_podcast_video_player @episode
-
-  .download_link
-    = link_to(image_tag('k3cms/s3_podcast/video.png') + ' Download Video', @episode.download_url)
+  - if @episode.podcast.video?
+    = k3cms_s3_podcast_video_player @episode
+  - if @episode.podcast.audio?
+    = k3cms_s3_podcast_audio_player @episode
+  = k3cms_s3_podcast_download_links(@episode)
 
   .tags
-    %label Tags:
+    %label #{t('Tags')}:
     - if can?(:edit, @episode) && edit_mode?
       = best_in_place @episode, :tag_list, :type => :input
     - else

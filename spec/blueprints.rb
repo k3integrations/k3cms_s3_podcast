@@ -11,11 +11,11 @@ module K3cms::S3Podcast
 
   Podcast.blueprint do
     title        { Sham.title }
-    media_type 'Audio'
-    url nil
     description 'Description'
     summary 'Summary'
     author { User.first || User.make }
+    image_url "http://example.com/{code}.png"
+    sources  ["http://example.com/{code}.m4a", "http://example.com/{code}.ogg"]
   end
 
   Sham.code  {|i| "#{i}" }

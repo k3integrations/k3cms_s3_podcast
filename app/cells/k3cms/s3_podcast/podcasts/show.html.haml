@@ -33,6 +33,7 @@
       = link_to t('View more episodes'), k3cms_s3_podcast_podcast_episodes_path(@podcast)
 
 
+  -# FIXME: Duplicated with ./app/cells/k3cms/s3_podcast/episodes/record_editing_js.html.haml
   :javascript
     $(function() {
       var this_podcast_box = $('.edit_mode_on .k3cms_s3_podcast_podcast.show_small##{dom_id(@podcast)}');
@@ -43,7 +44,7 @@
           url: #{polymorphic_url(@podcast, :only_path => true).to_json},
           'save-type': 'POST',
           object_name: #{dom_class(@podcast).to_json},
-          elements: $('.new_k3cms_s3_podcast_podcast .editable'),
+          elements: $('#new_k3cms_s3_podcast_podcast .editable, #new_k3cms_s3_podcast_podcast :input'),
           save_success: function(data, msg, xhr, options) {
             if (data.error) {
               return;
@@ -52,10 +53,8 @@
             $('.context_ribbon.new_k3cms_s3_podcast_podcast').remove();
 
             var tooltip = $('#new_k3cms_s3_podcast_podcast').data('tooltip');
-            // There's a bug that makes this not work. isShown() incorrectly returns 'full'.
-            tooltip.hide();
-            // Workaround:
-            tooltip.getTip().hide();
+            tooltip.hide(); // There's a bug that makes this not work. isShown() incorrectly returns 'full'.
+            tooltip.getTip().hide(); // Workaround
 
             $('#new_k3cms_s3_podcast_podcast').data('close_box_when_mask_closes', false);
             $.mask.close();
