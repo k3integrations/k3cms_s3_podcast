@@ -33,7 +33,7 @@ module K3cms::S3Podcast::EpisodeHelper
 
   def k3cms_s3_podcast_download_links(episode)
     episode.sources_hash.map { |extension, source_url|
-      link_to(image_tag('k3cms/s3_podcast/video.png') + " #{t('Download')} #{extension} #{t('file')}", source_url)
+      link_to(image_tag('k3cms/s3_podcast/video.png') + " " + t('Download type file', :extension => extension), source_url)
     }.join('<br/>').html_safe
   end
 
@@ -81,7 +81,7 @@ module K3cms::S3Podcast::EpisodeHelper
         </video>
 
         <!-- Download links provided for devices that can't play video in the browser. 
-        <p class="vjs-no-video"><strong>Download Video:</strong>
+        <p class="vjs-no-video"><strong>#{t('Download')}:</strong>
           #{download_list}
         </p> -->
 
