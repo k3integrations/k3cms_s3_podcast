@@ -21,8 +21,7 @@
   .right
     .episode
       - if @most_recent_episode
-        .video_player
-          = k3cms_s3_podcast_video_player @most_recent_episode
+        = k3cms_s3_podcast_episode_player @most_recent_episode
 
         .title
           = @most_recent_episode.title

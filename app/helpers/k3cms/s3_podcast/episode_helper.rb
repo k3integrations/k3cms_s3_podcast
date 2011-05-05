@@ -25,20 +25,25 @@ module K3cms::S3Podcast::EpisodeHelper
     }.join(', ').html_safe
   end
 
+  def k3cms_s3_podcast_episode_player(episode)
+    (k3cms_s3_podcast_video_player episode if episode.podcast.video?).to_s.html_safe +
+    (k3cms_s3_podcast_audio_player episode if episode.podcast.audio?).to_s.html_safe
+  end
+
   def k3cms_s3_podcast_video_player(episode)
     video_player episode.video_sources, {
       :poster => episode.image_url
     }.merge(Rails.application.config.k3cms_s3_podcast_video_tag_options)
   end
 
+  def k3cms_s3_podcast_audio_player(episode)
+    audio_player episode.audio_sources
+  end
+
   def k3cms_s3_podcast_download_links(episode)
     episode.sources_hash.map { |extension, source_url|
       link_to(image_tag('k3cms/s3_podcast/video.png') + " " + t('Download type file', :extension => extension), source_url)
     }.join('<br/>').html_safe
-  end
-
-  def k3cms_s3_podcast_audio_player(episode)
-    audio_player episode.audio_sources
   end
 
   def video_player(sources, options = {})
@@ -64,7 +69,7 @@ module K3cms::S3Podcast::EpisodeHelper
     raise "Must define at least one mp4 source: #{sources}" unless defined?(mp4_url)
     
     %Q(
-      <div class="video-js-box">
+      <div class="video_player video-js-box">
         <!-- Using the Video for Everybody Embed Code http://camendesign.com/code/video_for_everybody -->
         <video class="video-js" width="#{options[:width]}" height="#{options[:height]}" controls preload poster="#{options[:poster]}">
           #{src_list}
@@ -110,7 +115,7 @@ module K3cms::S3Podcast::EpisodeHelper
     
     %Q(
       <div id="jquery_jplayer_1" class="jp-jplayer"></div>
-      <div class="jp-audio">
+      <div class="audio_player jp-audio">
         <div class="jp-type-single">
           <div id="jp_interface_1" class="jp-interface">
             <ul class="jp-controls">

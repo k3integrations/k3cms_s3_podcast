@@ -24,11 +24,8 @@
     - else
       = raw @episode.description
 
-  - if @episode.podcast.video?
-    = k3cms_s3_podcast_video_player @episode
-  - if @episode.podcast.audio?
-    = k3cms_s3_podcast_audio_player @episode
-  = k3cms_s3_podcast_download_links(@episode)
+  = k3cms_s3_podcast_episode_player @episode
+  = k3cms_s3_podcast_download_links @episode
 
   .tags
     %label #{t('Tags')}:

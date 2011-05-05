@@ -53,6 +53,7 @@ module K3cms
         'k3cms/s3_podcast_overlay.css',
         'k3cms/video-js.css',
         'k3cms/jquery.jplayer/jplayer.blue.monday.css',
+        'k3cms/jquery.jplayer/jplayer.blue.monday.overrides.css',
       ]
 
       initializer 'k3.s3_podcast.cells_paths' do |app|
