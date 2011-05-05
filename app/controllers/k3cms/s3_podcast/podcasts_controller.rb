@@ -4,7 +4,7 @@ module K3cms
       load_and_authorize_resource :podcast, :class => 'K3cms::S3Podcast::Podcast'
 
       def index
-        @podcasts = Podcast.order('id desc')
+        @podcasts = Podcast.order('created_at asc')
 
         respond_to do |format|
           format.html # index.html.erb
