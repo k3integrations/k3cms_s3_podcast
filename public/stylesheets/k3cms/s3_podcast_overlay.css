@@ -1,30 +1,30 @@
-.s3_podcast_overlay {
-	display: none;
-	z-index: 10000;
-	background-color: #333;
-	
-	width: 675px;	
-	min-height: 200px;
-	border: 1px solid #666;
-	
-	   -moz-box-shadow: 0 0 90px 5px #000;
-	-webkit-box-shadow: 0 0 90px #000;	
-	        box-shadow: 0 0 90px #000;	
+.k3cms_s3_podcast_overlay {
+  display: none;
+  z-index: 10000;
+  background-color: #333;
+
+  width: 675px;	
+  min-height: 200px;
+  border: 1px solid #666;
+
+  -moz-box-shadow: 0 0 90px 5px #000;
+  -webkit-box-shadow: 0 0 90px #000;	
+  box-shadow: 0 0 90px #000;	
 }
 
-.s3_podcast_overlay .close {
+.k3cms_s3_podcast_overlay .close {
   background-image: url(/images/k3cms/s3_podcast/overlay/close.png);
-	position: absolute;
-	right: -15px;
-	top: -15px;
-	cursor: pointer;
-	height: 35px;
-	width: 35px;
+  position: absolute;
+  right: -15px;
+  top: -15px;
+  cursor: pointer;
+  height: 35px;
+  width: 35px;
   z-index: 100;
 }
 
 /*
-.s3_podcast_overlay .content {
+.k3cms_s3_podcast_overlay .content {
   height: 441px;
   overflow-y: auto;
 }
