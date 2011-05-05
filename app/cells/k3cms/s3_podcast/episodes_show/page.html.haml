@@ -24,7 +24,7 @@
     - else
       = raw @episode.description
 
-  = k3cms_s3_podcast_episode_player @episode
+  = k3cms_s3_podcast_episode_player @episode, :autoplay => true
   = k3cms_s3_podcast_download_links @episode
 
   .tags

@@ -25,19 +25,21 @@ module K3cms::S3Podcast::EpisodeHelper
     }.join(', ').html_safe
   end
 
-  def k3cms_s3_podcast_episode_player(episode)
-    (k3cms_s3_podcast_video_player episode if episode.podcast.video?).to_s.html_safe +
-    (k3cms_s3_podcast_audio_player episode if episode.podcast.audio?).to_s.html_safe
+  def k3cms_s3_podcast_episode_player(episode, options = {})
+    (k3cms_s3_podcast_video_player(episode, options) if episode.podcast.video?).to_s.html_safe +
+    (k3cms_s3_podcast_audio_player(episode, options) if episode.podcast.audio?).to_s.html_safe
   end
 
-  def k3cms_s3_podcast_video_player(episode)
-    video_player episode.video_sources, {
-      :poster => episode.image_url
-    }.merge(Rails.application.config.k3cms_s3_podcast_video_tag_options)
+  def k3cms_s3_podcast_video_player(episode, options = {})
+    video_player(episode.video_sources,
+      {
+        :poster => episode.image_url
+      }.merge(Rails.application.config.k3cms_s3_podcast_video_tag_options).merge(options)
+    )
   end
 
-  def k3cms_s3_podcast_audio_player(episode)
-    audio_player episode.audio_sources
+  def k3cms_s3_podcast_audio_player(episode, options = {})
+    audio_player episode.audio_sources, options
   end
 
   def k3cms_s3_podcast_download_links(episode)
@@ -48,7 +50,11 @@ module K3cms::S3Podcast::EpisodeHelper
 
   def video_player(sources, options = {})
     # FIXME: H.264 MP4 works in Firefox but not Chrome 10+
-    options.merge!(:controls => 'true', :style => "display: block;")
+    options.reverse_merge!(
+        :controls => 'true',
+        :style => "display: block;",
+        :autoplay => false,
+    )
     
     src_list=''; download_list=''; mp4_url=''
     #sources << 'http://video-js.zencoder.com/oceans-clip.ogv'
@@ -78,7 +84,7 @@ module K3cms::S3Podcast::EpisodeHelper
             data="http://releases.flowplayer.org/swf/flowplayer-3.2.1.swf">
             <param name="movie" value="http://releases.flowplayer.org/swf/flowplayer-3.2.1.swf" />
             <param name="allowfullscreen" value="true" />
-            <param name="flashvars" value='config={"playlist":["#{options[:poster]}", {"url": "#{mp4_url}","autoPlay":false,"autoBuffering":true}]}' />
+            <param name="flashvars" value='config={"playlist":["#{options[:poster]}", {"url": "#{mp4_url}","autoPlay":#{options[:autoplay]},"autoBuffering":true}]}' />
             <!-- Image Fallback. Typically the same as the poster image. -->
             <img src="#{options[:poster]}" width="#{options[:width]}" height="#{options[:height]}" alt="Poster Image"
               title="No video playback capabilities." />
@@ -93,6 +99,9 @@ module K3cms::S3Podcast::EpisodeHelper
         <script type="text/javascript">
           $(function() {
             $('video.video-js').VideoJS();
+            #{if options[:autoplay]
+           "$('video.video-js')[0].player.play();"
+            end}
           })
         </script>
       </div>
@@ -152,8 +161,10 @@ module K3cms::S3Podcast::EpisodeHelper
           //$("#jquery_jplayer_1")
           $(".jp-jplayer").jPlayer({
             ready: function () {
-              $(this).jPlayer("setMedia", #{sources_hash.to_json}).
-                      jPlayer("play"); // auto-start
+              $(this).jPlayer('setMedia', #{sources_hash.to_json});
+              #{if options[:autoplay]
+             "$(this).jPlayer('play');"
+              end}
             },
             supplied: "#{sources_hash.keys.join(', ')}",
             swfPath: "/k3cms/jquery.jplayer",
