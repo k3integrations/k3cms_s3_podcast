@@ -25,15 +25,17 @@ module K3cms::S3Podcast
         end
       end
 
-      describe 'image_url' do
-        it "shouldn't allow invalid URLs" do
-          podcast = Podcast.new(image_url: 'htt:/not.a.real.url/')
-          podcast.valid?
-          podcast.errors[:image_url].should be_present
+      ['episode_image_url', 'icon_url', 'logo_url', 'episode_source_urls'].each do |attr_name|
+        describe attr_name do
+          it "shouldn't allow invalid URLs" do
+            podcast = Podcast.new(attr_name => 'htt:/not.a.real.url/')
+            podcast.valid?
+            podcast.errors[attr_name].should be_present
 
-          podcast = Podcast.new(image_url: 'http://a.real.url.com/')
-          podcast.valid?
-          podcast.errors[:image_url].should be_empty
+            podcast = Podcast.new(attr_name => 'http://a.real.url.com/')
+            podcast.valid?
+            podcast.errors[attr_name].should be_empty
+          end
         end
       end
     end
@@ -45,33 +47,43 @@ module K3cms::S3Podcast
       end
     end
 
-    describe 'sources' do
+    describe 'episode_source_urls' do
       it 'should be initialized to an array' do
         podcast = Podcast.new
-        podcast.sources.should be_instance_of(Array)
+        podcast.episode_source_urls.should be_instance_of(Array)
+      end
+
+      it 'should coerce it to an array if you set it to a non-array' do
+        podcast = Podcast.new(:episode_source_urls => 'not_an_array')
+        podcast.episode_source_urls.should be_instance_of(Array)
+      end
+
+      it 'should still be an array when you reload the record' do
+        podcast = Podcast.make(:episode_source_urls => ["http://example.com/"])
+        podcast.reload.episode_source_urls.should == ["http://example.com/"]
       end
 
       it 'should be required to have at least one source' do
         podcast = Podcast.new
         podcast.valid?
-        podcast.errors[:sources].should be_present
+        podcast.errors[:episode_source_urls].should be_present
       end
 
-      it 'should ignore blank sources' do
-        podcast = Podcast.new(:sources => ["http://example.com/{code}.m4a", nil, nil, ""])
-        podcast.sources.should == ["http://example.com/{code}.m4a"]
+      it 'should ignore blank episode_source_urls' do
+        podcast = Podcast.new(:episode_source_urls => ["http://example.com/{code}.m4a", nil, nil, ""])
+        podcast.episode_source_urls.should == ["http://example.com/{code}.m4a"]
       end
 
-      it 'does not strip out blank sources when you modify the array directly, bypassing the sources= setter' do
-        podcast = Podcast.make(:sources => ["http://example.com/{code}.m4a"])
-        podcast.sources[4] = 'other'
-        podcast.save
-        podcast.reload.sources.should == ["http://example.com/{code}.m4a", nil, nil, nil, 'other']
+      it 'does not strip out blank episode_source_urls when you modify the array directly, bypassing the episode_source_urls= setter' do
+        podcast = Podcast.make(:episode_source_urls => ["http://example.com/{code}.m4a"])
+        podcast.episode_source_urls[4] = 'other'
+        podcast.should_not be_valid
+        podcast.errors[:episode_source_urls].should be_present
+        podcast.episode_source_urls.should == ["http://example.com/{code}.m4a", nil, nil, nil, 'other']
 
-        # but, source_1 works around this, triggering sources= setter 
+        # but, source_1 works around this, triggering episode_source_urls= setter 
         podcast.source_1 = '1'
-        podcast.save
-        podcast.reload.sources.should == ["http://example.com/{code}.m4a", '1', 'other']
+        podcast.episode_source_urls.should == ["http://example.com/{code}.m4a", '1', 'other']
   
       end
     end

@@ -7,6 +7,10 @@
   height: 100%;
 }
 
+.clear_left {
+  clear: left;
+}
+
 /*================================================================================================*/
 /* .context_ribbon */
 
@@ -19,11 +23,12 @@
   z-index: 9999; /* must be on top of "expose" mask */
 }
 
-.context_ribbon * {
+
+.context_ribbon .left {
   float: left;
 }
 
-.context_ribbon>div + div {
+.context_ribbon .left + .left {
   margin-left: 10px;
 }
 
@@ -78,12 +83,12 @@
   background: url(/images/k3cms/s3_podcast/video_player_large_bg.png) top left no-repeat;
 }
 
-.k3cms_s3_podcast_podcast.show_small .left {
+.k3cms_s3_podcast_podcast.show_small>.left {
   float: left;
   width: 200px;
 }
 
-.k3cms_s3_podcast_podcast.show_small .right {
+.k3cms_s3_podcast_podcast.show_small>.right {
   float: right;
   width: 390px;
   padding-left: 10px;

@@ -11,13 +11,13 @@
       - if false
         = text_field_tag @episode, :code
 
-    .display_date
+    .date
       %label Date:
       - if can?(:edit, @episode) && edit_mode?
-        = inline_editable('span', @episode, :display_date) do
-          = raw @episode.display_date
+        = inline_editable('span', @episode, :date) do
+          = raw @episode.date
       - else
-        = @episode.display_date && @episode.display_date.to_s(:long)
+        = @episode.date && @episode.date.to_s(:long)
 
     .description
 

@@ -3,10 +3,10 @@ require 'spec_helper'
 module K3cms::S3Podcast
   describe EpisodesController do
 
+    # Fix for "undefined method `authenticate' for nil:NilClass" in k3cms_user
     let(:user) { mock_model(User, :k3cms_permitted? => true) }
     before { controller.stub :current_user => user }
 
-    #let(:mock_episode) { mock_model(Episode) }
     def mock_episode(stubs={})
       (@mock_episode ||= mock_model(Episode).as_null_object).tap do |episode|
         episode.stub(stubs) unless stubs.empty?
@@ -22,7 +22,13 @@ module K3cms::S3Podcast
 
     before do
       @podcast = Podcast.make
-      @episode = @podcast.episodes.make
+      @unpublished_episode = @podcast.episodes.make(:unpublished)
+      @episode   =           @podcast.episodes.make
+    end
+
+    it "our fixtures are what we expect" do
+      @unpublished_episode.should_not be_published
+      @episode.            should     be_published
     end
 
     describe "#index" do
@@ -35,10 +41,45 @@ module K3cms::S3Podcast
      #end
 
       context "nested" do
-        it "assigns all episodes for podcast as @episodes" do
+        before do
           get :index, :podcast_id => @podcast
+        end
+
+        it "does not include unpublished episodes" do
+          assigns(:episodes).should_not include(@unpublished_episode)
+        end
+
+        it "assigns all episodes for podcast as @episodes" do
           assigns(:episodes).size.should == 1
           assigns(:episodes).should == [@episode]
+        end
+      end
+    end
+
+    describe "#index.atom" do
+      render_views
+
+      context "nested" do
+        before do
+          get :index, :podcast_id => @podcast, :format => 'atom'
+        end
+
+        it "does not include unpublished episodes" do
+          assigns(:episodes).should_not include(@unpublished_episode)
+        end
+
+
+        it "assigns all episodes for podcast as @episodes" do
+          #puts "assigns=#{assigns.keys.inspect}"
+          assigns(:episodes).should == [@episode]
+          #puts "assigns(:episodes)=#{assigns(:episodes).inspect}"
+          response.should render_template("index")
+          #puts "response=#{response.inspect}"
+          #puts "response=#{response.body}"
+        end
+
+        it "should look like a feed" do
+          response.body.should have_tag('feed')
         end
       end
     end

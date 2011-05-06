@@ -6,3 +6,4 @@ module K3cms
 end
 
 require 'k3cms/s3_podcast/engine'
+require_relative 'uri_validator'

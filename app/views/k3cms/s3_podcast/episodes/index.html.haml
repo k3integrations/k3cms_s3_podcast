@@ -1,8 +1,12 @@
 - content_for :title do
   Episodes
+
+- content_for :head do
+  = auto_discovery_link_tag(:atom, k3cms_s3_podcast_podcast_episodes_path(@podcast, :atom))
+
 %h1.episodes_index_title 
   = @podcast.title
 
-= link_to image_tag('k3cms/s3_podcast/feed.png') + ' ' + t('Subscribe to Podcast'), k3cms_s3_podcast_podcast_episodes_url(@podcast, :format => :rss)
+= link_to image_tag('k3cms/s3_podcast/feed.png') + ' ' + t('Subscribe to Podcast'), k3cms_s3_podcast_podcast_episodes_url(@podcast, :format => :atom)
 
 = render_cell 'k3cms/s3_podcast/episodes_index', :index, :episodes => @episodes, :podcast => @podcast

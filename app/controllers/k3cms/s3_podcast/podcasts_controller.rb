@@ -10,7 +10,6 @@ module K3cms
           format.html # index.html.erb
           format.xml  { render :xml  => @podcasts }
           format.json { render :json => @podcasts }
-          format.rss
         end
       end
 
@@ -65,7 +64,7 @@ module K3cms
           else
             format.html { render :action => "new" }
             format.xml  { render :xml => @podcast.errors, :status => :unprocessable_entity }
-            format.json { render :json => {:error => @podcast.errors.full_messages.join('<br/>')} }
+            format.json { render :json => {:error => @podcast.errors.full_messages.join('<br/>'), :status => :unprocessable_entity} }
           end
         end
       end
@@ -82,7 +81,7 @@ module K3cms
           else
             format.html { render :action => "edit" }
             format.xml  { render :xml => @podcast.errors, :status => :unprocessable_entity }
-            format.json { render :json => {:error => @podcast.errors.full_messages.join('<br/>')} }
+            format.json { render :json => {:error => @podcast.errors.full_messages.join('<br/>')}, :status => :unprocessable_entity }
           end
         end
       end

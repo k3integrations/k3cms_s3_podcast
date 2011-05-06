@@ -20,4 +20,4 @@
   -# Note: The td must be the last element, so that the :last-child CSS selector selects it
   %td.download
     - unless @episode.new_record?
-      = link_to raw(t('Download')+' '+image_tag('dl.gif')), @episode.sources[0]
+      = link_to raw(t('Download')+' '+image_tag('dl.gif')), @episode.source_urls[0]

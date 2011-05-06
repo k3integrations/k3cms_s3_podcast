@@ -1,28 +1,35 @@
 - if can?(:edit, @podcast) && edit_mode?
   .context_ribbon{:class => dom_id(@podcast)}
-    %div{:style => 'clear: left'}
-      %label Audio/video sources:
+    .field
+      %label Audio/video source URLs:
+      %ul
+        - if @podcast.new_record?
+          - (@podcast.episode_source_urls + ['']).each do |source_url|
+            %li= text_field_tag 'podcast[episode_source_urls][]', source_url, :size => 50
+        - else
+          %li= best_in_place @podcast, :source_0, :type => :input
+          %li= best_in_place @podcast, :source_1, :type => :input
+
+    .field
+      %label Feed icon URL:
       - if @podcast.new_record?
-        - (@podcast.sources + ['']).each do |source_url|
-          = text_field_tag 'podcast[sources][]', source_url
+        = text_field :podcast, :icon_url
       - else
-        = best_in_place @podcast, :source_0, :type => :input
-        = best_in_place @podcast, :source_1, :type => :input
+        = best_in_place @podcast, :icon_url, :type => :input
 
-    %div{:style => 'clear: left'}
-      .field
-        %label Image:
-        - if @podcast.new_record?
-          = text_field :podcast, :image_url
-        - else
-          = best_in_place @podcast, :image_url, :type => :input
+    .field
+      %label Episode image URL:
+      - if @podcast.new_record?
+        = text_field :podcast, :episode_image_url
+      - else
+        = best_in_place @podcast, :episode_image_url, :type => :input
 
-      .field
-        = label :podcast, :publish_days_in_advance_of_display_date
-        - if @podcast.new_record?
-          = text_field :podcast, :publish_days_in_advance_of_display_date, :size => 1
-        - else
-          = best_in_place @podcast, :publish_days_in_advance_of_display_date, :type => :input
+    .field
+      = label :podcast, :publish_episodes_days_in_advance_of_date
+      - if @podcast.new_record?
+        = text_field :podcast, :publish_episodes_days_in_advance_of_date, :size => 1
+      - else
+        = best_in_place @podcast, :publish_episodes_days_in_advance_of_date, :type => :input
 
     %div
       - unless @podcast.new_record?
@@ -32,9 +39,10 @@
           = link_to image_tag('k3cms/s3_podcast/delete.png', :alt => 'Delete')  + ' Delete', polymorphic_url(@podcast, :only_path => true), :confirm => 'Are you sure?', :method => :delete, :remote => true
 
     %div
-      - if can?(:edit, @podcast) && edit_mode? && @podcast.new_record?
-        = button_to_function 'Create', '', :class => 'create_button'
+      .left
+        - if can?(:edit, @podcast) && edit_mode? && @podcast.new_record?
+          = button_to_function 'Create', '', :class => 'create_button'
 
-    %div
-      - if can?(:edit, @podcast) && edit_mode? && @podcast.new_record?
-        = link_to_function image_tag('k3cms/s3_podcast/cancel.png', :alt => 'Cancel') + ' Cancel', "$(this).closest('.k3cms_s3_podcast_podcast').trigger('close')"
+      .left
+        - if can?(:edit, @podcast) && edit_mode? && @podcast.new_record?
+          = link_to_function image_tag('k3cms/s3_podcast/cancel.png', :alt => 'Cancel') + ' Cancel', "$(this).closest('.k3cms_s3_podcast_podcast').trigger('close')"

@@ -1,14 +1,3 @@
-class UriValidator < ActiveModel::EachValidator
-  def validate_each(object, attribute, value)
-    configuration = { :message => "is invalid", :format => URI::regexp(%w(http https)) }
-    configuration.update(options)
-    
-    unless value =~ configuration[:format]
-      object.errors.add(attribute, configuration[:message])
-    end
-  end
-end
-
 module K3cms
   module S3Podcast
     class Podcast < ActiveRecord::Base
@@ -21,33 +10,52 @@ module K3cms
 
       validates :title, :presence => true
 
-      validates :image_url, :presence => true, :uri => true
+      validates :episode_image_url, :uri => true, :presence => true
+      validates :icon_url, :logo_url, :uri => true, :allow_nil => true
 
       #---------------------------------------------------------------------------------------------
       # Sources
 
-      serialize :sources
-      normalize_attributes :sources, :with => [:reject_blank]
+      serialize :episode_source_urls
+      normalize_attributes :episode_source_urls, :with => [:reject_blank]
 
-      after_initialize :initialize_sources
-      def initialize_sources
-        self.sources ||= []
+      after_initialize :initialize_episode_source_urls
+      def initialize_episode_source_urls
+        self.episode_source_urls ||= []
       end
 
-      validate :validate_sources
-      def validate_sources
-        sources.any? or errors[:sources] << "must include one source"
-        # TODO: use UriValidator
+      validate :validate_episode_source_urls
+      def validate_episode_source_urls
+        episode_source_urls.any? or (errors[:episode_source_urls] << "must include one source"; return)
+
+        episode_source_urls.each do |source_url|
+          validator = UriValidator.new(:attributes => [:episode_source_urls], :message => "contains invalid url '#{source_url}'")
+          validator.validate_each self, :episode_source_urls, source_url
+        end
       end
 
       class << self
         def image_extensions; %w[.png .jpg .gif]; end
         def video_extensions; %w[.mp4 .ogv .webmv .m4v]; end
         def audio_extensions; %w[.mp3 .oga .webma .m4a .wav]; end
+        def mime_type_from_url(url)
+          extension = Pathname.new(url).extname
+          {
+            '.ogg'     => 'application/ogg',
+            '.ogx'     => 'application/ogg',
+            '.ogv'     => 'video/ogg',
+            '.oga'     => 'audio/ogg',
+            '.mp4'     => 'video/mp4',
+            '.m4v'     => 'video/mp4',
+            '.mp3'     => 'audio/mpeg',
+            '.m4a'     => 'audio/mpeg'
+          }[extension] || ::MIME::Types.type_for(url).first
+        end
       end
 
-      def sources_hash
-        sources.inject({}) do |hash, url|
+
+      def episode_source_urls_hash
+        episode_source_urls.inject({}) do |hash, url|
           extension = Pathname.new(url).extname
           hash[extension] = url
           hash
@@ -55,24 +63,24 @@ module K3cms
       end
 
       def source_extensions
-        #sources.map {|_| Pathname.new(_).extname }
-        sources_hash.keys
+        #episode_source_urls.map {|_| Pathname.new(_).extname }
+        episode_source_urls_hash.keys
       end
 
      #def image_url
-     #  sources_hash.detect {|k,v| Podcast.image_extensions.include? k }
+     #  episode_source_urls_hash.detect {|k,v| Podcast.image_extensions.include? k }
      #end
-      def video_sources_hash
-        sources_hash.select {|k,v| Podcast.video_extensions.include? k }
+      def video_episode_source_urls_hash
+        episode_source_urls_hash.select {|k,v| Podcast.video_extensions.include? k }
       end
-      def audio_sources_hash
-        sources_hash.select {|k,v| Podcast.audio_extensions.include? k }
+      def audio_episode_source_urls_hash
+        episode_source_urls_hash.select {|k,v| Podcast.audio_extensions.include? k }
       end
-      def video_sources
-        video_sources_hash.values
+      def video_episode_source_urls
+        video_episode_source_urls_hash.values
       end
-      def audio_sources
-        audio_sources_hash.values
+      def audio_episode_source_urls
+        audio_episode_source_urls_hash.values
       end
 
      #def image?
@@ -89,18 +97,18 @@ module K3cms
 
       # ugly workaround so that we can use best_in_place
       def source_0
-        sources[0]
+        episode_source_urls[0]
       end
       def source_1
-        sources[1]
+        episode_source_urls[1]
       end
       def source_0=(new)
-        sources[0] = new
-        self.sources = sources.dup
+        episode_source_urls[0] = new
+        self.episode_source_urls = episode_source_urls.dup
       end
       def source_1=(new)
-        sources[1] = new
-        self.sources = sources.dup
+        episode_source_urls[1] = new
+        self.episode_source_urls = episode_source_urls.dup
       end
 
 
@@ -108,9 +116,9 @@ module K3cms
       def set_defaults
         self.title       = 'New Podcast'
         self.description = '<p>Description goes here</p>'
-        self.image_url   =  "http://example.com/{year}/{code}.png"
-        self.sources     = ["http://example.com/{year}/{code}.m4a", "http://example.com/{year}/{code}.ogg"]
-        self.publish_days_in_advance_of_display_date = 0
+        self.episode_image_url   =  "http://example.com/{year}/{code}.png"
+        self.episode_source_urls     = ["http://example.com/{year}/{code}.m4a", "http://example.com/{year}/{code}.ogg"]
+        self.publish_episodes_days_in_advance_of_date = 0
         self
       end
 

@@ -31,24 +31,25 @@ module K3cms::S3Podcast::EpisodeHelper
   end
 
   def k3cms_s3_podcast_video_player(episode, options = {})
-    video_player(episode.video_sources,
+    video_player(episode.video_source_urls,
       {
         :poster => episode.image_url
-      }.merge(Rails.application.config.k3cms_s3_podcast_video_tag_options).merge(options)
+      }.merge(Rails.application.config.k3cms_s3_podcast_video_tag_options).
+        merge(options)
     )
   end
 
   def k3cms_s3_podcast_audio_player(episode, options = {})
-    audio_player episode.audio_sources, options
+    audio_player episode.audio_source_urls, options
   end
 
   def k3cms_s3_podcast_download_links(episode)
-    episode.sources_hash.map { |extension, source_url|
+    episode.source_urls_hash.map { |extension, source_url|
       link_to(image_tag('k3cms/s3_podcast/video.png') + " " + t('Download type file', :extension => extension), source_url)
     }.join('<br/>').html_safe
   end
 
-  def video_player(sources, options = {})
+  def video_player(source_urls, options = {})
     # FIXME: H.264 MP4 works in Firefox but not Chrome 10+
     options.reverse_merge!(
         :controls => 'true',
@@ -57,8 +58,8 @@ module K3cms::S3Podcast::EpisodeHelper
     )
     
     src_list=''; download_list=''; mp4_url=''
-    #sources << 'http://video-js.zencoder.com/oceans-clip.ogv'
-    sources.each do |source_url|
+    #source_urls << 'http://video-js.zencoder.com/oceans-clip.ogv'
+    source_urls.each do |source_url|
       case Pathname.new(source_url).extname
       when '.mp4', '.m4v'
         src_list += %Q(<source src="#{source_url}" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"' />\n)
@@ -72,7 +73,7 @@ module K3cms::S3Podcast::EpisodeHelper
         download_list += %Q(<a href="#{source_url}">OGV</a>\n)
       end
     end
-    raise "Must define at least one mp4 source: #{sources}" unless defined?(mp4_url)
+    raise "Must define at least one mp4 source: #{source_urls}" unless defined?(mp4_url)
     
     %Q(
       <div class="video_player video-js-box">
@@ -108,19 +109,19 @@ module K3cms::S3Podcast::EpisodeHelper
     ).html_safe
   end
 
-  def audio_player(sources, options = {})
-    #sources = ["http://www.jplayer.org/audio/m4a/Miaow-07-Bubble.m4a", "http://www.jplayer.org/audio/ogg/Miaow-07-Bubble.ogg"]
+  def audio_player(source_urls, options = {})
+    #source_urls = ["http://www.jplayer.org/audio/m4a/Miaow-07-Bubble.m4a", "http://www.jplayer.org/audio/ogg/Miaow-07-Bubble.ogg"]
 
-    sources_hash = {}
-    sources.each do |source_url|
+    source_urls_hash = {}
+    source_urls.each do |source_url|
       extension = Pathname.new(source_url).extname
       extension = extension[1..-1] # drop leading '.'
-      sources_hash[extension] = source_url
+      source_urls_hash[extension] = source_url
     end
 
     # http://www.jplayer.org/latest/quick-start-guide/step-8-audio/
     # "Note that for audio, you must supply either M4A or MP3 files to satisfy both HTML5 and Flash solutions."
-    raise "Must define at least one m4a or mp3 source: #{sources}" unless (sources_hash.keys & ['m4a', 'mp3']).any?
+    raise "Must define at least one m4a or mp3 source: #{source_urls}" unless (source_urls_hash.keys & ['m4a', 'mp3']).any?
     
     %Q(
       <div id="jquery_jplayer_1" class="jp-jplayer"></div>
@@ -161,12 +162,12 @@ module K3cms::S3Podcast::EpisodeHelper
           //$("#jquery_jplayer_1")
           $(".jp-jplayer").jPlayer({
             ready: function () {
-              $(this).jPlayer('setMedia', #{sources_hash.to_json});
+              $(this).jPlayer('setMedia', #{source_urls_hash.to_json});
               #{if options[:autoplay]
              "$(this).jPlayer('play');"
               end}
             },
-            supplied: "#{sources_hash.keys.join(', ')}",
+            supplied: "#{source_urls_hash.keys.join(', ')}",
             swfPath: "/k3cms/jquery.jplayer",
             solution: "html, flash",
             volume: 1,

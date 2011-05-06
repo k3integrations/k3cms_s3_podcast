@@ -8,15 +8,14 @@ module K3cms::S3Podcast
       Time.stub!(:now).and_return(Time.mktime(2011,1,1, 12,0))
     end
 
-
     describe "published?" do
-      it 'when display_date is yesterday, it will report itself as being unpublished' do
-        @episode = Episode.make(:display_date => Date.new(2011,12,31))
+      it 'when date is yesterday, it will report itself as being unpublished' do
+        @episode = Episode.make(:date => Date.new(2011,12,31))
         @episode.should_not be_published
       end
 
-      it 'when display_date is today, it will report itself as being published' do
-        @episode = Episode.make(:code => 'something', :display_date => Date.new(2011,1,1))
+      it 'when date is today, it will report itself as being published' do
+        @episode = Episode.make(:code => 'something', :date => Date.new(2011,1,1))
         @episode.should be_published
       end
 
@@ -37,20 +36,20 @@ module K3cms::S3Podcast
         end
       end
 
-      describe 'display_date' do
+      describe 'date' do
         it "accepts valid dates" do
           Episode.destroy_all
-          episode = Episode.make_unsaved(:code => 'something', :display_date => '2011-02-10')
+          episode = Episode.make_unsaved(:code => 'something', :date => '2011-02-10')
           episode.should be_valid
         end
 
         it "doesn't accept valid date" do
           Episode.destroy_all
           episode = Episode.new(code: 'code')
-          episode.display_date = '2011-02-99'
+          episode.date = '2011-02-99'
           episode.valid?
           episode.should_not be_valid
-          episode.errors['display_date'].first.should match(/not a valid date/)
+          episode.errors['date'].first.should match(/not a valid date/)
         end
       end
 
@@ -71,40 +70,58 @@ module K3cms::S3Podcast
 
     end
 
-    describe 'sources' do
+    describe 'source_urls (with multiple sources)' do
       before do
-        @podcast = Podcast.make(sources: [
+        @podcast = Podcast.make(episode_source_urls: [
           "http://example.com/{code}.ogv",
           "http://example.com/{code}.m4v",
         ])
         @episode = Episode.new(code: 'my_code', podcast: @podcast)
       end
 
-      it 'should replace {code} with the actual code' do
-        @episode.sources[0].should == "http://example.com/my_code.ogv"
-      end
-
-      it 'video_sources should return the video sources' do
-        @episode.video_sources.should == ["http://example.com/my_code.ogv", "http://example.com/my_code.m4v"]
+      it 'video_source_urls should return the video source_urls' do
+        @episode.video_source_urls.should == ["http://example.com/my_code.ogv", "http://example.com/my_code.m4v"]
       end
     end
 
-    describe 'sources' do
-      let(:episode) { @episode = Episode.new(code: 'my_code', display_date: Date.new(2011, 5, 1), podcast: @podcast) }
+    describe 'source_urls' do
+      let(:episode) { @episode = Episode.new(code: 'my_code', date: Date.new(2011, 5, 1), podcast: @podcast) }
+
+      it 'should replace {code} with the actual code' do
+        @podcast = Podcast.make(episode_source_urls: ["http://example.com/{code}.ogv"])
+        episode.source_urls[0].should == "http://example.com/my_code.ogv"
+      end
 
       it 'should replace {year} with the actual year' do
-        @podcast = Podcast.make(sources: ["http://example.com/{year}.ogv"])
-        episode.sources[0].should == "http://example.com/2011.ogv"
+        @podcast = Podcast.make(episode_source_urls: ["http://example.com/{year}.ogv"])
+        episode.source_urls[0].should == "http://example.com/2011.ogv"
       end
 
       it 'should replace {month} with the actual month, padded with 0s' do
-        @podcast = Podcast.make(sources: ["http://example.com/{month}.ogv"])
-        episode.sources[0].should == "http://example.com/05.ogv"
+        @podcast = Podcast.make(episode_source_urls: ["http://example.com/{month}.ogv"])
+        episode.source_urls[0].should == "http://example.com/05.ogv"
       end
 
       it 'should replace {month} with the actual day, padded with 0s' do
-        @podcast = Podcast.make(sources: ["http://example.com/{day}.ogv"])
-        episode.sources[0].should == "http://example.com/01.ogv"
+        @podcast = Podcast.make(episode_source_urls: ["http://example.com/{day}.ogv"])
+        episode.source_urls[0].should == "http://example.com/01.ogv"
+      end
+    end
+
+    describe 'get_url' do
+      it "given nil, should return nil" do
+        episode = Episode.new
+        episode.send(:get_url, nil).should be_nil
+      end
+
+      it "when code is nil and is referenced by the source_url, should return nil" do
+        episode = Episode.new(code: nil)
+        episode.send(:get_url, 'something_{code}').should be_nil
+      end
+
+      it "when code is nil but is NOT even referenced by the source_url, should not matter" do
+        episode = Episode.new(code: nil, date: Date.new(2011,1,1))
+        episode.send(:get_url, 'something_{year}').should == 'something_2011'
       end
     end
 

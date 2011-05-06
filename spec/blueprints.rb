@@ -14,8 +14,8 @@ module K3cms::S3Podcast
     description 'Description'
     summary 'Summary'
     author { User.first || User.make }
-    image_url "http://example.com/{code}.png"
-    sources  ["http://example.com/{code}.m4a", "http://example.com/{code}.ogg"]
+    episode_image_url "http://example.com/{code}.png"
+    episode_source_urls  ["http://example.com/{code}.m4a", "http://example.com/{code}.ogg"]
   end
 
   Sham.code  {|i| "#{i}" }
@@ -24,6 +24,10 @@ module K3cms::S3Podcast
     podcast      { Podcast.first || Podcast.make }
     code         { Sham.code }
     title        { Sham.title }
-    display_date { Date.tomorrow }
+    date         { Date.yesterday }
+  end
+
+  Episode.blueprint :unpublished do
+    date         { Date.tomorrow }
   end
 end

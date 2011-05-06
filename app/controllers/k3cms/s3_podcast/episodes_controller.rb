@@ -2,23 +2,24 @@ module K3cms
   module S3Podcast
     class EpisodesController < K3cms::S3Podcast::BaseController
       before_filter :adjust_params
-      # otherwise the load_resource :episode results in a 'Failed Authorization' error
+      # otherwise the load_resource :episode results in a 'Failed Authorization' error, because load_resource :podcast doesn't find the Podcast
       def adjust_params
         if params[:k3cms_s3_podcast_podcast_id]
           params[:podcast_id] = params[:k3cms_s3_podcast_podcast_id]
         end
       end
 
+      # TODO: change to load_and_authorize_resource
       load_resource :podcast, :class => 'K3cms::S3Podcast::Podcast'
       load_resource :episode, :class => 'K3cms::S3Podcast::Episode', :through => :podcast, :shallow => true
 
       def index
         @podcast or raise "podcast must be specified in the url (use the nested route, k3cms_s3_podcast_podcast_episodes_path(podcast))"
 
-        if request.fullpath =~ /.rss$/
-          @episodes = Episode.most_recent.limit(20)
+        if params[:format] == 'atom'
+          @episodes = @podcast.episodes.published.most_recent.limit(20)
         else
-          @episodes = @episodes.order('id desc')
+          @episodes = @episodes.published.order('id desc')
         end
 
         if params[:tag_list]
@@ -29,7 +30,7 @@ module K3cms
           format.html # index.html.erb
           format.xml  { render :xml  => @episodes }
           format.json { render :json => @episodes }
-          format.rss
+          format.atom
         end
       end
 
