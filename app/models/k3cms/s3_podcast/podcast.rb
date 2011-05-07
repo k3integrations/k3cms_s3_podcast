@@ -8,10 +8,10 @@ module K3cms
 
       normalize_attributes :title, :summary, :description, :with => [:strip, :blank]
 
-      validates :title, :presence => true
+      validates :episode_image_url, :icon_url, :logo_url, :uri => true, :allow_nil => true
 
-      validates :episode_image_url, :uri => true, :presence => true
-      validates :icon_url, :logo_url, :uri => true, :allow_nil => true
+      validates :title, :presence => true
+      validates :episode_image_url, :presence => true, :if => :video?
 
       #---------------------------------------------------------------------------------------------
       # Sources
@@ -83,10 +83,6 @@ module K3cms
         audio_episode_source_urls_hash.values
       end
 
-     #def image?
-     #  (source_extensions & Podcast.image_extensions).any?
-     #end
-
       def video?
         (source_extensions & Podcast.video_extensions).any?
       end
@@ -113,12 +109,17 @@ module K3cms
 
 
       #---------------------------------------------------------------------------------------------
+
+      after_initialize :initialize_publish_episodes_days_in_advance_of_date
+      def initialize_publish_episodes_days_in_advance_of_date
+        self.publish_episodes_days_in_advance_of_date = 0 if self.attributes['publish_episodes_days_in_advance_of_date'].nil?
+      end
+
       def set_defaults
         self.title       = 'New Podcast'
         self.description = '<p>Description goes here</p>'
         self.episode_image_url   =  "http://example.com/{year}/{code}.png"
-        self.episode_source_urls     = ["http://example.com/{year}/{code}.m4a", "http://example.com/{year}/{code}.ogg"]
-        self.publish_episodes_days_in_advance_of_date = 0
+        self.episode_source_urls = ["http://example.com/{year}/{code}.m4a", "http://example.com/{year}/{code}.ogg"]
         self
       end
 

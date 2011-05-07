@@ -8,21 +8,64 @@ module K3cms::S3Podcast
       Time.stub!(:now).and_return(Time.mktime(2011,1,1, 12,0))
     end
 
-    describe "published?" do
-      it 'when date is yesterday, it will report itself as being unpublished' do
-        @episode = Episode.make(:date => Date.new(2011,12,31))
-        @episode.should_not be_published
+    context 'publish_episodes_days_in_advance_of_date is 0 (default)' do
+      before do
+        @podcast = Podcast.make
+        @episode_for_today       = @podcast.episodes.make(:date => Date.new(2011,1,1))
+        @episode_1_day_in_future = @podcast.episodes.make(:date => Date.new(2011,1,2))
       end
 
-      it 'when date is today, it will report itself as being published' do
-        @episode = Episode.make(:code => 'something', :date => Date.new(2011,1,1))
-        @episode.should be_published
+      describe 'published scope' do
+        subject { Rails.logger.debug "... Marker"; Episode.published }
+
+        it { should == [@episode_for_today] }
       end
 
+      describe "published?" do
+        it 'when date is today, it should consider itself published' do
+          @episode_for_today.should be_published
+        end
+
+        it 'when date is tomorrow, it should consider itself unpublished' do
+          @episode_1_day_in_future.should be_unpublished
+        end
+      end
+    end
+
+    # When publish_episodes_days_in_advance_of_date is n, the published scope
+    # should return episodes that have any date that is <= n days in the future.
+    context 'publish_episodes_days_in_advance_of_date is 1' do
+      before do
+        @podcast = Podcast.make(:publish_episodes_days_in_advance_of_date => 1)
+        @episode_for_today       = @podcast.episodes.make(:date => Date.new(2011,1,1))
+        @episode_1_day_in_future = @podcast.episodes.make(:date => Date.new(2011,1,2))
+        @episode_2_day_in_future = @podcast.episodes.make(:date => Date.new(2011,1,3))
+      end
+
+      describe 'published scope' do
+        subject { Episode.published }
+
+        it { should == [@episode_for_today, @episode_1_day_in_future] }
+
+      end
+
+      describe "published?" do
+        it 'when date is today, it should consider itself published' do
+          @episode_for_today.should be_published
+        end
+
+        it 'when date is 1 day in future, it should consider itself published' do
+          @episode_1_day_in_future.should be_published
+        end
+
+        it 'when date is 2 days in future, it should consider itself unpublished' do
+          @episode_2_day_in_future.should be_unpublished
+        end
+      end
     end
 
     describe "normalization" do
-      [:title, :description].each do |attr_name|
+      [:title, :description, :code].each do |attr_name|
         it { should normalize_attribute(attr_name).from('  Something  ').to('Something') }
         it { should normalize_attribute(attr_name).from('').to(nil) }
       end

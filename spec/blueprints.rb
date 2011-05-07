@@ -10,12 +10,17 @@ module K3cms::S3Podcast
   Sham.title {|i| "Title #{i}" }
 
   Podcast.blueprint do
-    title        { Sham.title }
-    description 'Description'
-    summary 'Summary'
-    author { User.first || User.make }
-    episode_image_url "http://example.com/{code}.png"
-    episode_source_urls  ["http://example.com/{code}.m4a", "http://example.com/{code}.ogg"]
+    title                                    { Sham.title }
+    description                              'Description'
+    summary                                  'Summary'
+    author                                   { User.first || User.make }
+    episode_image_url                         "http://example.com/{code}.png"
+    episode_source_urls                      ["http://example.com/{code}.m4a", "http://example.com/{code}.ogg"]
+  end
+  Podcast.blueprint :audio do
+  end
+  Podcast.blueprint :video do
+    episode_source_urls                      ["http://example.com/{code}.m4v", "http://example.com/{code}.ogv"]
   end
 
   Sham.code  {|i| "#{i}" }
@@ -28,6 +33,6 @@ module K3cms::S3Podcast
   end
 
   Episode.blueprint :unpublished do
-    date         { Date.tomorrow }
+    date         { 100.days.from_now }
   end
 end

@@ -11,7 +11,7 @@ module K3cms
 
       # TODO: change to load_and_authorize_resource
       load_resource :podcast, :class => 'K3cms::S3Podcast::Podcast'
-      load_resource :episode, :class => 'K3cms::S3Podcast::Episode', :through => :podcast, :shallow => true
+      load_and_authorize_resource :episode, :class => 'K3cms::S3Podcast::Episode', :through => :podcast, :shallow => true
 
       def index
         @podcast or raise "podcast must be specified in the url (use the nested route, k3cms_s3_podcast_podcast_episodes_path(podcast))"
@@ -19,7 +19,16 @@ module K3cms
         if params[:format] == 'atom'
           @episodes = @podcast.episodes.published.most_recent.limit(20)
         else
-          @episodes = @episodes.published.order('id desc')
+          # Ideally we could use:
+          #   @episodes = Episode.accessible_by(current_ability).order('id desc')
+          # but that requires the Episode.published scope to be specified in the Ability class, and that doesn't work well enough. 
+          # What a user is allowed to read *should* only be specified in one place, in Ability class,
+          # (you need :edit_episode permission to view unpublished episodes; :view_episode permission only allows viewing published episodes) and enforced by fetch_episodes is EpisodesIndexCell
+          # but as a workaround, we'll duplicate that information here too:
+          unless k3cms_user.k3cms_permitted?(:edit_podcast) && edit_mode?
+            @episodes = @episodes.published
+          end
+          @episodes = @episodes.order('id desc')
         end
 
         if params[:tag_list]

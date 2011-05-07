@@ -12,7 +12,7 @@ atom_feed(
 
   # Required elements:
   feed.title       @podcast.title
-  feed.updated     @episodes.first.created_at
+  feed.updated     @episodes.first.try(:created_at) || Time.now
 
   # Optional elements:
   feed.icon        @podcast.icon_url                   if @podcast.icon_url.present?

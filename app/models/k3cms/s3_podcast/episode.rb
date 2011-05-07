@@ -8,9 +8,6 @@ module K3cms
 
       acts_as_taggable
 
-      #scope :published,    lambda { where(['date <= ? - interval k3cms_s3_podcast.publish_episodes_days_in_advance_of_episode_date day', Time.now.to_date]) }
-      scope :published,    lambda { where(['date <= ?', Time.now.to_date]) }
-
       scope :most_recent,  lambda { order('date DESC') }
       scope :most_popular, lambda { order('view_count DESC') }
       scope :random,       order('rand() ASC')
@@ -23,6 +20,29 @@ module K3cms
       validates :podcast, :presence => true
       validates :code, :uniqueness => {:scope => :podcast_id}, :allow_nil => true
       validates :date, :timeliness => {:type => :date}
+
+      #---------------------------------------------------------------------------------------------
+
+      # FIXME: This is currently MySQL specific. I tried to do it in Arel, like so:
+      #   K3cms::S3Podcast::Episode.joins(:podcast).where(
+      #     (Episode.arel_table[:date] - Podcast.arel_table[:publish_episodes_days_in_advance_of_date]) < Date.today
+      #   )
+      # but got this error:
+      #   NoMethodError: undefined method `-' for #<Arel::Attributes::Time:0x00000004bb6148>
+      # Is something like that possible without using raw SQL??
+      scope :published, lambda {
+        joins(:podcast).
+        where([':today >= k3cms_s3_podcast_episodes.date
+                   - interval k3cms_s3_podcast_podcasts.publish_episodes_days_in_advance_of_date day',
+               {:today => Time.zone.now.to_date}])
+      }
+
+      def published?
+        date and Time.zone.now >= date.beginning_of_day - podcast.publish_episodes_days_in_advance_of_date.days
+      end
+      def unpublished?
+        !published?
+      end
 
       #---------------------------------------------------------------------------------------------
       # Sources
@@ -65,10 +85,6 @@ module K3cms
         self.description = '<p>Description goes here</p>'     if self.attributes['description'].nil?
         self.date = Date.tomorrow                     if self.attributes['date'].nil?
         self
-      end
-
-      def published?
-        date and Time.zone.now >= date.beginning_of_day
       end
 
       #---------------------------------------------------------------------------------------------

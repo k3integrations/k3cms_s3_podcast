@@ -41,6 +41,9 @@ module K3cms
         # Episodes
 
         if user.k3cms_permitted?(:view_episode)
+          # Using a scope here works in some cases, but gives "Unable to merge an Active Record scope with other conditions. Instead use a hash or SQL for read K3cms::S3Podcast::Episode ability" when I go to the controller and it calls load_collection
+          #can :read, K3cms::S3Podcast::Episode, K3cms::S3Podcast::Episode.published do |episode|
+
           can :read, K3cms::S3Podcast::Episode, [] do |episode|
             episode.published?
           end
