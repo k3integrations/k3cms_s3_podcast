@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'cells'
   s.add_dependency 'acts-as-taggable-on'
   s.add_dependency 'aws-s3' # :require => 'aws/s3'
-  #s.add_dependency 'kaminari' # pagination
+  s.add_dependency 'kaminari' # pagination
 
   s.add_dependency 'attribute_normalizer'
   s.add_dependency 'validates_timeliness'
