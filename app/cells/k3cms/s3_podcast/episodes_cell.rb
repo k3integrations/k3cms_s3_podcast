@@ -44,7 +44,8 @@ module K3cms
 
         @podcast = options[:podcast] || @episode.podcast
 
-        # duplicated with #new action in controller
+        # FIXME: duplicated with #new action in controller
+        # (used by episodes_index/list and episodes_index/tiles)
         @new_episode = K3cms::S3Podcast::Episode.new.set_defaults
         @new_episode.podcast = @podcast
 

@@ -21,6 +21,9 @@ module K3cms
         # This is to enforce the podcast.published? condition specified in a block. accessible_by doesn't automatically check the block conditions when fetching records.
         @podcasts.select! {|podcast| can?(:read, podcast)}
 
+        # FIXME: duplicated with #new action in controller
+        @new_podcast = K3cms::S3Podcast::Podcast.new.set_defaults
+
         render
       end
 

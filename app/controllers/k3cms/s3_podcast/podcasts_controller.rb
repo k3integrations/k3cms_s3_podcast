@@ -32,6 +32,9 @@ module K3cms
       end
 
       def new
+        # TODO: duplicated with PodcastsCell
+        @podcast = K3cms::S3Podcast::Podcast.new.set_defaults
+
         respond_to do |format|
           if request.xhr?
             format.html {
