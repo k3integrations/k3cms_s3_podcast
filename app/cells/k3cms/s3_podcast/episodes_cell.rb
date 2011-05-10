@@ -27,7 +27,7 @@ module K3cms
         render
       end
 
-      def record_editing_js
+      def record_js
         set_up
         raise 'episode is required' unless @episode
         raise 'podcast is required' unless @podcast

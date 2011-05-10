@@ -15,7 +15,7 @@
     - unless @episode.new_record?
       = link_to raw(t(@episode.audio? ? 'Listen' : 'Watch')+' '+image_tag('eye.gif')), @episode, link_params
 
-  = render_cell('k3cms/s3_podcast/episodes_index', :record_editing_js, :episode => @episode, :podcast => @podcast)
+  = render_cell('k3cms/s3_podcast/episodes_index', :record_js, :episode => @episode, :podcast => @podcast)
 
   -# Note: The td must be the last element, so that the :last-child CSS selector selects it
   %td.download

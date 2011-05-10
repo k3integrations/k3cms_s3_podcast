@@ -170,7 +170,7 @@ module K3cms::S3Podcast::EpisodeHelper
             supplied: "#{source_urls_hash.keys.join(', ')}",
             swfPath: "/k3cms/jquery.jplayer",
             solution: "html, flash",
-            volume: 1,
+            volume: 1
           });
         });
       </script>

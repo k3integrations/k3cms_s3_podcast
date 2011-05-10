@@ -1,6 +1,5 @@
 -# vim: ft=javascript
 
-
 :javascript
   $(function() {
     $("a.lightbox[rel]").overlay({
@@ -56,7 +55,7 @@
         },
         onHide: function() {
           this.getTrigger().removeClass('active');
-        },
+        }
       });
 
       this_episode_box.bind('toggle', function() {
@@ -149,7 +148,7 @@
                 K3cms_InlineEditor.initInlineEditor();
               });
             });
-          },
+          }
         });
       }); // $(this_episode_box.selector + ' .create_button').click(function()
 

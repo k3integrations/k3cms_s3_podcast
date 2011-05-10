@@ -1,0 +1,92 @@
+-# vim: ft=javascript
+-# FIXME: Duplicated with ./app/cells/k3cms/s3_podcast/episodes/record_js.html.haml
+
+- if edit_mode?
+  :javascript
+    $(function() {
+      var this_podcast_box = $('.edit_mode_on .k3cms_s3_podcast_podcast.show_small##{dom_id(@podcast)}');
+      var this_context_ribbon_selector = '.context_ribbon.#{dom_id(@podcast)}}';
+
+      $(this_podcast_box.selector + ' .create_button').click(function() {
+        K3cms_InlineEditor.saveMultipleElements({
+          url: #{polymorphic_url(@podcast, :only_path => true).to_json},
+          'save-type': 'POST',
+          object_name: #{dom_class(@podcast).to_json},
+          elements: $('#new_k3cms_s3_podcast_podcast .editable, #new_k3cms_s3_podcast_podcast :input'),
+          save_success: function(data, msg, xhr, options) {
+            if (data.error) {
+              return;
+            }
+
+            $('.context_ribbon.new_k3cms_s3_podcast_podcast').remove();
+
+            var tooltip = $('#new_k3cms_s3_podcast_podcast').data('tooltip');
+            tooltip.hide(); // There's a bug that makes this not work. isShown() incorrectly returns 'full'.
+            tooltip.getTip().hide(); // Workaround
+
+            $('#new_k3cms_s3_podcast_podcast').data('close_box_when_mask_closes', false);
+            $.mask.close();
+
+            // Now that we've created the record, we need to do an Ajax request and actually replace the New Object box with an Update Object box
+            // so that we have an object_id and the correct url and save-type for updating, so that inline-editing will work.
+            // We could probably update the existing DOM elements, but this is easier...
+            $.get(k3cms_s3_podcast_podcast.url_for(options.object), function(data) {
+              $('#new_k3cms_s3_podcast_podcast').eq(0).replaceWith(data);
+
+              // Add the #new_k3cms_s3_podcast_podcast box back into the DOM (initially hidden) so they can add another New Podcast
+              $.get(#{new_k3cms_s3_podcast_podcast_path.to_json}, function(data) {
+                $('.k3cms_s3_podcast.podcast_list .the_list>.k3cms_s3_podcast_podcast:visible:eq(0)').before(data);
+
+                // TODO: instead of having it add editors to *all* the '.editable' elements (some of which have already been initialized for editing),
+                // we should selectively add the inline editor to *only* the elements we just added to the DOM. (Or change initInlineEditor to use livequery or something
+                // so it automatically applies it to .editable elements as soon as they're added to the DOM.
+                K3cms_InlineEditor.initInlineEditor();
+              });
+            });
+          },
+        });
+      });
+
+      this_podcast_box.bind('toggle', function() {
+        if ($(this).is(':visible')) {
+          $(this).trigger('close');
+        } else {
+          $(this).addClass('visible'); // for CSS
+          $(this).show();
+        }
+      });
+
+      this_podcast_box.bind('close', function() {
+        if (!$(this).data('closing')) {
+          $.mask.close();
+        } else if ($(this).data('closing') === 'expose is closed') {
+          $(this).hide();
+          $(this).removeClass('visible'); // for CSS
+          $(this).data('closing', false)
+        }
+
+        $(this_context_ribbon_selector).hide();
+      });
+
+      this_podcast_box.tooltip({
+        delay: 100,
+        position: 'top left',
+        relative: true,
+        tip: this_context_ribbon_selector,
+        offset: [-5, -5],
+        onBeforeShow: function() {
+          this.getTip().css('width', this.getTrigger().innerWidth() + 'px');
+        },
+        onShow: function() {
+          this.getTrigger().addClass('active');
+        },
+        onBeforeHide: function(event) {
+          if (this.getTrigger().hasClass('new_record')) {
+            event.preventDefault()
+          }
+        },
+        onHide: function() {
+          this.getTrigger().removeClass('active');
+        },
+      });
+    });

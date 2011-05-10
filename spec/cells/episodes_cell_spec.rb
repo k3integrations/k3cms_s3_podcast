@@ -23,7 +23,7 @@ module K3cms::S3Podcast
       subject { cell('k3cms/s3_podcast/episodes') } 
       it { should respond_to(:published_status) }
       it { should respond_to(:context_ribbon) }
-      it { should respond_to(:record_editing_js) }
+      it { should respond_to(:record_js) }
     end
   end
 end
