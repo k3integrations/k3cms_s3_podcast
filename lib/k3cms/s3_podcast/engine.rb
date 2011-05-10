@@ -32,23 +32,24 @@ module K3cms
       end
 
       # This is to avoid errors like undefined method `can?' for #<K3cms::S3Podcast::EpisodesCell>
-      initializer 'k3.s3_podcast.cancan' do
+      initializer 'k3cms.s3_podcast.cancan' do
         ActiveSupport.on_load(:action_controller) do
           include CanCan::ControllerAdditions
           Cell::Base.send :include, CanCan::ControllerAdditions
         end
       end
 
-      config.action_view.javascript_expansions[:k3] ||= []
-      config.action_view.javascript_expansions[:k3].concat [
-        'jquery.tools.min.js',
-        'jquery.tools.tooltip.js',
-        'k3cms/s3_podcast.js',
+      config.action_view.javascript_expansions[:k3cms_viewing].concat [
         'k3cms/video.js',
+        'k3cms/s3_podcast.js',
+        'jquery.tools.min.js',
         'k3cms/jquery.jplayer.min.js',
       ]
-      config.action_view.stylesheet_expansions[:k3] ||= []
-      config.action_view.stylesheet_expansions[:k3].concat [
+      config.action_view.javascript_expansions[:k3cms_editing].concat [
+        'jquery.tools.tooltip.js',
+      ]
+      config.action_view.stylesheet_expansions[:k3cms] ||= []
+      config.action_view.stylesheet_expansions[:k3cms].concat [
         'k3cms/s3_podcast.css',
         'k3cms/s3_podcast_overlay.css',
         'k3cms/video-js.css',
@@ -56,12 +57,12 @@ module K3cms
         'k3cms/jquery.jplayer/jplayer.blue.monday.overrides.css',
       ]
 
-      initializer 'k3.s3_podcast.cells_paths' do |app|
+      initializer 'k3cms.s3_podcast.cells_paths' do |app|
         Cell::Base.view_paths += [config.root + 'app/cells',
                                   config.root + 'app/views']
       end
 
-      initializer 'k3.s3_podcast.action_view' do
+      initializer 'k3cms.s3_podcast.action_view' do
         ActiveSupport.on_load(:action_view) do
           #include K3cms::S3Podcast::S3PodcastHelper
         end
@@ -77,14 +78,14 @@ module K3cms
         end
       end
 
-      initializer 'k3.s3_podcast.hooks', :before => 'k3.core.hook_listeners' do |app|
+      initializer 'k3cms.s3_podcast.hooks', :before => 'k3cms.core.hook_listeners' do |app|
         class K3cms::S3Podcast::Hooks < K3cms::ThemeSupport::HookListener
           insert_after :top_of_page, :file => 'k3cms/s3_podcast/init.html.haml'
         end
       end
 
-      initializer 'k3.s3_podcast.require_decorators', :after => 'k3.core.require_decorators' do |app|
-        #puts 'k3.s3_podcast.require_decorators'
+      initializer 'k3cms.s3_podcast.require_decorators', :after => 'k3cms.core.require_decorators' do |app|
+        #puts 'k3cms.s3_podcast.require_decorators'
         Dir.glob(config.root + "app/**/*_decorator*.rb") do |c|
           Rails.env.production? ? require(c) : load(c)
         end
