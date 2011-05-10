@@ -1,7 +1,7 @@
 K3cms_S3Podcast = {
   config: {
     pagination: {
-      per_row: 4,
+      per_row: 4
     }
   },
 
