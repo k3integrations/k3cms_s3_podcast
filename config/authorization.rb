@@ -1,4 +1,4 @@
-K3cms::S3Podcast::Engine.authorization.draw do
+K3cms::S3Podcast::Railtie.authorization.draw do
   # First define and describe some suggested permission sets.
   suggested_permission_set :default, 'Allows managers to create & edit all podcasts/episodes, and delete their own episodes'
   suggested_permission_set :user_creation, 'Allows users to create and manage their own podcasts/episodes'

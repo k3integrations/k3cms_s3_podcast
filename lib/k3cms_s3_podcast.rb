@@ -5,5 +5,5 @@ module K3cms
   end
 end
 
-require 'k3cms/s3_podcast/engine'
+require 'k3cms/s3_podcast/railtie'
 require_relative 'uri_validator'

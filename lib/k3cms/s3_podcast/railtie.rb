@@ -5,7 +5,7 @@ require 'facets/pathname'
 
 module K3cms
   module S3Podcast
-    class Engine < Rails::Engine
+    class Railtie < Rails::Engine
       puts self
 
       config.before_initialize do
@@ -90,6 +90,7 @@ module K3cms
           Rails.env.production? ? require(c) : load(c)
         end
       end
+
     end
   end
 end
