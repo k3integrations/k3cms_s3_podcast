@@ -1,4 +1,4 @@
-- link_params = Rails.application.config.k3cms_s3_show_view==:lightbox ? {:class => 'lightbox', :rel => '.k3cms_s3_podcast_overlay'} : {}
+- link_params = Rails.application.config.k3cms.s3_podcast.show_view==:lightbox ? {:class => 'lightbox', :rel => '.k3cms_s3_podcast_overlay'} : {}
 %tr{:class => k3cms_s3_podcast_episode_classes(@episode), :id => dom_id(@episode)}
   %td.nearly_invisible
     .relative_fix

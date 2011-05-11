@@ -1,5 +1,5 @@
 # This Gemfile is generated from Gemfile.tt. Do not edit it directly!
-# Instead, please edit Gemfile.tt and run rake gemfile.
+# Instead, please edit Gemfile.tt and run rake bundle.
 
 # The rescue is because within the test_app, there is no gemspec
 gemspec rescue nil

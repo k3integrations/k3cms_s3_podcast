@@ -28,7 +28,7 @@
     - if can?(:create, K3cms::S3Podcast::Podcast) && edit_mode?
       = render_cell 'k3cms/s3_podcast/podcasts', :show, :podcast => @new_podcast
 
-    - @podcasts.in_groups_of(Rails.application.config.k3cms_s3_podcast_pagination[:per_row], false).each do |podcasts|
+    - @podcasts.in_groups_of(Rails.application.config.k3cms.s3_podcast.pagination[:per_row], false).each do |podcasts|
       - podcasts.each do |podcast|
         = render_cell 'k3cms/s3_podcast/podcasts', :show, :podcast => podcast
 

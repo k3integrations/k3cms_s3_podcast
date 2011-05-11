@@ -20,10 +20,12 @@ gem 'k3cms_s3_podcast',            :path => '#{Pathname.new(__FILE__).dirname + 
   K3cms::S3Podcast::GemfileGenerator.start(args[:args].to_s.split(' '))
 end
 
-# Note: You can pass in args to the generator like this: rake test_app["--verbose --other-args"]
-# If you want to debug things are just see what's going on, use rake test_app[--verbose]
+#---------------------------------------------------------------------------------------------------
 desc "Generate a Rails app (required to run specs)"
 task :test_app, [:args] => :gemfile do |t, args|
+# Note: You can pass in args to the generator like this: rake test_app["--verbose --other-args"]
+# If you want to debug things are just see what's going on, use rake test_app[--verbose]
+
   require '../lib/generators/test_app/generator'
   class K3cms::S3Podcast::TestAppGenerator < K3cms::Generators::TestAppGenerator
 
@@ -39,16 +41,6 @@ task :test_app, [:args] => :gemfile do |t, args|
       #puts "source_paths_for_search=#{self.class.source_paths_for_search.inspect}"
       template "config/database.mysql.yml", "config/database.yml", :force => true
       #inside(".") { run "pwd >&2; cat config/database.yml >&2" }
-    end
-
-    def install_gems
-      inside "test_app" do
-        run 'rake k3cms:install'
-      end
-    end
-
-    def migrate_db
-      run_migrations
     end
 
     def root_route

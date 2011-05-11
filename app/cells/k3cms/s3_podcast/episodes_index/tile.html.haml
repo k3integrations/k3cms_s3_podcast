@@ -1,4 +1,4 @@
-- link_params = Rails.application.config.k3cms_s3_show_view==:lightbox ? {:rel => '#s3_overlay'} : {}
+- link_params = Rails.application.config.k3cms.s3_podcast.show_view==:lightbox ? {:rel => '#s3_overlay'} : {}
 
 %div{:class => k3cms_s3_podcast_episode_classes(@episode) + ['tile'], :id => dom_id(@episode), :'data-use_expose_effect' => 'true'}
   = render_cell('k3cms/s3_podcast/episodes', :context_ribbon, :episode => @episode)

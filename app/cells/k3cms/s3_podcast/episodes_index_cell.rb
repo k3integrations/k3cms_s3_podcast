@@ -4,7 +4,7 @@ module K3cms
 
       #---------------------------------------------------------------------------------------------
       def index
-        send(::Rails.application.config.k3cms_s3_index_view)
+        send(::Rails.application.config.k3cms.s3_podcast.index_view)
       end
       
       def list
@@ -22,7 +22,7 @@ module K3cms
         set_up
         raise 'episode is required' unless @episode
         raise 'podcast is required' unless @podcast
-        render :view => (::Rails.application.config.k3cms_s3_index_view == :tiles ? :tile : :table_row)
+        render :view => (::Rails.application.config.k3cms.s3_podcast.index_view == :tiles ? :tile : :table_row)
       end
 
       def table_row

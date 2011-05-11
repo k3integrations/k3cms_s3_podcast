@@ -34,7 +34,7 @@ module K3cms::S3Podcast::EpisodeHelper
     video_player(episode.video_source_urls,
       {
         :poster => episode.image_url
-      }.merge(Rails.application.config.k3cms_s3_podcast_video_tag_options).
+      }.merge(Rails.application.config.k3cms.s3_podcast.video_tag_options).
         merge(options)
     )
   end

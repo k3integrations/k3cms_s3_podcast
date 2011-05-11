@@ -8,6 +8,23 @@ module K3cms
     class Railtie < Rails::Engine
       puts self
 
+      config.k3cms.s3_podcast = ActiveSupport::OrderedOptions.new
+
+      config.before_configuration do |app|
+        # Ensure that active_record is loaded before attribute_normalizer, since attribute_normalizer only loads its active_record-specific code if active_record is loaded.
+        require 'active_record'
+        require 'kaminari'
+        require 'attribute_normalizer'
+
+        # See ./lib/generators/k3cms_s3_podcast_initializer/templates/initializer.rb.erb
+        config.k3cms.s3_podcast.video_tag_options = {}
+        config.k3cms.s3_podcast.pagination = {
+          :per_row => 3, :per_page => 12
+        }
+        config.k3cms.s3_podcast.index_view = :tiles # :list or :tiles
+        config.k3cms.s3_podcast.show_view  = :page  # :lightbox or :page
+      end
+
       config.before_initialize do
         # Anything in the .gemspec that needs to be *required* should be required here.
         # This is a workaround for the fact that this line:
@@ -18,17 +35,6 @@ module K3cms
         require 'aws/s3'
         require 'validates_timeliness'
         require 'cancan'
-      end
-
-      config.before_configuration do |app|
-        # Ensure that active_record is loaded before attribute_normalizer, since attribute_normalizer only loads its active_record-specific code if active_record is loaded.
-        require 'active_record'
-        require 'kaminari'
-        require 'attribute_normalizer'
-
-        # See ./lib/generators/k3cms_s3_podcast_initializer/templates/initializer.rb.erb
-        #config.k3cms_s3_podcast_video_tag_options =
-        # TODO: Figure out how to namespace config settings so we can do config.k3cms_s3_podcast.video_tag_options
       end
 
       # This is to avoid errors like undefined method `can?' for #<K3cms::S3Podcast::EpisodesCell>
@@ -67,6 +73,7 @@ module K3cms
           #include K3cms::S3Podcast::S3PodcastHelper
         end
       end
+
       config.after_initialize do
         Cell::Rails.class_eval do
           helper K3cms::S3Podcast::EpisodeHelper

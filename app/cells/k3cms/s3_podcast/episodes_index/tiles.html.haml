@@ -14,14 +14,14 @@
     - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
       = render_cell 'k3cms/s3_podcast/episodes_index', :tile, :episode => @new_episode, :podcast => @podcast, :style => 'tiles'
 
-    - @episodes.in_groups_of(Rails.application.config.k3cms_s3_podcast_pagination[:per_row], false).each do |episodes|
+    - @episodes.in_groups_of(Rails.application.config.k3cms.s3_podcast.pagination[:per_row], false).each do |episodes|
       - episodes.each do |episode|
         = render_cell 'k3cms/s3_podcast/episodes_index', :tile, :episode => episode, :podcast => @podcast, :style => 'tiles'
 
 :javascript
   K3cms_S3Podcast.fix_clears()
 
-- if ::Rails.application.config.k3cms_s3_show_view == :lightbox
+- if ::Rails.application.config.k3cms.s3_podcast.show_view == :lightbox
   :javascript
     $(function() {
       $("a[rel]").overlay({

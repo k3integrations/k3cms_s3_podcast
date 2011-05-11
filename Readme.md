@@ -34,6 +34,12 @@ If your video player gives you this message, it could mean that your podcast's *
 
 Unfortunately, any time the image URL is broken, it will prevent playing of the video itself. This appears to be a bug with the VideoJS video player library that was used. We hope to find a solution to this.
 
+Running Tests
+=============
+
+    rake test_app
+    rake spec
+
 License
 =======
 

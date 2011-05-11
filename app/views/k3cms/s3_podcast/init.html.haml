@@ -3,7 +3,7 @@
   // Config
 
   if (window.K3cms_S3Podcast) {
-    K3cms_S3Podcast.config.pagination        = #{Rails.application.config.k3cms_s3_podcast_pagination.to_json};
-    K3cms_S3Podcast.config.video_tag_options = #{Rails.application.config.k3cms_s3_podcast_video_tag_options.to_json};
+    K3cms_S3Podcast.config.pagination        = #{Rails.application.config.k3cms.s3_podcast.pagination.to_json};
+    K3cms_S3Podcast.config.video_tag_options = #{Rails.application.config.k3cms.s3_podcast.video_tag_options.to_json};
   }
   
