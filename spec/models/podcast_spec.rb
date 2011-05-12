@@ -25,22 +25,22 @@ module K3cms::S3Podcast
         end
       end
 
-      ['publish_episodes_days_in_advance_of_date'].each do |attr_name|
+      %w[publish_episodes_days_in_advance_of_date].each do |attr_name|
         describe attr_name do
+          subject { podcast = Podcast.new }
           it "shouldn't allow blank values" do
-            podcast = Podcast.new
-            podcast[attr_name] = nil 
-            podcast.valid?
-            podcast.errors[attr_name].should include("can't be blank")
+            subject[attr_name] = nil
+            subject.valid?
+            subject.errors[attr_name].should include("can't be blank")
 
-            podcast[attr_name] = 'not blank'
-            podcast.valid?
-            podcast.errors[attr_name].should_not include("can't be blank")
+            subject[attr_name] = 'not blank'
+            subject.valid?
+            subject.errors[attr_name].should_not include("can't be blank")
           end
         end
       end
 
-      ['episode_image_url', 'icon_url', 'logo_url', 'episode_source_urls'].each do |attr_name|
+      %w[episode_image_url icon_url logo_url episode_source_urls].each do |attr_name|
         describe attr_name do
           it "shouldn't allow invalid URLs" do
             podcast = Podcast.new(attr_name => 'htt:/not.a.real.url/')
@@ -96,10 +96,10 @@ module K3cms::S3Podcast
         podcast.errors[:episode_source_urls].should be_present
         podcast.episode_source_urls.should == ["http://example.com/{code}.m4a", nil, nil, nil, 'other']
 
-        # but, source_1 works around this, triggering episode_source_urls= setter 
+        # but, source_1 works around this, triggering episode_source_urls= setter
         podcast.source_1 = '1'
         podcast.episode_source_urls.should == ["http://example.com/{code}.m4a", '1', 'other']
-  
+
       end
     end
   end
