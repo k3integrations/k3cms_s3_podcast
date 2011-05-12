@@ -11,7 +11,7 @@ module K3cms
       validates            :episode_image_url, :icon_url, :logo_url, :uri => true, :allow_nil => true
       normalize_attributes :episode_image_url, :icon_url, :logo_url, :with => [:strip, :blank]
 
-      validates :title, :presence => true
+      validates :title, :publish_episodes_days_in_advance_of_date, :presence => true
       validates :episode_image_url, :presence => true, :if => :video?
 
       #---------------------------------------------------------------------------------------------

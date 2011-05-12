@@ -25,6 +25,21 @@ module K3cms::S3Podcast
         end
       end
 
+      ['publish_episodes_days_in_advance_of_date'].each do |attr_name|
+        describe attr_name do
+          it "shouldn't allow blank values" do
+            podcast = Podcast.new
+            podcast[attr_name] = nil 
+            podcast.valid?
+            podcast.errors[attr_name].should include("can't be blank")
+
+            podcast[attr_name] = 'not blank'
+            podcast.valid?
+            podcast.errors[attr_name].should_not include("can't be blank")
+          end
+        end
+      end
+
       ['episode_image_url', 'icon_url', 'logo_url', 'episode_source_urls'].each do |attr_name|
         describe attr_name do
           it "shouldn't allow invalid URLs" do

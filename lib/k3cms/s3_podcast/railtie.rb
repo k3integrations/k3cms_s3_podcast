@@ -1,4 +1,5 @@
 require "rails"
+require "k3cms/core/railtie"
 require "k3cms_s3_podcast"
 require 'facets/kernel/__dir__'
 require 'facets/pathname'
