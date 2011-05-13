@@ -21,7 +21,7 @@ module K3cms
         set_up
         render
       end
-      
+
       def context_ribbon
         set_up
         render
@@ -33,9 +33,9 @@ module K3cms
         raise 'podcast is required' unless @podcast
         render
       end
-      
+
     private
-      
+
       # Extracts from options hash and sets instance variables
       # Initializes @new_episode
       def set_up

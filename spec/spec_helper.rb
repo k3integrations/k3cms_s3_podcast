@@ -19,7 +19,7 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
 
   config.include AttributeNormalizer::RSpecMatcher
-  config.include(RspecTagMatchers)
+  config.include RspecTagMatchers
 
   include Devise::TestHelpers
 end
