@@ -10,10 +10,13 @@ module K3cms::S3Podcast
     end
 
     it "should understand routes" do
-      assert_routing "/episodes",            {:controller=>"k3cms/s3_podcast/episodes", :action=>"index", }
-      # TODO: figure out how to make these pass
-     #assert_routing "/episodes/1",          {:controller=>"k3cms/s3_podcast/episodes", :action=>"show",  :id => 1}
-     #assert_routing "/podcasts/1/episodes", {:controller=>"k3cms/s3_podcast/episodes", :action=>"index", :k3cms_s3_podcast_podcasts => 1}
+      assert_routing "/episodes",            :controller=>"k3cms/s3_podcast/episodes", :action=>"index"
+      assert_routing "/episodes/1",          :controller=>"k3cms/s3_podcast/episodes", :action=>"show",  :id => "1"
+
+      # TODO: figure out why this fails:
+      #No route matches {"action"=>"index", "controller"=>"k3cms/s3_podcast/episodes", "k3cms_s3_podcast_podcast_id"=>"1"}>
+     #assert_generates "/podcasts/1/episodes", {"action"=>"index", "controller"=>"k3cms/s3_podcast/episodes", "k3cms_s3_podcast_podcast_id"=>"1"}
+     #assert_routing "/podcasts/1/episodes", :controller=>"k3cms/s3_podcast/episodes", :action=>"index", :k3cms_s3_podcast_podcast_id => "1"
     end
 
     before do
