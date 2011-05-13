@@ -15,7 +15,7 @@ module K3cms::S3Podcast::EpisodeHelper
       dom_class(episode),
       dom_id(episode),
       (episode.published? ? 'published' : 'unpublished'),
-      (episode.new_record? ? 'new_record' : 'visible'),
+      (episode.new_record? ? 'new_record' : 'record_exists'),
     ].compact
   end
 

@@ -3,7 +3,7 @@ module K3cms::S3Podcast::PodcastHelper
     [
       dom_class(podcast),
       dom_id(podcast),
-      (podcast.new_record? ? 'new_record' : 'visible'),
+      (podcast.new_record? ? 'new_record' : 'record_exists'),
     ].compact
   end
 end
