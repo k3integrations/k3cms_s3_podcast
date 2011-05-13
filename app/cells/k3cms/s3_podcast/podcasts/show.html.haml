@@ -35,5 +35,5 @@
     - unless @podcast.new_record?
       = link_to t('View more programs'), k3cms_s3_podcast_podcast_episodes_path(@podcast)
 
-  = render_cell 'k3cms/inline_editor', :record_editing_js, @podcast,
+  = render_cell 'k3cms/ribbon', :context_ribbon_js, @podcast,
     :ribbon_offset => [-5, -5]

@@ -28,7 +28,7 @@
     K3cms_S3Podcast.fix_clears();
   });
 
-= render_cell 'k3cms/inline_editor', :record_editing_js, @episode,
+= render_cell 'k3cms/ribbon', :context_ribbon_js, @episode,
   :extra_params => {:size => 'small'},
   :new_record_path => new_k3cms_s3_podcast_podcast_episode_path(@podcast),
   :ribbon_offset => [-0, -5]
