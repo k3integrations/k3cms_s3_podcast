@@ -48,7 +48,7 @@ task :test_app, [:args] => :gemfile do |t, args|
     end
 
     def s3_podcast_initializer
-      generate 'k3cms_s3_podcast_initializer', 'my_bucket'
+      generate 'k3cms_s3_podcast_initializer'
     end
 
   protected

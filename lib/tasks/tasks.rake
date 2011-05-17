@@ -3,7 +3,7 @@ namespace :k3cms do
     desc "Install K3cms S3Podcast"
     task :install => [:copy_public, :copy_migrations] do
       puts "Don't forget to run:
-rails generate k3cms_s3_podcast_initializer bucket_name"
+rails generate k3cms_s3_podcast_initializer"
     end
     
     desc "Copy public files"
