@@ -1,5 +1,7 @@
+/* vim: expandtab shiftwidth=2 tabstop=2
+*/
 /*================================================================================================*/
-/* Common */
+/* Not s3_podcast-specific */
 
 /* This is a workaround for the fact that 'position: relative' is ignored for table cells. Put one of these inside your td. */
 .relative_fix {
@@ -9,6 +11,13 @@
 
 .clear_left {
   clear: left;
+}
+
+
+/*================================================================================================*/
+/* s3_podcast general */
+.k3cms_s3_podcast a {
+  text-decoration: none;
 }
 
 /*================================================================================================*/
@@ -58,6 +67,15 @@
 
 /*------------------------------------------------------------------------------------------------*/
 /* .k3cms_s3_podcast_podcast.show_small */
+
+.k3cms_s3_podcast_podcast {
+  color: black;
+  line-height: 1.3em;
+  font-size: 13px;
+}
+.k3cms_s3_podcast_podcast a {
+  color: black;
+}
 
 .k3cms_s3_podcast_podcast.show_small {
   position: relative;
@@ -135,6 +153,15 @@
 
 /*================================================================================================*/
 /* Episodes */
+
+.k3cms_s3_podcast_episode {
+  color: black;
+  line-height: 1.3em;
+  font-size: 13px;
+}
+.k3cms_s3_podcast_episode a {
+  color: black;
+}
 
 /*------------------------------------------------------------------------------------------------*/
 /* .k3cms_s3_podcast_episode_list */
