@@ -20,6 +20,17 @@
   text-decoration: none;
 }
 
+/* auto-clear some things (http://www.positioniseverything.net/easyclearing.html) */
+.k3cms_s3_podcast_podcast_list .the_list:after,
+.k3cms_s3_podcast_episode_list .the_list:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+
 /*================================================================================================*/
 /* .context_ribbon */
 
