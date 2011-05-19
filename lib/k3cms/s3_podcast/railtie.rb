@@ -22,7 +22,7 @@ module K3cms
         config.k3cms.s3_podcast.pagination = {
           :per_row => 3, :per_page => 12
         }
-        config.k3cms.s3_podcast.index_view = :tiles # :list or :tiles
+        config.k3cms.s3_podcast.index_view = :tiles # :table or :tiles
         config.k3cms.s3_podcast.show_view  = :page  # :lightbox or :page
       end
 

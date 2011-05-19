@@ -4,17 +4,8 @@ module K3cms
 
       #---------------------------------------------------------------------------------------------
       def index
-        send(::Rails.application.config.k3cms.s3_podcast.index_view)
-      end
-      
-      def list
         fetch_episodes
-        render :view => 'list'
-      end
-
-      def tiles
-        fetch_episodes
-        render :view => 'tiles' # Must specify because of choose() above...
+        render :view => ::Rails.application.config.k3cms.s3_podcast.index_view
       end
 
       #---------------------------------------------------------------------------------------------
