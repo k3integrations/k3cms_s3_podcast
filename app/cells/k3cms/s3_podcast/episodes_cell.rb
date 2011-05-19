@@ -48,8 +48,6 @@ module K3cms
         # (used by episodes_index/list and episodes_index/tiles)
         @new_episode = K3cms::S3Podcast::Episode.new.set_defaults
         @new_episode.podcast = @podcast
-
-        @style = options[:style]
       end
     end
   end
