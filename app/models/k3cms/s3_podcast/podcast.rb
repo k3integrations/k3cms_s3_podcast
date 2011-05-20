@@ -25,6 +25,10 @@ module K3cms
         self.episode_source_urls ||= []
       end
 
+      def code_is_required?
+        self.episode_source_urls.any? {|_| _ =~ /\{code\}/i }
+      end
+
       validate :validate_episode_source_urls
       def validate_episode_source_urls
         episode_source_urls.any? or (errors[:episode_source_urls] << "must include one source"; return)

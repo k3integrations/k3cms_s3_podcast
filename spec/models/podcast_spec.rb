@@ -102,5 +102,20 @@ module K3cms::S3Podcast
 
       end
     end
+
+    describe 'code_is_required?' do
+      describe 'when >=1 of the episode_source_urls contains {code}' do
+        it 'should be true' do
+          podcast = Podcast.make_unsaved(:episode_source_urls => ["http://example.com/{code}.m4a"])
+          podcast.should be_code_is_required
+        end
+      end
+      describe 'when none of the episode_source_urls contains {code}' do
+        it 'should be false' do
+          podcast = Podcast.make_unsaved(:episode_source_urls => ["http://example.com/{year}.m4a"])
+          podcast.should_not be_code_is_required
+        end
+      end
+    end
   end
 end

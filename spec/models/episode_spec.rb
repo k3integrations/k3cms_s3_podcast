@@ -22,11 +22,11 @@ module K3cms::S3Podcast
       end
 
       describe "published?" do
-        it 'when date is today, it should consider itself published' do
+        it 'when date of episode is today, it should consider itself published' do
           @episode_for_today.should be_published
         end
 
-        it 'when date is tomorrow, it should consider itself unpublished' do
+        it 'when date of episode is tomorrow, it should consider itself unpublished' do
           @episode_1_day_in_future.should be_unpublished
         end
       end
@@ -50,15 +50,15 @@ module K3cms::S3Podcast
       end
 
       describe "published?" do
-        it 'when date is today, it should consider itself published' do
+        it 'when date of episode is today, it should consider itself published' do
           @episode_for_today.should be_published
         end
 
-        it 'when date is 1 day in future, it should consider itself published' do
+        it 'when date of episode is 1 day in future, it should consider itself published' do
           @episode_1_day_in_future.should be_published
         end
 
-        it 'when date is 2 days in future, it should consider itself unpublished' do
+        it 'when date of episode is 2 days in future, it should consider itself unpublished' do
           @episode_2_day_in_future.should be_unpublished
         end
       end
@@ -111,6 +111,14 @@ module K3cms::S3Podcast
         end
       end
 
+      describe "when >=1 of the podcast's episode_source_urls contains {code}" do
+        it 'should not allow code to be missing' do
+          podcast = Podcast.make_unsaved(:episode_source_urls => ["http://example.com/{code}.m4a"])
+          episode = podcast.episodes.make_unsaved(code: nil)
+          episode.valid?
+          episode.errors[:code].should include("can't be blank")
+        end
+      end
     end
 
     describe 'source_urls (with multiple sources)' do

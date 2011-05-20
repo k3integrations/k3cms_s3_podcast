@@ -16,6 +16,7 @@ module K3cms
 
       normalize_attributes :title, :description, :code, :with => [:strip, :blank]
 
+      validates :code, :presence => true, :if => :code_is_required?
       validates :title, :presence => true
       validates :podcast, :presence => true
       validates :code, :uniqueness => {:scope => :podcast_id}, :allow_nil => true
@@ -48,6 +49,10 @@ module K3cms
       # Sources
 
       delegate :image?, :video?, :audio?, :to => :podcast
+      def code_is_required?
+        # can't use delegate because podcast not present for new records
+        podcast && podcast.code_is_required?
+      end
 
       def source_urls
         podcast.episode_source_urls.map { |url| get_url(url) }
