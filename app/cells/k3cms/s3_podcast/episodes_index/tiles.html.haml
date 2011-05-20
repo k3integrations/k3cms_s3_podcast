@@ -3,12 +3,11 @@
 .k3cms_s3_podcast_episode_list.tiles
   .header
     - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
-      %div
+      %div.editing_links
         = link_to_function image_tag('k3cms/s3_podcast/add.png', :alt => 'New') + ' New episode',
-          "$('.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode:eq(0)').trigger('toggle')"
+          "$('.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode:eq(0)').trigger('toggle')", :class => 'new_episode with_icon'
 
-    %div
-      = paginate @episodes
+    = paginate @episodes
 
   .the_list
     - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?

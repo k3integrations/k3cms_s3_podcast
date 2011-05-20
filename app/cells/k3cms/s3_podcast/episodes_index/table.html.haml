@@ -8,7 +8,7 @@
     - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
       %div
         = link_to_function image_tag('k3cms/s3_podcast/add.png', :alt => 'New') + ' New episode',
-          "$('.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode:eq(0)').trigger('toggle')"
+          "$('.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode:eq(0)').trigger('toggle')", :class => 'new_episode with_icon'
 
   %table
     %thead

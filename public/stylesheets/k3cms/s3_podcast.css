@@ -1,4 +1,8 @@
 /* vim: expandtab shiftwidth=2 tabstop=2
+Notes:
+* I would have preferred to use class names like .k3cms_s3_podcast.episode so that we could style
+  *everything* related to k3cms_s3_podcast using a single .k3cms_s3_podcast selector...
+  but .k3cms_s3_podcast_episode is what the dom_class helper generates so I decided to use that.
 */
 /*================================================================================================*/
 /* Not s3_podcast-specific */
@@ -13,11 +17,11 @@
   clear: left;
 }
 
-
 /*================================================================================================*/
-/* s3_podcast general */
-.k3cms_s3_podcast a {
-  text-decoration: none;
+/* general styles for s3_podcast gem */
+
+.k3cms_s3_podcast {
+/*  border: 1px solid red;*/
 }
 
 /* auto-clear some things (http://www.positioniseverything.net/easyclearing.html) */
@@ -30,6 +34,23 @@
   visibility: hidden;
 }
 
+.k3cms_s3_podcast a.with_icon {
+  position: relative;
+  margin-left: 20px;
+}
+.k3cms_s3_podcast a.with_icon img {
+  position: absolute;
+  top: 0px;
+  left: -20px;
+}
+
+/*------------------------------------------------------------------------------------------------*/
+/* Link styles */
+
+.k3cms_s3_podcast a,
+.k3cms_s3_podcast a:link {
+  text-decoration: underline;
+}
 
 /*================================================================================================*/
 /* Podcasts */
@@ -41,7 +62,7 @@
 }
 
 /*------------------------------------------------------------------------------------------------*/
-/* .k3cms_s3_podcast_podcast.show_small */
+/* .k3cms_s3_podcast_podcast */
 
 .k3cms_s3_podcast_podcast {
   color: black;
@@ -51,6 +72,9 @@
 .k3cms_s3_podcast_podcast a {
   color: black;
 }
+
+/*------------------------------------------------------------------------------------------------*/
+/* .k3cms_s3_podcast_podcast.show_small */
 
 .k3cms_s3_podcast_podcast.show_small {
   position: relative;
@@ -134,9 +158,6 @@
   line-height: 1.3em;
   font-size: 13px;
 }
-.k3cms_s3_podcast_episode a {
-  color: black;
-}
 
 /*------------------------------------------------------------------------------------------------*/
 /* .k3cms_s3_podcast_episode_list */
@@ -152,8 +173,14 @@
   font-size: 16px;
   padding-bottom: 5px;
 }
+
 /*------------------------------------------------------------------------------------------------*/
-/* common to index and show */
+/* common to .show_large and .tile */
+
+.k3cms_s3_podcast_episode.new_record {
+  display: none;
+  border: 3px solid green;
+}
 
 .k3cms_s3_podcast_episode.show_large,
 .k3cms_s3_podcast_episode.tile {
@@ -172,6 +199,83 @@ tr.k3cms_s3_podcast_episode td.nearly_invisible {
   width: 0px;
   padding: 0px !important;
 }
+
+/* Records on the page that *can* be edited but are not yet being edited */
+/* Give a subtle visual hint as to which areas on the screen can be edited */
+.edit_mode_on .k3cms_s3_podcast_episode.tile,
+.edit_mode_on .k3cms_s3_podcast_episode.show_large {
+     -moz-box-shadow: 0 0 12px #ddd;
+  -webkit-box-shadow: 0 0 12px #ddd;
+          box-shadow: 0 0 12px #ddd;
+}
+
+/* Records that you hover over or are actively editing */ 
+/* Copied fom inline_editor/public/stylesheets/k3cms/inline_editor.css -- keep in sync */
+.edit_mode_on .k3cms_s3_podcast_episode.tile:hover,
+.edit_mode_on .k3cms_s3_podcast_episode.tile.active,
+.edit_mode_on .k3cms_s3_podcast_episode.show_large:hover,
+.edit_mode_on .k3cms_s3_podcast_episode.show_large.active,
+.context_ribbon,
+.context_ribbon {
+  outline-color: #009000; /* green */
+     -moz-box-shadow: 0 0 12px #009000;
+  -webkit-box-shadow: 0 0 12px #009000;
+          box-shadow: 0 0 12px #009000;
+}
+
+/*------------------------------------------------------------------------------------------------*/
+/* elements *within* the episode box */
+
+.k3cms_s3_podcast_episode.show_large .status.unpublished,
+.k3cms_s3_podcast_episode.tile .status.unpublished {
+  border: 1px solid #A33028;
+  background: #E6554B;
+  color: white;
+}
+.k3cms_s3_podcast_episode.tile .status.unpublished {
+  font-size: 110%;
+}
+
+.k3cms_s3_podcast_episode label {
+  font-weight: bold;
+}
+
+.k3cms_s3_podcast_episode form {
+  display: inline;
+}
+.k3cms_s3_podcast_episode form input {
+  margin: 0;
+}
+
+/*------------------------------------------------------------------------------------------------*/
+/* .k3cms_s3_podcast_episode.tile */
+
+.k3cms_s3_podcast_episode.tile {
+  float: left;
+  padding: 10px 18px 0;
+  /* This is just an invisible placeholder border to keep dimensions uniform. The width here should match that of .k3cms_s3_podcast_episode.new_record */
+  border: 3px solid transparent;
+  width: 170px;
+}
+
+.k3cms_s3_podcast_episode.tile.unpublished {
+  background: #BDAD69;
+}
+
+.k3cms_s3_podcast_episode.tile div.thumbnail {
+  margin: 0 0 5px -8px;
+  width: 166px;
+  height: 124px;
+  padding: 10px;
+  background: url(/images/k3cms/s3_podcast/episode_small-thumbnail_bg.png) center no-repeat;
+}
+
+.k3cms_s3_podcast_episode.tile .k3cms_s3_podcast_episode div.tags input {
+  width: 100px;
+}
+
+/*------------------------------------------------------------------------------------------------*/
+/* .k3cms_s3_podcast_episode.table_row */
 
 /* This is just an invisible placeholder border to keep dimensions uniform. The width here should match that of the green border below */
 tr.k3cms_s3_podcast_episode td {
@@ -199,51 +303,6 @@ tr.k3cms_s3_podcast_episode.new_record td:last-child {
   border-right:  3px solid green;
 }
 
-.k3cms_s3_podcast_episode.tile.unpublished {
-  background: #BDAD69;
-}
-
-/* Records on the page that *can* be edited but are not yet being edited */
-/* Give a subtle visual hint as to which areas on the screen can be edited */
-.edit_mode_on .k3cms_s3_podcast_episode.tile,
-.edit_mode_on .k3cms_s3_podcast_episode.show_large {
-     -moz-box-shadow: 0 0 12px #ddd;
-  -webkit-box-shadow: 0 0 12px #ddd;
-          box-shadow: 0 0 12px #ddd;
-}
-
-/* Records that you hover over or are actively editing */ 
-/* Copied fom inline_editor/public/stylesheets/k3cms/inline_editor.css -- keep in sync */
-.edit_mode_on .k3cms_s3_podcast_episode.tile:hover,
-.edit_mode_on .k3cms_s3_podcast_episode.tile.active,
-.edit_mode_on .k3cms_s3_podcast_episode.show_large:hover,
-.edit_mode_on .k3cms_s3_podcast_episode.show_large.active,
-.context_ribbon,
-.context_ribbon {
-  outline-color: #009000; /* green */
-     -moz-box-shadow: 0 0 12px #009000;
-  -webkit-box-shadow: 0 0 12px #009000;
-          box-shadow: 0 0 12px #009000;
-}
-
-.k3cms_s3_podcast_episode.show_large .status.unpublished,
-.k3cms_s3_podcast_episode.tile .status.unpublished {
-  border: 1px solid #A33028;
-  background: #E6554B;
-  color: white;
-}
-.k3cms_s3_podcast_episode.tile .status.unpublished {
-}
-.k3cms_s3_podcast_episode.tile .status.unpublished {
-  font-size: 110%;
-}
-
-.k3cms_s3_podcast_episode form {
-  display: inline;
-}
-.k3cms_s3_podcast_episode form input {
-  margin: 0;
-}
 
 /*------------------------------------------------------------------------------------------------*/
 /* .k3cms_s3_podcast_episode.show_large */
@@ -254,35 +313,6 @@ tr.k3cms_s3_podcast_episode.new_record td:last-child {
 
 .k3cms_s3_podcast_episode.show_large .description {
   margin: 1em 0;
-}
-
-/*------------------------------------------------------------------------------------------------*/
-/* .k3cms_s3_podcast_episode.tile */
-
-.k3cms_s3_podcast_episode.tile {
-  float: left;
-  padding: 10px 18px 0;
-  /* This is just an invisible placeholder border to keep dimensions uniform. The width here should match that of .k3cms_s3_podcast_episode.new_record */
-  border: 3px solid transparent;
-  width: 170px;
-}
-
-.k3cms_s3_podcast_episode.tile div.thumbnail {
-  margin: 0 0 5px -8px;
-  width: 166px;
-  height: 124px;
-  padding: 10px;
-  background: url(/images/k3cms/s3_podcast/episode_small-thumbnail_bg.png) center no-repeat;
-}
-
-.k3cms_s3_podcast_episode.tile .k3cms_s3_podcast_episode div.tags input {
-  width: 100px;
-}
-
-/*------------------------------------------------------------------------------------------------*/
-.k3cms_s3_podcast_episode.new_record {
-  display: none;
-  border: 3px solid green;
 }
 
 /*================================================================================================*/
