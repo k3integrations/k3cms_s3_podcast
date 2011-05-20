@@ -1,22 +1,22 @@
 -# Compare: app/cells/k3cms/s3_podcast/episodes_index/table.html.haml app/cells/k3cms/s3_podcast/episodes_index/tiles.html.haml
 
-.k3cms_s3_podcast_episode_list
+.k3cms_s3_podcast_episode_list.tiles
   .header
-    %div
-      = paginate @episodes
-
     - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
       %div
         = link_to_function image_tag('k3cms/s3_podcast/add.png', :alt => 'New') + ' New episode',
           "$('.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode:eq(0)').trigger('toggle')"
 
+    %div
+      = paginate @episodes
+
   .the_list
     - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
       = render_cell 'k3cms/s3_podcast/episodes_index', :tile, :episode => @new_episode, :podcast => @podcast
 
-    - @episodes.in_groups_of(Rails.application.config.k3cms.s3_podcast.pagination[:per_row], false).each do |episodes|
-      - episodes.each do |episode|
-        = render_cell 'k3cms/s3_podcast/episodes_index', :tile, :episode => episode, :podcast => @podcast
+    - @episodes.each do |episode|
+      = render_cell 'k3cms/s3_podcast/episodes_index', :tile, :episode => episode, :podcast => @podcast
+
 
 :javascript
   K3cms_S3Podcast.fix_clears()
