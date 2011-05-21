@@ -65,12 +65,10 @@ Notes:
 /* .k3cms_s3_podcast_podcast */
 
 .k3cms_s3_podcast_podcast {
-  color: black;
   line-height: 1.3em;
   font-size: 13px;
 }
 .k3cms_s3_podcast_podcast a {
-  color: black;
 }
 
 /*------------------------------------------------------------------------------------------------*/
@@ -154,7 +152,6 @@ Notes:
 /* Episodes */
 
 .k3cms_s3_podcast_episode {
-  color: black;
   line-height: 1.3em;
   font-size: 13px;
 }
