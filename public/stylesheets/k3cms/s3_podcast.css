@@ -1,8 +1,8 @@
 /* vim: expandtab shiftwidth=2 tabstop=2
 Notes:
-* I would have preferred to use class names like .k3cms_s3_podcast.episode so that we could style
-  *everything* related to k3cms_s3_podcast using a single .k3cms_s3_podcast selector...
-  but .k3cms_s3_podcast_episode is what the dom_class helper generates so I decided to use that.
+* I would have preferred to use class names like .k3cms_s3_podcast.episode but .k3cms_s3_podcast_episode is what the dom_class helper generates so I decided to use that.
+* But I still tried to make sure that every k3cms_s3_podcast view renders its contents within .k3cms_s3_podcast
+  so that we can easily style *everything* rendered by k3cms_s3_podcast with a single .k3cms_s3_podcast selector...
 */
 /*================================================================================================*/
 /* Not s3_podcast-specific */
