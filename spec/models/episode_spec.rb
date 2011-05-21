@@ -8,6 +8,49 @@ module K3cms::S3Podcast
       Time.stub!(:now).and_return(Time.mktime(2011,1,1, 12,0))
     end
 
+    describe "Scopes" do
+      before(:each) do
+        @episode1 = Episode.make(:date => '2010-01-01', :view_count => 90, :tag_list => 'A,B')
+        @episode2 = Episode.make(:date => '2010-01-02', :view_count => 10, :tag_list => 'C')
+        @episode3 = Episode.make(:date => '2015-01-03', :view_count => 20, :tag_list => 'B')
+      end
+
+      describe "published" do
+        it "should only return published episodes" do
+          Episode.published.should == [@episode1, @episode2]
+        end
+      end
+
+      describe "most_recent" do
+        it "should return most recent episodes" do
+          Episode.most_recent.should == [@episode3, @episode2, @episode1]
+        end
+      end
+
+      describe "most_popular" do
+        it "should return most viewed episodes" do
+          Episode.most_popular.should == [@episode1, @episode3, @episode2]
+        end
+      end
+
+      # (not technically a scope -- would be nice if it were though)
+      describe "related" do
+        subject { @episode1.related }
+        it "should return episodes having any of the same tags" do
+          subject.should == [@episode3]
+        end
+        it { should_not include(@episode1) }
+      end
+    end
+    
+    describe "Tagging" do
+      it "should be able to take new tags" do
+        episode = Episode.make(:tag_list => 'first, second, last tag')
+        Episode.first.tag_list.should == ['first', 'second', 'last tag']
+        Episode.tagged_with('first').should == [episode]
+      end
+    end
+
     context 'publish_episodes_days_in_advance_of_date is 0 (default)' do
       before do
         @podcast = Podcast.make

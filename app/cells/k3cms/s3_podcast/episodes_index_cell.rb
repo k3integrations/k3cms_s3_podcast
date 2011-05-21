@@ -10,10 +10,28 @@ module K3cms
         render :view => ::Rails.application.config.k3cms.s3_podcast.index_view
       end
 
+      def random
+        @episodes = Episode.published.random
+        options[:limit] ||= 3
+        options[:pagination] = false if options[:pagination].nil?
+        options[:text_for_header] ||= '<h2>Other Episodes</h2>'.html_safe
+        index
+      end
+
       def most_recent
-        @episodes = Episode.most_recent.published
+        @episodes = Episode.published.most_recent
         options[:limit] ||= 6
         options[:pagination] = false if options[:pagination].nil?
+        options[:text_for_header] ||= '<h2>Most Recent</h2>'.html_safe
+        index
+      end
+
+      def related
+        options[:to] or raise("to is required")
+        @episodes = options[:to].related.most_recent
+        options[:limit] ||= 3
+        options[:pagination] = false if options[:pagination].nil?
+        options[:text_for_header] ||= '<h2>Related Episodes</h2>'.html_safe
         index
       end
 

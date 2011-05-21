@@ -11,6 +11,11 @@ module K3cms
       scope :most_recent,  lambda { order('date DESC') }
       scope :most_popular, lambda { order('view_count DESC') }
       scope :random,       order('rand() ASC')
+      scope :without,      lambda {|obj| where(['id != ?', obj.is_a?(Integer) ? obj : obj.id]) }
+
+      def related
+        tag_list.blank? ? Episode.where('null') : Episode.tagged_with(tag_list, :any => :true).without(id)
+      end
 
       paginates_per Rails.application.config.k3cms.s3_podcast.pagination[:per_page]
 

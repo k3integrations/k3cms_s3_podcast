@@ -1,40 +1,40 @@
 -# Compare: app/cells/k3cms/s3_podcast/episodes_index/table.html.haml app/cells/k3cms/s3_podcast/episodes_index/tiles.html.haml
+- if @episodes.any?
+  .k3cms_s3_podcast.k3cms_s3_podcast_episode_list.tiles
+    .header
+      - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
+        %div.editing_links
+          = link_to_function image_tag('k3cms/s3_podcast/add.png', :alt => 'New') + ' New episode',
+            "$('.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode:eq(0)').trigger('toggle')", :class => 'new_episode with_icon'
 
-.k3cms_s3_podcast.k3cms_s3_podcast_episode_list.tiles
-  .header
-    - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
-      %div.editing_links
-        = link_to_function image_tag('k3cms/s3_podcast/add.png', :alt => 'New') + ' New episode',
-          "$('.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode:eq(0)').trigger('toggle')", :class => 'new_episode with_icon'
+      - if @options[:text_for_header]
+        .text_for_header= @options[:text_for_header]
+      = paginate @episodes unless @options[:pagination] == false
 
-    - if @options[:text_for_header]
-      .text_for_header= @options[:text_for_header]
-    = paginate @episodes unless @options[:pagination] == false
+    .the_list
+      - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
+        = render_cell 'k3cms/s3_podcast/episodes_index', :tile, :episode => @new_episode, :podcast => @podcast
 
-  .the_list
-    - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
-      = render_cell 'k3cms/s3_podcast/episodes_index', :tile, :episode => @new_episode, :podcast => @podcast
+      - @episodes.each do |episode|
+        = render_cell 'k3cms/s3_podcast/episodes_index', :tile, :episode => episode, :podcast => @podcast
 
-    - @episodes.each do |episode|
-      = render_cell 'k3cms/s3_podcast/episodes_index', :tile, :episode => episode, :podcast => @podcast
+    .footer
 
-  .footer
-
-:javascript
-  K3cms_S3Podcast.fix_clears()
-
-- if ::Rails.application.config.k3cms.s3_podcast.show_view == :lightbox
   :javascript
-    $(function() {
-      $("a[rel]").overlay({
-        mask: '#000',
-        effect: 'apple',
-        onBeforeLoad: function() {
-          var wrap = this.getOverlay().find(".s3podcastWrap");
-          wrap.load(this.getTrigger().attr("href"));
-        }
-      });
-    });
+    K3cms_S3Podcast.fix_clears()
 
-.k3cms_s3_podcast_overlay#s3_overlay
-  .contentWrap
+  - if ::Rails.application.config.k3cms.s3_podcast.show_view == :lightbox
+    :javascript
+      $(function() {
+        $("a[rel]").overlay({
+          mask: '#000',
+          effect: 'apple',
+          onBeforeLoad: function() {
+            var wrap = this.getOverlay().find(".s3podcastWrap");
+            wrap.load(this.getTrigger().attr("href"));
+          }
+        });
+      });
+
+  .k3cms_s3_podcast_overlay#s3_overlay
+    .contentWrap

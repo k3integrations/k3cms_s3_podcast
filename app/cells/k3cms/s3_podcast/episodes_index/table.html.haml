@@ -1,28 +1,28 @@
 -# Compare: app/cells/k3cms/s3_podcast/episodes_index/table.html.haml app/cells/k3cms/s3_podcast/episodes_index/tiles.html.haml
+- if @episodes.any?
+  .k3cms_s3_podcast.k3cms_s3_podcast_episode_list.table
+    .header
+      - if @options[:text_for_header]
+        .text_for_header= @options[:text_for_header]
+      = paginate @episodes unless @options[:pagination] == false
 
-.k3cms_s3_podcast.k3cms_s3_podcast_episode_list.table
-  .header
-    - if @options[:text_for_header]
-      .text_for_header= @options[:text_for_header]
-    = paginate @episodes unless @options[:pagination] == false
-
-    - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
-      %div
-        = link_to_function image_tag('k3cms/s3_podcast/add.png', :alt => 'New') + ' New episode',
-          "$('.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode:eq(0)').trigger('toggle')", :class => 'new_episode with_icon'
-
-  %table
-    %thead
-      %tr
-        %th{:colspan=>"4"}
-          = t('Latest Programs')
-
-    %tbody.the_list
       - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
-        = render_cell 'k3cms/s3_podcast/episodes_index', :table_row, :episode => @new_episode, :podcast => @podcast
+        %div
+          = link_to_function image_tag('k3cms/s3_podcast/add.png', :alt => 'New') + ' New episode',
+            "$('.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode:eq(0)').trigger('toggle')", :class => 'new_episode with_icon'
 
-      - @episodes.each do |episode|
-        = render_cell 'k3cms/s3_podcast/episodes_index', :table_row, :episode => episode, :podcast => @podcast
+    %table
+      %thead
+        %tr
+          %th{:colspan=>"4"}
+            = t('Latest Programs')
 
-.k3cms_s3_podcast_overlay
-  .content
+      %tbody.the_list
+        - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
+          = render_cell 'k3cms/s3_podcast/episodes_index', :table_row, :episode => @new_episode, :podcast => @podcast
+
+        - @episodes.each do |episode|
+          = render_cell 'k3cms/s3_podcast/episodes_index', :table_row, :episode => episode, :podcast => @podcast
+
+  .k3cms_s3_podcast_overlay
+    .content

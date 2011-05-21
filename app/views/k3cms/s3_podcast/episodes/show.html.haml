@@ -1,8 +1,10 @@
 - content_for :title do
   = strip_tags @episode.title
 
--# Hard-code the widget on this page
+-# Hard-code some widgets on this page
 = render_cell 'k3cms/s3_podcast/episodes_show', :show, :episode => @episode
+= render_cell 'k3cms/s3_podcast/episodes_index', :related, :to => @episode, :podcast => @episode.podcast
+= render_cell 'k3cms/s3_podcast/episodes_index', :random, :podcast => @episode.podcast
 
 - if edit_mode?
   :javascript
