@@ -10,7 +10,7 @@
       = raw @episode.title
 
   .date
-    %label #{t('Publish date')}:
+    %label #{t('Date')}:
     - if can?(:edit, K3cms::S3Podcast::Episode) && edit_mode?
       = inline_editable('span', @episode, :date) do
         = raw @episode.date

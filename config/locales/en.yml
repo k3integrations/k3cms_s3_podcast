@@ -2,8 +2,9 @@ en:
   Watch: Watch
   Listen: Listen
   Download: Download
-  Download {extension} file: Download %{extension} file
+  Download {extension} file: Download as %{extension} file
   Subscribe to Podcast: Subscribe to Podcast
   Latest Programs: Latest Programs
   View more programs: View more programs
   Tags: Tags
+  Date: Date
