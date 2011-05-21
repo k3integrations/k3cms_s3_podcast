@@ -39,10 +39,9 @@ module K3cms
       # Extracts from options hash and sets instance variables
       # Initializes @new_episode
       def set_up
-        @episode = options[:episode]
-        @episodes = options[:episodes]
-
-        @podcast = options[:podcast] || @episode.podcast
+        @episode  ||= options[:episode]
+        @episodes ||= options[:episodes]
+        @podcast  ||= options[:podcast] || @episode.podcast
 
         # FIXME: duplicated with #new action in controller
         # (used by episodes_index/list and episodes_index/tiles)

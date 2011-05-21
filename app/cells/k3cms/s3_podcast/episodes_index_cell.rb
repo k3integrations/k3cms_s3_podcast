@@ -3,12 +3,23 @@ module K3cms
     class EpisodesIndexCell < EpisodesCell
 
       #---------------------------------------------------------------------------------------------
+      # These views show many episodes (within .k3cms_s3_podcast_episode_list)
+
       def index
         fetch_episodes
         render :view => ::Rails.application.config.k3cms.s3_podcast.index_view
       end
 
+      def most_recent
+        @episodes = Episode.most_recent.published
+        options[:limit] ||= 6
+        options[:pagination] = false if options[:pagination].nil?
+        index
+      end
+
       #---------------------------------------------------------------------------------------------
+      # These views show a single episode
+
       def show
         set_up
         raise 'episode is required' unless @episode
@@ -39,6 +50,7 @@ module K3cms
           @episodes = Episode.accessible_by(current_ability).order('id desc')
         end
         @episodes = @episodes.page(params[:page])
+        @episodes = @episodes.limit(options[:limit]) if options[:limit]
         # This is to enforce the episode.published? condition specified in a block. accessible_by doesn't automatically check the block conditions when fetching records.
         @episodes.select! {|episode| can?(:read, episode)}
       end

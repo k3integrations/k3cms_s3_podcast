@@ -7,7 +7,9 @@
         = link_to_function image_tag('k3cms/s3_podcast/add.png', :alt => 'New') + ' New episode',
           "$('.k3cms_s3_podcast_episode#new_k3cms_s3_podcast_episode:eq(0)').trigger('toggle')", :class => 'new_episode with_icon'
 
-    = paginate @episodes
+    - if @options[:text_for_header]
+      .text_for_header= @options[:text_for_header]
+    = paginate @episodes unless @options[:pagination] == false
 
   .the_list
     - if can?(:create, K3cms::S3Podcast::Episode) && edit_mode?
@@ -16,6 +18,7 @@
     - @episodes.each do |episode|
       = render_cell 'k3cms/s3_podcast/episodes_index', :tile, :episode => episode, :podcast => @podcast
 
+  .footer
 
 :javascript
   K3cms_S3Podcast.fix_clears()
