@@ -12,6 +12,7 @@ module K3cms::S3Podcast::EpisodeHelper
 
   def k3cms_s3_podcast_episode_classes(episode)
     [
+      'k3cms_s3_podcast',
       dom_class(episode),
       dom_id(episode),
       (episode.published? ? 'published' : 'unpublished'),
@@ -45,7 +46,7 @@ module K3cms::S3Podcast::EpisodeHelper
 
   def k3cms_s3_podcast_download_links(episode)
     episode.source_urls_hash.map { |extension, source_url|
-      link_to(image_tag('k3cms/s3_podcast/video.png') + " " + t('Download {extension} file', :extension => extension), source_url)
+      link_to(image_tag('k3cms/s3_podcast/video.png') + " " + t('Download {extension} file', :extension => extension), source_url, :class => 'download with_icon')
     }.join('<br/>').html_safe
   end
 
@@ -76,7 +77,7 @@ module K3cms::S3Podcast::EpisodeHelper
     raise "Must define at least one mp4 source: #{source_urls}" unless defined?(mp4_url)
     
     %Q(
-      <div class="video_player video-js-box">
+      <div class="player video_player video-js-box">
         <!-- Using the Video for Everybody Embed Code http://camendesign.com/code/video_for_everybody -->
         <video class="video-js" width="#{options[:width]}" height="#{options[:height]}" controls preload poster="#{options[:poster]}">
           #{src_list}
@@ -125,7 +126,7 @@ module K3cms::S3Podcast::EpisodeHelper
     
     %Q(
       <div id="jquery_jplayer_1" class="jp-jplayer"></div>
-      <div class="audio_player jp-audio">
+      <div class="player audio_player jp-audio">
         <div class="jp-type-single">
           <div id="jp_interface_1" class="jp-interface">
             <ul class="jp-controls">

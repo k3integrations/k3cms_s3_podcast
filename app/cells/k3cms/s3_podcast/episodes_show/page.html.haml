@@ -9,6 +9,8 @@
     - else
       = raw @episode.title
 
+  = k3cms_s3_podcast_episode_player @episode, :autoplay => true
+
   .date
     %label #{t('Date')}:
     - if can?(:edit, K3cms::S3Podcast::Episode) && edit_mode?
@@ -24,8 +26,8 @@
     - else
       = raw @episode.description
 
-  = k3cms_s3_podcast_episode_player @episode, :autoplay => true
-  = k3cms_s3_podcast_download_links @episode
+  .download_links
+    = k3cms_s3_podcast_download_links @episode
 
   .tags
     %label #{t('Tags')}:

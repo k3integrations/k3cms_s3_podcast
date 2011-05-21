@@ -185,18 +185,6 @@ Notes:
   position: relative;
 }
 
-/* This doesn't work (in Chromium and Firefox anyway). 'position: relative' is ignored for table cells. */
-/* Use .relative_fix instead */
-tr.k3cms_s3_podcast_episode td {
-  position: relative;
-}
-
-/* we can't make this display: none, because it contains a .context_ribbon, but this comes close enough */
-tr.k3cms_s3_podcast_episode td.nearly_invisible {
-  width: 0px;
-  padding: 0px !important;
-}
-
 /* Records on the page that *can* be edited but are not yet being edited */
 /* Give a subtle visual hint as to which areas on the screen can be edited */
 .edit_mode_on .k3cms_s3_podcast_episode.tile,
@@ -274,6 +262,18 @@ tr.k3cms_s3_podcast_episode td.nearly_invisible {
 /*------------------------------------------------------------------------------------------------*/
 /* .k3cms_s3_podcast_episode.table_row */
 
+/* This doesn't work (in Chromium and Firefox anyway). 'position: relative' is ignored for table cells. */
+/* Use .relative_fix instead */
+tr.k3cms_s3_podcast_episode td {
+  position: relative;
+}
+
+/* we can't make this display: none, because it contains a .context_ribbon, but this comes close enough */
+tr.k3cms_s3_podcast_episode td.nearly_invisible {
+  width: 0px;
+  padding: 0px !important;
+}
+
 /* This is just an invisible placeholder border to keep dimensions uniform. The width here should match that of the green border below */
 tr.k3cms_s3_podcast_episode td {
   border-top:    3px solid transparent;
@@ -311,6 +311,13 @@ tr.k3cms_s3_podcast_episode.new_record td:last-child {
 .k3cms_s3_podcast_episode.show_large .description {
   margin: 1em 0;
 }
+
+.k3cms_s3_podcast_episode.show_large .player {
+  float: right;
+  margin-left: 10px;
+}
+
+
 
 /*================================================================================================*/
 /* Icons */
