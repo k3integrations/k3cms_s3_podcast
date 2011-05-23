@@ -8,6 +8,7 @@ atom_feed(
   :id            => k3cms_s3_podcast_podcast_episodes_url(@podcast),
   :root_url      => k3cms_s3_podcast_podcast_episodes_url(@podcast),
   'xmlns:itunes' => "http://www.itunes.com/dtds/podcast-1.0.dtd",
+  'xmlns:media'  => "http://search.yahoo.com/mrss/",
 ) do |feed|
 
   # Required elements:
@@ -15,9 +16,9 @@ atom_feed(
   feed.updated     @episodes.first.try(:created_at) || Time.now
 
   # Optional elements:
-  feed.icon        @podcast.icon_url                   if @podcast.icon_url.present?
+  feed.icon        @podcast.icon_url                   if @podcast.icon_url.present?  # icon  Identifies a small image which provides iconic visual identification for the feed. Icons should be square.
   feed.tag! 'itunes:image', :href => @podcast.icon_url if @podcast.icon_url.present?
-  feed.logo        @podcast.logo_url                   if @podcast.logo_url.present?
+  feed.logo        @podcast.logo_url                   if @podcast.logo_url.present?  # logo  Identifies a larger image which provides visual identification for the feed. Images should be twice as wide as they are tall.
   feed.rights      @podcast.rights, :type => 'html'    if @podcast.rights.present?
   feed.generator  'K3cms (http://k3cms.k3integrations.com)'
  #feed.author
@@ -38,6 +39,9 @@ atom_feed(
       episode.tags.each do |tag|
         entry.category :term => tag
       end
+
+      # http://video.search.yahoo.com/mrss
+      feed.tag! 'media:thumbnail', :url => episode.image_url
 
      #entry.contributor
      #entry.rights
