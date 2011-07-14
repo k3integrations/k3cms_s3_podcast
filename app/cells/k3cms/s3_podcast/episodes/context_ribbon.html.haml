@@ -3,27 +3,27 @@
     = fields_for(@episode) do |f|
       = f.hidden_field :podcast_id
 
-    .code.field
-      %label Code:
+    .code.field.clear
+      %label.left Code:
       - if true
-        = inline_editable('span', @episode, :code) do
+        = inline_editable('div', @episode, :code, :class => 'left') do
           = @episode.code
       - if false
         = text_field_tag @episode, :code
 
-    .date.field
-      %label Date:
+    .date.field.clear
+      %label.left Date:
       - if can?(:edit, @episode) && edit_mode?
-        = inline_editable('span', @episode, :date) do
+        = inline_editable('div', @episode, :date, :class => 'left') do
           = raw @episode.date
       - else
         = @episode.date && @episode.date.to_s(:long)
 
     .description.field
 
-    .row
-      .action.left
-        - unless @episode.new_record?
+    .clear
+      - unless @episode.new_record?
+        .action.left
           -# if can?(:edit, @episode)
             = link_to image_tag('k3cms/s3_podcast/pencil_go.png', :alt => 'Edit') + ' Edit', polymorphic_url(@episode, :only_path => true)
           - if can?(:destroy, @episode)
