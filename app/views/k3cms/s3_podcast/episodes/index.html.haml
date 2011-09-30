@@ -6,7 +6,7 @@
 
 .k3cms_s3_podcast
   %h1.episodes_index_title 
-    = @podcast.title
+    = raw @podcast.title
 
   = link_to image_tag('k3cms/s3_podcast/feed.png') + ' ' + t('Subscribe to Podcast'), k3cms_s3_podcast_podcast_episodes_url(@podcast, :format => :atom), :class => 'subscribe_to_feed with_icon'
 
