@@ -60,7 +60,7 @@ module K3cms
       end
 
       def source_urls
-        podcast.episode_source_urls.map { |url| get_url(url) }
+        podcast.episode_source_urls.map { |url| get_url(url) }.compact
       end
 
       def source_urls_hash
