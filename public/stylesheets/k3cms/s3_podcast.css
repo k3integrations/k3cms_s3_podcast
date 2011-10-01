@@ -308,6 +308,10 @@ tr.k3cms_s3_podcast_episode.new_record td:last-child {
   padding: 5px;
 }
 
+.k3cms_s3_podcast_episode.show_large .title {
+  text-align: center;
+}
+
 .k3cms_s3_podcast_episode.show_large .description {
   margin: 1em 0;
 }
