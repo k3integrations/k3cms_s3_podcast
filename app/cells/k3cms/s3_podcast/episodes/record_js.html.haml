@@ -5,8 +5,11 @@
     $("a.lightbox[rel]").overlay({
       mask: '#000',
       onBeforeLoad: function() {
-        var wrap = this.getOverlay().find(".content");
-        wrap.load(this.getTrigger().attr("href"));
+        var content = this.getOverlay().find(".content");
+        content.load(this.getTrigger().attr("href"), function() {
+          //content.find('.editable').inlineEditor(options)
+          K3cms_InlineEditor.initInlineEditor();
+        });
       },
       onBeforeClose: function() {
         var elements = this.getOverlay().find('video.video-js');
