@@ -12,7 +12,7 @@ atom_feed(
 ) do |feed|
 
   # Required elements:
-  feed.title       @podcast.title
+  feed.title       strip_tags(@podcast.title)
   feed.updated     @episodes.first.try(:created_at) || Time.now
 
   # Optional elements:
