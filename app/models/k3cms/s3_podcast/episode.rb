@@ -8,10 +8,10 @@ module K3cms
 
       acts_as_taggable
 
-      scope :most_recent,  lambda { order('date DESC') }
-      scope :most_popular, lambda { order('view_count DESC') }
+      scope :most_recent,  lambda { order('k3cms_s3_podcast_episodes.date DESC') }
+      scope :most_popular, lambda { order('k3cms_s3_podcast_episodes.view_count DESC') }
       scope :random,       order('rand() ASC')
-      scope :without,      lambda {|obj| where(['id != ?', obj.is_a?(Integer) ? obj : obj.id]) }
+      scope :without,      lambda {|obj| where(['k3cms_s3_podcast_episodes.id != ?', obj.is_a?(Integer) ? obj : obj.id]) }
 
       def related
         tag_list.blank? ? Episode.where('null') : Episode.tagged_with(tag_list, :any => :true).without(id)
