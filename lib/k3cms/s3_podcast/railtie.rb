@@ -46,7 +46,7 @@ module K3cms
         end
       end
 
-      config.action_view.javascript_expansions[:k3cms_viewing].concat [
+      config.action_view.javascript_expansions[:k3cms].concat [
         'k3cms/video.js',
         'k3cms/s3_podcast.js',
         'jquery.tools.min.js',
