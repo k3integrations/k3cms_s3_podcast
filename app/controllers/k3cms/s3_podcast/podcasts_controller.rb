@@ -22,11 +22,7 @@ module K3cms
           else
             format.html # show.html.erb
           end
-          format.js # not currently used
-          format.json {
-            K3cms::S3Podcast::Podcast.model_name.instance_variable_set('@element', dom_class(@podcast))
-            render :json => @podcast
-          }
+          format.json { render :json => @podcast }
           format.xml  { render :xml  => @podcast }
         end
       end
@@ -61,7 +57,6 @@ module K3cms
             format.xml  { render :xml => @podcast, :status => :created, :location => @podcast }
             format.json {
               redirect_to(k3cms_s3_podcast_podcast_url(@podcast))
-              #K3cms::S3Podcast::Podcast.model_name.instance_variable_set('@element', dom_class(@podcast))
               #render :json => @podcast
             }
           else

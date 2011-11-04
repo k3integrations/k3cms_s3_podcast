@@ -14,7 +14,7 @@ K3cms_S3Podcast = {
   }
 }
 
-k3cms_s3_podcast_podcast = {
+K3cms_S3Podcast_Podcast = {
   url_for: function(object) {
      return '/podcasts/' + object.id;
   },
@@ -42,7 +42,7 @@ k3cms_s3_podcast_podcast = {
 };
 
 
-k3cms_s3_podcast_episode = {
+K3cms_S3Podcast_Episode = {
   url_for: function(object) {
      return '/podcasts/' + object.podcast_id + '/episodes/' + object.id;
   },

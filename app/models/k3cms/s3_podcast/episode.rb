@@ -1,6 +1,7 @@
 module K3cms
   module S3Podcast
     class Episode < ActiveRecord::Base
+      self.include_root_in_json = false
       set_table_name 'k3cms_s3_podcast_episodes'
 
       belongs_to :author, :class_name => 'User'

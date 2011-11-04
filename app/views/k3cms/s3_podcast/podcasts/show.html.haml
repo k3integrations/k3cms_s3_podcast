@@ -6,4 +6,4 @@
 
 - if edit_mode?
   :javascript
-    k3cms_s3_podcast_podcast.updatePage('#{dom_class(@podcast)}', '#{dom_id(@podcast)}', #{@podcast.to_json}.podcast, null);
+    #{inline_editor_update_page_from_object(@podcast)}

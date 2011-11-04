@@ -8,4 +8,4 @@
 
 - if edit_mode?
   :javascript
-    k3cms_s3_podcast_episode.updatePage('#{dom_class(@episode)}', '#{dom_id(@episode)}', #{@episode.to_json}.episode, null);
+    #{inline_editor_update_page_from_object(@episode)}

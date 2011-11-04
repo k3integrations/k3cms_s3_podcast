@@ -58,14 +58,7 @@ module K3cms
           else
             format.html # show.html.erb
           end
-          format.js # not currently used
-          format.json {
-            # So we have data-object="k3cms_s3_podcast_episode" so that the params come in as params[:k3cms_s3_podcast_episode] like the controller expects (and which works well since form_for @episode creates fields named that way).
-            # But that causes it to expect the json object to be in the form {"k3cms_s3_podcast_episode":...}
-            # But K3cms::S3Podcast::Episode.model_name.element drops the namespace and returns 'episode' by default. Here is my workaround:
-            K3cms::S3Podcast::Episode.model_name.instance_variable_set('@element', dom_class(@episode))
-            render :json => @episode
-          }
+          format.json { render :json => @episode }
           format.xml  { render :xml  => @episode }
         end
       end

@@ -1,6 +1,7 @@
 module K3cms
   module S3Podcast
     class Podcast < ActiveRecord::Base
+      self.include_root_in_json = false
       set_table_name 'k3cms_s3_podcast_podcasts'
 
       has_many :episodes, :class_name => 'K3cms::S3Podcast::Episode'
