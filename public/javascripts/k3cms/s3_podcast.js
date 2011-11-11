@@ -71,7 +71,8 @@ K3cms_S3Podcast_Episode = {
 
     //$('[data-object=' + object_name + '][data-object-id=' + object_id + '][data-attribute=' + attr_name + ']')
 
-    var container = $('.k3cms_s3_podcast_episode#' + object_id);
+    var container = $('.k3cms_s3_podcast_episode_' + object_id);
+    if (!container) console.debug('Could not find container for episode ' + object_id);
     if (container.is('tr')) {
       var style = 'table';
     } else {
@@ -82,7 +83,7 @@ K3cms_S3Podcast_Episode = {
     link.attr('href', object.download_url);
 
     var img = container.find('.thumbnail img');
-    img.attr('src', object.thumbnail_image_url);
+    img.attr('src', object.image_url);
 
     var video = container.find('video');
     video.attr('poster', K3cms_S3Podcast.config.video_tag_options.poster || object.thumbnail_image_url);
