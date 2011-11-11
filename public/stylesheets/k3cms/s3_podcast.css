@@ -211,6 +211,10 @@ Notes:
 /*------------------------------------------------------------------------------------------------*/
 /* elements *within* the episode box */
 
+.k3cms_s3_podcast_episode .context_ribbon label,
+.k3cms_s3_podcast_episode .context_ribbon .field {
+  font-size: 13px !important;
+}
 .k3cms_s3_podcast_episode.show_large .status.unpublished,
 .k3cms_s3_podcast_episode.tile .status.unpublished {
   border: 1px solid #A33028;
