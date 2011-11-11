@@ -3,7 +3,7 @@
     = fields_for(@episode) do |f|
       = f.hidden_field :podcast_id
 
-    .code.field.clear
+    .code.field.clear_left
       %label.left Code:
       - if true
         = inline_editable('div', @episode, :code, :class => 'left') do
@@ -11,7 +11,7 @@
       - if false
         = text_field_tag @episode, :code
 
-    .date.field.clear
+    .date.field.clear_left
       %label.left Date:
       - if can?(:edit, @episode) && edit_mode?
         = inline_editable('div', @episode, :date, :class => 'left') do
@@ -21,7 +21,7 @@
 
     .description.field
 
-    .clear
+    .clear_left
       - unless @episode.new_record?
         .action.left
           -# if can?(:edit, @episode)
