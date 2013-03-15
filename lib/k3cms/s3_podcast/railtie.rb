@@ -47,21 +47,15 @@ module K3cms
       end
 
       config.action_view.javascript_expansions[:k3cms].concat [
-        'k3cms/video.js',
-        'k3cms/s3_podcast.js',
+        'flowplayer.min.js',
         'jquery.tools.min.js',
-        'k3cms/jquery.jplayer.min.js',
-      ]
-      config.action_view.javascript_expansions[:k3cms_editing].concat [
-        'jquery.tools.tooltip.js',
+        'k3cms/s3_podcast.js',
       ]
       config.action_view.stylesheet_expansions[:k3cms] ||= []
       config.action_view.stylesheet_expansions[:k3cms].concat [
+        'k3cms/flowplayer/minimalist.css',
         'k3cms/s3_podcast.css',
         'k3cms/s3_podcast_overlay.css',
-        'k3cms/video-js.css',
-        'k3cms/jquery.jplayer/jplayer.blue.monday.css',
-        'k3cms/jquery.jplayer/jplayer.blue.monday.overrides.css',
       ]
 
       initializer 'k3cms.s3_podcast.cells_paths' do |app|

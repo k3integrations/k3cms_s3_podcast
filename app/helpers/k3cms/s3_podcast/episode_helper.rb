@@ -51,62 +51,39 @@ module K3cms::S3Podcast::EpisodeHelper
   end
 
   def video_player(source_urls, options = {})
-    # FIXME: H.264 MP4 works in Firefox but not Chrome 10+
     options.reverse_merge!(
         :controls => 'true',
         :style => "display: block;",
         :autoplay => false,
     )
-    
-    src_list=''; download_list=''; mp4_url=''
-    #source_urls << 'http://video-js.zencoder.com/oceans-clip.ogv'
+
+    src_list='';
     source_urls.each do |source_url|
       case Pathname.new(source_url).extname
       when '.mp4', '.m4v'
-        src_list += %Q(<source src="#{source_url}" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"' />\n)
-        download_list += %Q(<a href="#{source_url}">MP4</a>\n)
-        mp4_url = source_url
+        src_list += %Q(<source src="#{source_url}" type="video/mp4" />\n)
       when '.webm'
-        src_list += %Q(<source src="#{source_url}" type='video/webm; codecs="vp8, vorbis"' />\n)
-        download_list += %Q(<a href="#{source_url}">WEBM</a>\n)
-      when '.ogv'
-        src_list += %Q(<source src="#{source_url}" type='video/ogg; codecs="theora, vorbis"' />\n)
-        download_list += %Q(<a href="#{source_url}">OGV</a>\n)
+        src_list += %Q(<source src="#{source_url}" type="video/webm" />\n)
+      when '.wmv'
+        src_list += %Q(<source src="#{source_url}" type="video/x-ms-wmv" />\n)
       end
     end
-    raise "Must define at least one mp4 source: #{source_urls}" unless defined?(mp4_url)
-    
+
+    # "Note that for video, you must supply at least an M4V"
+    raise "Must define at least one m4v source: #{source_urls}" unless src_list.include?('video/mp4')
+
     %Q(
-      <div class="player video_player video-js-box">
-        <!-- Using the Video for Everybody Embed Code http://camendesign.com/code/video_for_everybody -->
-        <video class="video-js" width="#{options[:width]}" height="#{options[:height]}" controls preload poster="#{options[:poster]}">
+      <div class="player">
+        <video>
           #{src_list}
-          <!-- Flash Fallback. Use any flash video player here. Make sure to keep the vjs-flash-fallback class. -->
-          <object class="vjs-flash-fallback" width="#{options[:width]}" height="#{options[:height]}" type="application/x-shockwave-flash"
-            data="http://releases.flowplayer.org/swf/flowplayer-3.2.1.swf">
-            <param name="movie" value="http://releases.flowplayer.org/swf/flowplayer-3.2.1.swf" />
-            <param name="allowfullscreen" value="true" />
-            <param name="flashvars" value='config={"playlist":["#{options[:poster]}", {"url": "#{mp4_url}","autoPlay":#{options[:autoplay]},"autoBuffering":true}]}' />
-            <!-- Image Fallback. Typically the same as the poster image. -->
-            <img src="#{options[:poster]}" width="#{options[:width]}" height="#{options[:height]}" alt="Poster Image"
-              title="No video playback capabilities." />
-          </object>
         </video>
-
-        <!-- Download links provided for devices that can't play video in the browser. 
-        <p class="vjs-no-video"><strong>#{t('Download')}:</strong>
-          #{download_list}
-        </p> -->
-
-        <script type="text/javascript">
-          $(function() {
-            $('video.video-js').VideoJS();
-            #{if options[:autoplay]
-           "$('video.video-js')[0].player.play();"
-            end}
-          })
-        </script>
       </div>
+
+      <script type="text/javascript">
+        $(function() {
+          $(".player").flowplayer({ swf: "/k3cms/flowplayer.swf" });
+        });
+      </script>
     ).html_safe
   end
 

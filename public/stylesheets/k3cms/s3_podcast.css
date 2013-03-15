@@ -321,6 +321,7 @@ tr.k3cms_s3_podcast_episode.new_record td:last-child {
 }
 
 .k3cms_s3_podcast_episode.show_large .player {
+  width: 384px;
   float: right;
   margin-left: 10px;
 }
