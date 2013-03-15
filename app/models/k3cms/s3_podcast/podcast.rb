@@ -42,7 +42,7 @@ module K3cms
 
       class << self
         def image_extensions; %w[.png .jpg .gif]; end
-        def video_extensions; %w[.mp4 .ogv .webmv .m4v]; end
+        def video_extensions; %w[.mp4 .wmv .webm .m4v]; end
         def audio_extensions; %w[.mp3 .oga .webma .m4a .wav]; end
         def mime_type_from_url(url)
           extension = Pathname.new(url).extname

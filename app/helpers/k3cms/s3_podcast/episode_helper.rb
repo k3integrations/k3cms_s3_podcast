@@ -57,7 +57,7 @@ module K3cms::S3Podcast::EpisodeHelper
         :autoplay => false,
     )
 
-    src_list='';
+    src_list=''
     source_urls.each do |source_url|
       case Pathname.new(source_url).extname
       when '.mp4', '.m4v'
